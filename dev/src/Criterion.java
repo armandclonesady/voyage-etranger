@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Critetion {
+public class Criterion {
     /**
      * Attributes
      */
@@ -34,30 +34,29 @@ public class Critetion {
      * @param value
      * @param label
      */
-    public Critetion(String value, CriterionName label) {
+    public Criterion(String value, CriterionName label) {
         this.value = value;
         this.label = label;
     }
 
+    public Criterion(String value, String label) {
+        this(value, CriterionName.valueOf(label));
+    }
+
     public boolean isValid() {
-        
         switch (this.label.getType()) {
             case 'B':
                 return B_VALUES.contains(this.value);
             case 'T':
                 if (this.label.equals(CriterionName.GENDER) || this.label.equals(CriterionName.PAIR_GENDER)) {
                     return GENDER_VALUES.contains(this.value);
-                }
+                } 
                 else if (this.label.equals(CriterionName.HISTORY)) {
                     return HISTORY_VALUES.contains(this.value);
                 }
                 return false;
             default:
-                return false;
-            
+                return false;   
         }
     }
-
-    
-
 }

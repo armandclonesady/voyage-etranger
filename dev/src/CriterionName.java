@@ -12,14 +12,14 @@ public enum CriterionName {
     HISTORY('T');
 
     /**
-     * Attributes
+     * Attributes which represent the type of the criterion.
      */
     private final char TYPE;
 
 
     /**
-     * Constructeur de CriterionName
-     * @param type
+     * Constructors for CriterionName.
+     * @param type 
      */
     CriterionName(char type) {
         this.TYPE = type;
@@ -27,8 +27,8 @@ public enum CriterionName {
 
 
     /**
-     * getter du type du Cr
-     * @return
+     * Getter for TYPE.
+     * @return The type.
      */
     public char getType() {
         return this.TYPE;
