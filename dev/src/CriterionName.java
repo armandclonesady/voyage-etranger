@@ -1,3 +1,3 @@
-public class CriterionName {
+public enum CriterionName {
     
 }

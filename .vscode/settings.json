@@ -1,0 +1,12 @@
+{
+    "java.project.sourcePaths": [
+        "dev/src",
+        "test"
+    ],
+    "java.project.outputPath": "dev/bin",
+    "java.project.referencedLibraries": [
+        "dev/lib/**/*.jar", "dev/lib/*.jar"
+    ],
+    "java.debug.settings.onBuildFailureProceed": true,
+    "editor.tabCompletion": "on",
+}
