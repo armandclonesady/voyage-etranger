@@ -1,5 +1,4 @@
-
-
+package devoo;
 
 public enum CriterionName {
     GUEST_HAS_ALLERGY('B'),
