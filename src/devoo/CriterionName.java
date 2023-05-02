@@ -15,7 +15,6 @@ public enum CriterionName {
      */
     private final char TYPE;
 
-
     /**
      * Constructors for CriterionName.
      * @param type 
@@ -24,12 +23,15 @@ public enum CriterionName {
         this.TYPE = type;
     }
 
-
     /**
      * Getter for TYPE.
      * @return The type.
      */
     public char getType() {
         return this.TYPE;
+    }
+
+    public String getName() {
+        return this.name();
     }
 }

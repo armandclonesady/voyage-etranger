@@ -7,42 +7,42 @@ public class Criterion {
     /**
      * Attributes
      */
-    private String value;
     private CriterionName label;
+    private String value;
 
     /**
      * Values for Booleans
      */
-    final static private String POS = "yes"; 
-    final static private String NEG = "no";
+    final static public String POS = "yes"; 
+    final static public String NEG = "no";
     final static private ArrayList<String> B_VALUES = new ArrayList<String>(Arrays.asList(POS, NEG));
     /**
      * Values for Gender
      */
-    final static private String F = "female"; 
-    final static private String M = "male";
-    final static private String OTH = "other";
+    final static public String F = "female"; 
+    final static public String M = "male";
+    final static public String OTH = "other";
     final static private ArrayList<String> GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH));
 
     /**
      * Values for History
      */
-    final static private String PREF_SAME = "same";
-    final static private String PREF_OTH = "other";
+    final static public String PREF_SAME = "same";
+    final static public String PREF_OTH = "other";
     final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH));
 
     /**
      * Constructeur de Criterion, entièrement
-     * @param value
+     * @param value 
      * @param label
      */
-    public Criterion(String value, CriterionName label) {
-        this.value = value;
+    public Criterion(CriterionName label, String value) {
         this.label = label;
+        this.value = value;
     }
 
-    public Criterion(String value, String label) {
-        this(value, CriterionName.valueOf(label));
+    public Criterion(String label, String value) {
+        this(CriterionName.valueOf(label), value);
     }
 
     public boolean isValid() {
@@ -58,7 +58,17 @@ public class Criterion {
                 }
                 return false;
             default:
-                return false;   
+                return true;   
         }
+    }
+
+    
+
+    public CriterionName getLabel() {
+        return this.label;
+    }
+
+    public String getValue() {
+        return this.value;
     }
 }
