@@ -10,6 +10,8 @@ package devoo;
 
     getType() qui renvoie le type du critère (B, T),
     getName() qui renvoie le nom de la constante énumérée correspondante
+    
+    @autor : Raphael Kiecken, Armand Sady, Antoine Gaienier
 */
 public enum CriterionName {
     GUEST_HAS_ALLERGY('B'),
