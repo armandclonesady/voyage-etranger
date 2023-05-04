@@ -6,20 +6,65 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 public class CriterionTest {
+    Criterion c1; Criterion c2; Criterion c3; 
+    Criterion c4; Criterion c5; Criterion c6;
+    Criterion c7; Criterion c8; Criterion c9; 
+    Criterion c10; Criterion c11; Criterion c12;
+    Criterion c13; Criterion c14; Criterion c15; 
+    Criterion c16; Criterion c17; Criterion c18;
 
+
+/**
+ * Y'a des champs qu'on peut laisser vide mais on les as pas prit en compte pour le moment je crois (genre History ou Hobbies)
+ */
+
+    @BeforeEach
+    public void initTest() {
+        c1 = new Criterion("GUEST_HAS_ALLERGY", "yes");
+        c2 = new Criterion( "HOST_HAS_ANIMAL", "no");
+        c3 = new Criterion( "GUEST_HAS_ALLERGY" ,"yes");
+        c4 = new Criterion( "HOST_HAS_ANIMAL", "non");
+        c5 = new Criterion( "GUEST_HAS_ALLERGY", "oui");
+        c6 = new Criterion( "HOST_HAS_ANIMAL", "noN");
+
+        c7 = new Criterion("HOST_FOOD", "nonut");
+        c8 = new Criterion( "HOST_FOOD", "AUCUNENOIX");
+        c9 = new Criterion( "GUEST_FOOD" ,"vegetarian");
+        c10 = new Criterion( "GUEST_FOOD", "AUCUNEVIANDE");
+
+        c11 = new Criterion( "HISTORY", "same");
+        c12 = new Criterion( "HISTORY", "other");
+        c13 = new Criterion( "HISTORY", "AUTRE");
+        c14 = new Criterion( "HISTORY", "PAREIL");
+
+        c15 = new Criterion( "PAIR_GENDER", "female");
+        c16 = new Criterion( "PAIR_GENDER", "HOMME");
+        c17 = new Criterion( "GENDER", "other");
+        c18 = new Criterion( "GENDER", "FEMME");
+    }
+         
     @Test
     public void isValidTest() {
-        Criterion c1 = new Criterion("GUEST_HAS_ALLERGY", "yes"); 
         assertEquals(true, c1.isValid());
-        Criterion c2 = new Criterion( "HOST_HAS_ANIMAL", "no");
         assertEquals(true, c2.isValid());
-        Criterion c3 = new Criterion( "GUEST_HAS_ALLERGY" ,"yes");
         assertEquals(true, c3.isValid());
-        Criterion c4 = new Criterion( "HOST_HAS_ANIMAL", "non");
         assertEquals(false, c4.isValid());
-        Criterion c5 = new Criterion( "GUEST_HAS_ALLERGY", "oui");
         assertEquals(false, c5.isValid());
-        Criterion c6 = new Criterion( "HOT_HAS_ANIMAL", "no");
         assertEquals(false, c6.isValid());
+
+        assertEquals(true, c7.isValid());
+        assertEquals(false, c8.isValid());
+        assertEquals(true, c9.isValid());
+        assertEquals(false, c10.isValid());
+        
+        assertEquals(true, c11.isValid());
+        assertEquals(true, c12.isValid());
+        assertEquals(false, c13.isValid());
+        assertEquals(false, c14.isValid());
+
+        assertEquals(true, c15.isValid());
+        assertEquals(false, c16.isValid());
+        assertEquals(true, c17.isValid());
+        assertEquals(false, c18.isValid());
     }
 }
