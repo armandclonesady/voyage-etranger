@@ -34,6 +34,11 @@ public class Criterion {
     final static public String PREF_OTH = "other";
     final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH));
 
+    final static public String FOOD_N = "nonut";
+    final static public String FOOD_V = "vegetarian";
+    final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V));
+
+
     /**
      * Constructeur de Criterion
      * @param value 
@@ -60,15 +65,18 @@ public class Criterion {
             case 'B':
                 return B_VALUES.contains(this.value);
             case 'T':
-                if (this.label.equals(CriterionName.GENDER) || this.label.equals(CriterionName.PAIR_GENDER)) {
+                if(this.label.equals(CriterionName.GENDER) || this.label.equals(CriterionName.PAIR_GENDER)) {
                     return GENDER_VALUES.contains(this.value);
                 } 
-                else if (this.label.equals(CriterionName.HISTORY)) {
+                else if(this.label.equals(CriterionName.HISTORY)) {
                     return HISTORY_VALUES.contains(this.value);
+                }
+                else if(this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) {
+                    return FOOD_VALUES.contains(this.value);
                 }
                 return false;
             default:
-                return true;   
+                return true;
         }
     }
 
