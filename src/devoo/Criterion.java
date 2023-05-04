@@ -3,6 +3,9 @@ package devoo;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Classe Criterion
+ */
 public class Criterion {
     /**
      * Attributes
@@ -11,13 +14,13 @@ public class Criterion {
     private String value;
 
     /**
-     * Values for Booleans
+     * Valeurs pour les booléens
      */
     final static public String POS = "yes"; 
     final static public String NEG = "no";
     final static private ArrayList<String> B_VALUES = new ArrayList<String>(Arrays.asList(POS, NEG));
     /**
-     * Values for Gender
+     * Valeurs pour le genre
      */
     final static public String F = "female"; 
     final static public String M = "male";
@@ -25,14 +28,14 @@ public class Criterion {
     final static private ArrayList<String> GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH));
 
     /**
-     * Values for History
+     * Valeurs pour l'Histoire
      */
     final static public String PREF_SAME = "same";
     final static public String PREF_OTH = "other";
     final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH));
 
     /**
-     * Constructeur de Criterion, entièrement
+     * Constructeur de Criterion
      * @param value 
      * @param label
      */
@@ -40,10 +43,17 @@ public class Criterion {
         this.label = label;
         this.value = value;
     }
-
+    /*
+     * constructeur de Criterion chaîner
+     */
     public Criterion(String label, String value) {
         this(CriterionName.valueOf(label), value);
     }
+
+    /**
+     * Méthode qui vérifie si le critère est valide
+     * @return
+     */
 
     public boolean isValid() {
         switch (this.label.getType()) {
@@ -62,12 +72,19 @@ public class Criterion {
         }
     }
 
-    
+    /**
+     * Méthode qui renvoie le label du critère
+     * @return
+     */
 
     public CriterionName getLabel() {
         return this.label;
     }
 
+    /**
+     * Méthode qui renvoie la value
+     * @return
+     */
     public String getValue() {
         return this.value;
     }
