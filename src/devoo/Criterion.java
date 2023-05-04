@@ -3,8 +3,11 @@ package devoo;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.junit.Test;
+
 /**
  * Classe Criterion
+ * @autor : Raphael Kiecken, Armand Sady, Antoine Gaienier
  */
 public class Criterion {
     /**
@@ -53,7 +56,7 @@ public class Criterion {
      */
     public Criterion(String label, String value) {
         this(CriterionName.valueOf(label), value);
-    }
+    }   
 
     /**
      * Méthode qui vérifie si le critère est valide

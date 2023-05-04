@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 /**
  * Classe Teenager
- * 
+ * @author Raphael Kiecken, Armand Sady, Antoine Gaienier
  */
 public class Teenager {
     private static int count = 1;
