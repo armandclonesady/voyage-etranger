@@ -2,10 +2,14 @@ package devoo;
 
 import java.util.Map;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
  * Classe Teenager
+ * 
  */
 public class Teenager {
     private static int count = 1;
@@ -67,21 +71,44 @@ public class Teenager {
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager
      * @param t
-     * @return
+     * @return Un boolean qui indique si le Teenager est compatible
      */
     public boolean compatibleWithGuest(Teenager t) {
         if(this.lastGuest == t) {
-            String historyHost = this.getValue("HISTORY");
-            String historyGuest = t.getValue("HISTORY");
-            if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
-                return true;
-            } else if (historyHost.equals(Criterion.PREF_OTH) || historyGuest.equals(Criterion.PREF_OTH)) {
-                return false;
+            if(historyCompatibilty(t) != -1) {
+                return historyCompatibilty(t) == 0 ? true : false;
             }
         }
+        String hostAnimal = this.getValue("HOST_HAS_ANIMAL");
+        String guestAnimal = this.getValue("GUEST_HAS_ALLERGY");
+        if((guestAnimal.equals(Criterion.NEG)) || (hostAnimal.equals(Criterion.NEG) && guestAnimal.equals(Criterion.POS))) {
+            return true;
+        }
+        ArrayList<String> hostRegime = new ArrayList<String>();
+        hostRegime.addAll(Arrays.asList(this.getValue("HOST_FOOD").split(",")));
 
+        ArrayList<String> guestRegime = new ArrayList<String>();
+        guestRegime.addAll(Arrays.asList(this.getValue("GUEST_FOOD").split(",")));
+
+        Collections.sort(hostRegime);
+        Collections.sort(guestRegime);
+
+        if((hostRegime.containsAll(guestRegime))) {return true;}
         return false;
     }
+
+    public int historyCompatibilty(Teenager t) {
+        String historyHost = this.getValue("HISTORY");
+        String historyGuest = t.getValue("HISTORY");
+        if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
+            return 1;
+        } else if (historyHost.equals(Criterion.PREF_OTH) || historyGuest.equals(Criterion.PREF_OTH)) {
+            return 0;
+        }
+        return -1;
+    }
+
+
     /**
      * méthode qui ajoute un critère
      * @param criterion
@@ -104,6 +131,18 @@ public class Teenager {
      */
     public String getValue(String label) {
         return this.getCriterion(label).getValue();
+    }
+
+    public static void main(String[] args) {
+        Teenager teen1 = new Teenager("ratio", null, Country.FRANCE);
+        Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
+        
+        teen1.addCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
+        teen2.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+
+        System.out.println(teen1.compatibleWithGuest(teen2));
+
+
     }
 
 }
