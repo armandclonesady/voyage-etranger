@@ -20,7 +20,7 @@ public class Teenager {
     private Country origin;
     private Teenager lastGuest;
 
-    private Map<String, Criterion> requirements = new HashMap<String, Criterion>();
+    private Map<CriterionName, Criterion> requirements = new HashMap<CriterionName, Criterion>();
 
     /**
      * Constructeur de Teenager
@@ -74,54 +74,46 @@ public class Teenager {
      * @return Un boolean qui indique si le Teenager est compatible
      */
     public boolean compatibleWithGuest(Teenager t) {
-        if(this.lastGuest == t) {
-            if(historyCompatibilty(t) != -1) {
-                return historyCompatibilty(t) == 0 ? true : false;
+        if(this.lastGuest == t && (this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(Criterion)) {
+            String historyHost = this.getValue(CriterionName.HISTORY);
+            String historyGuest = t.getValue(CriterionName.HISTORY);
+            if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
+                return true;
+            } else if (historyHost.equals(Criterion.PREF_OTH) || historyGuest.equals(Criterion.PREF_OTH)) {
+                return false;
             }
         }
-        String hostAnimal = this.getValue("HOST_HAS_ANIMAL");
-        String guestAnimal = this.getValue("GUEST_HAS_ALLERGY");
-        if((guestAnimal.equals(Criterion.NEG)) || (hostAnimal.equals(Criterion.NEG) && guestAnimal.equals(Criterion.POS))) {
-            return true;
+        if(this.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && t.criterionIsProperlyDefine(CriterionName.GUEST_HAS_ALLERGY)) {
+            String hostAnimal = this.getValue(CriterionName.HOST_HAS_ANIMAL);
+            String guestAnimal = t.getValue(CriterionName.GUEST_HAS_ALLERGY);
+            if((guestAnimal.equals(Criterion.NEG)) || (hostAnimal.equals(Criterion.NEG) && guestAnimal.equals(Criterion.POS))) {
+                return true;
+            }
         }
-        ArrayList<String> hostRegime = new ArrayList<String>();
-        hostRegime.addAll(Arrays.asList(this.getValue("HOST_FOOD").split(",")));
-
-        ArrayList<String> guestRegime = new ArrayList<String>();
-        guestRegime.addAll(Arrays.asList(this.getValue("GUEST_FOOD").split(",")));
-
-        Collections.sort(hostRegime);
-        Collections.sort(guestRegime);
-
-        if((hostRegime.containsAll(guestRegime))) {return true;}
+        if(this.criterionIsProperlyDefine(CriterionName.HOST_FOOD) && t.criterionIsProperlyDefine(CriterionName.GUEST_FOOD)) {
+            ArrayList<String> hostRegime = new ArrayList<String>();
+            hostRegime.addAll(Arrays.asList(this.getValue(CriterionName.HOST_FOOD).split(",")));
+            ArrayList<String> guestRegime = new ArrayList<String>();
+            guestRegime.addAll(Arrays.asList(this.getValue(CriterionName.GUEST_FOOD).split(",")));
+            Collections.sort(hostRegime); Collections.sort(guestRegime);
+            if((hostRegime.containsAll(guestRegime))) {return true;}
+        }
         return false;
     }
-
-    public int historyCompatibilty(Teenager t) {
-        String historyHost = this.getValue("HISTORY");
-        String historyGuest = t.getValue("HISTORY");
-        if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
-            return 1;
-        } else if (historyHost.equals(Criterion.PREF_OTH) || historyGuest.equals(Criterion.PREF_OTH)) {
-            return 0;
-        }
-        return -1;
-    }
-
 
     /**
      * méthode qui ajoute un critère
      * @param criterion
      */
     public void addCriterion(Criterion criterion) {
-        this.requirements.put(criterion.getLabel().getName(), criterion);
+        this.requirements.put(criterion.getLabel(), criterion);
     }
     /**
      * retourne un critère
      * @param label
      * @return
      */
-    public Criterion getCriterion(String label) {
+    public Criterion getCriterion(CriterionName label) {
         return this.requirements.get(label);
     }
     /**
@@ -129,8 +121,12 @@ public class Teenager {
      * @param label
      * @return
      */
-    public String getValue(String label) {
+    public String getValue(CriterionName label) {
         return this.getCriterion(label).getValue();
+    }
+
+    public boolean criterionIsProperlyDefine(CriterionName label) {
+        return this.requirements.containsKey(label) && this.requirements != null;
     }
 
     public static void main(String[] args) {
@@ -138,7 +134,10 @@ public class Teenager {
         Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
         
         teen1.addCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
-        teen2.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        teen2.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+
+        teen1.addCriterion(new Criterion("HISTORY", "same"));
+        teen1.addCriterion(new Criterion("HISTORY", "same"));
 
         System.out.println(teen1.compatibleWithGuest(teen2));
 

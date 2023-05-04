@@ -3,8 +3,6 @@ package devoo;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.junit.Test;
-
 /**
  * Classe Criterion
  * @autor : Raphael Kiecken, Armand Sady, Antoine Gaienier
@@ -35,7 +33,8 @@ public class Criterion {
      */
     final static public String PREF_SAME = "same";
     final static public String PREF_OTH = "other";
-    final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH));
+    final static public String PREF_BLANK = "";
+    final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH, PREF_BLANK));
 
     final static public String FOOD_N = "nonut";
     final static public String FOOD_V = "vegetarian";
