@@ -1,5 +1,16 @@
 package devoo;
 
+/*
+    La classe contient une liste de constantes énumérées, chacune étant un critère, qui peut être de trois types différents représentés par des lettres :
+
+    'B' pour un critère binaire, c'est-à-dire qui a deux valeurs possibles (vrai ou faux),
+    'T' pour un critère textuel, c'est-à-dire qui a une valeur textuelle,
+   
+    La classe a deux méthodes publiques :
+
+    getType() qui renvoie le type du critère (B, T),
+    getName() qui renvoie le nom de la constante énumérée correspondante
+*/
 public enum CriterionName {
     GUEST_HAS_ALLERGY('B'),
     HOST_HAS_ANIMAL('B'),
@@ -11,12 +22,12 @@ public enum CriterionName {
     HISTORY('T');
 
     /**
-     * Attributes which represent the type of the criterion.
+     * Attributs qui représentent le type du critère.
      */
     private final char TYPE;
 
     /**
-     * Constructors for CriterionName.
+     * Constructeurs pour CriterionName.
      * @param type 
      */
     CriterionName(char type) {
@@ -24,7 +35,7 @@ public enum CriterionName {
     }
 
     /**
-     * Getter for TYPE.
+     * Getter pour TYPE.
      * @return The type.
      */
     public char getType() {
