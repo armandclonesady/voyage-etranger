@@ -32,13 +32,13 @@ public class Criterion {
     final static private ArrayList<String> PAIR_GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH, BLANK));
 
     /**
+            this.addCriterion(entry.getKey(), null) 
      * Valeurs possible pour le critéres lié à l'Historique
      */
     final static public String PREF_SAME = "same";
     final static public String PREF_OTH = "other";
     final static public String PREF_BLANK = "";
     final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH, PREF_BLANK));
-
     /**
      * Valeurs possible pour les critéres lié au Regime alimentaire
      */
@@ -48,7 +48,8 @@ public class Criterion {
     final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V, FOOD_BLANK));
 
     /**
-     * @param label Nom du Criterion.
+     * @param label Nom du Criterion
+            this.addCriterion(entry.getKey(), null) .
      * @param value Valeur du Criterion.
      */
     public Criterion(CriterionName label, String value) {
@@ -65,7 +66,7 @@ public class Criterion {
     /**
      * Méthode qui vérifie si le critère est valide
      * @return
-     */
+     */ 
 
     public boolean isValid() {
         switch (this.label.getType()) {
@@ -105,5 +106,9 @@ public class Criterion {
      */
     public String getValue() {
         return this.value;
+    }
+
+    public String toString() {
+        return this.label + " " + this.value;
     }
 }
