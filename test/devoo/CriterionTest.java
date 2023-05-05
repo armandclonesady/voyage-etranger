@@ -12,6 +12,7 @@ public class CriterionTest {
     Criterion c10; Criterion c11; Criterion c12;
     Criterion c13; Criterion c14; Criterion c15; 
     Criterion c16; Criterion c17; Criterion c18;
+    Criterion c19; Criterion c20;
 
 
 /**
@@ -27,20 +28,22 @@ public class CriterionTest {
         c5 = new Criterion( "GUEST_HAS_ALLERGY", "oui");
         c6 = new Criterion( "HOST_HAS_ANIMAL", "noN");
 
-        c7 = new Criterion("HOST_FOOD", "nonut");
+        c7 = new Criterion("HOST_FOOD", "nonuts");
         c8 = new Criterion( "HOST_FOOD", "AUCUNENOIX");
-        c9 = new Criterion( "GUEST_FOOD" ,"vegetarian");
-        c10 = new Criterion( "GUEST_FOOD", "AUCUNEVIANDE");
+        c9 = new Criterion( "HOST_FOOD", "");
+        c10 = new Criterion( "GUEST_FOOD" ,"vegetarian");
+        c11 = new Criterion( "GUEST_FOOD", "AUCUNEVIANDE");
+        c12 = new Criterion( "GUEST_FOOD", "");
 
-        c11 = new Criterion( "HISTORY", "same");
-        c12 = new Criterion( "HISTORY", "other");
-        c13 = new Criterion( "HISTORY", "AUTRE");
-        c14 = new Criterion( "HISTORY", "PAREIL");
+        c13 = new Criterion( "HISTORY", "same");
+        c14 = new Criterion( "HISTORY", "other");
+        c15 = new Criterion( "HISTORY", "AUTRE");
+        c16 = new Criterion( "HISTORY", "PAREIL");
 
-        c15 = new Criterion( "PAIR_GENDER", "female");
-        c16 = new Criterion( "PAIR_GENDER", "HOMME");
-        c17 = new Criterion( "GENDER", "other");
-        c18 = new Criterion( "GENDER", "FEMME");
+        c17 = new Criterion( "PAIR_GENDER", "female");
+        c18 = new Criterion( "PAIR_GENDER", "HOMME");
+        c19 = new Criterion( "GENDER", "other");
+        c20 = new Criterion( "GENDER", "FEMME");
     }
          
     @Test

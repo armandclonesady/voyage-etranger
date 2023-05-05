@@ -74,7 +74,7 @@ public class Teenager {
      * @return Un boolean qui indique si le Teenager est compatible
      */
     public boolean compatibleWithGuest(Teenager t) {
-        if(this.lastGuest == t && (this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(Criterion)) {
+        if(this.lastGuest == t && (this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY))) {
             String historyHost = this.getValue(CriterionName.HISTORY);
             String historyGuest = t.getValue(CriterionName.HISTORY);
             if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {

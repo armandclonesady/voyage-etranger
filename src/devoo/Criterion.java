@@ -15,47 +15,52 @@ public class Criterion {
     private String value;
 
     /**
-     * Valeurs pour les booléens
+     * Valeurs possible pour les critéres booléens
      */
     final static public String POS = "yes"; 
     final static public String NEG = "no";
     final static private ArrayList<String> B_VALUES = new ArrayList<String>(Arrays.asList(POS, NEG));
+
     /**
-     * Valeurs pour le genre
+     * Valeurs possible pour les critéres lié au Genre
      */
     final static public String F = "female"; 
     final static public String M = "male";
     final static public String OTH = "other";
+    final static public String BLANK = "";
     final static private ArrayList<String> GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH));
+    final static private ArrayList<String> PAIR_GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH, BLANK));
 
     /**
-     * Valeurs pour l'Histoire
+     * Valeurs possible pour le critéres lié à l'Historique
      */
     final static public String PREF_SAME = "same";
     final static public String PREF_OTH = "other";
     final static public String PREF_BLANK = "";
     final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH, PREF_BLANK));
 
-    final static public String FOOD_N = "nonut";
+    /**
+     * Valeurs possible pour les critéres lié au Regime alimentaire
+     */
+    final static public String FOOD_N = "nonuts";
     final static public String FOOD_V = "vegetarian";
-    final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V));
-
+    final static public String FOOD_BLANK = "";
+    final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V, FOOD_BLANK));
 
     /**
-     * Constructeur de Criterion
-     * @param value 
-     * @param label
+     * @param label Nom du Criterion.
+     * @param value Valeur du Criterion.
      */
     public Criterion(CriterionName label, String value) {
         this.label = label;
         this.value = value;
     }
-    /*
-     * constructeur de Criterion chaîner
+
+    /**
+     * @param label Chaine de caractère représentant le nom du Criterion.
+     * @param value Valeur du Criterion.
      */
-    public Criterion(String label, String value) {
-        this(CriterionName.valueOf(label), value);
-    }   
+    public Criterion(String label, String value) {this(CriterionName.valueOf(label), value);}   
 
     /**
      * Méthode qui vérifie si le critère est valide
@@ -67,18 +72,21 @@ public class Criterion {
             case 'B':
                 return B_VALUES.contains(this.value);
             case 'T':
-                if(this.label.equals(CriterionName.GENDER) || this.label.equals(CriterionName.PAIR_GENDER)) {
+                if(this.label.equals(CriterionName.GENDER)) {
                     return GENDER_VALUES.contains(this.value);
                 } 
+                else if(this.label.equals(CriterionName.PAIR_GENDER)) {
+                    return PAIR_GENDER_VALUES.contains(this.value);
+                }
                 else if(this.label.equals(CriterionName.HISTORY)) {
                     return HISTORY_VALUES.contains(this.value);
                 }
                 else if(this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) {
                     return FOOD_VALUES.contains(this.value);
                 }
-                return false;
-            default:
                 return true;
+            default:
+                return false;
         }
     }
 
