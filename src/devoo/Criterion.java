@@ -56,7 +56,7 @@ public class Criterion {
     /**
      * Méthode qui vérifie si le critère est valide
      * @return
-     */
+     */ 
 
     public boolean isValid() {
         switch (this.label.getType()) {
@@ -96,5 +96,9 @@ public class Criterion {
      */
     public String getValue() {
         return this.value;
+    }
+
+    public String toString() {
+        return this.label + " " + this.value;
     }
 }

@@ -36,6 +36,7 @@ public class Teenager {
         this.birth = birth;
         this.origin = origin;
         this.lastGuest = lastGuest;
+        initRequirements();
     }
     /**
      * Constructeur de Teenager chaîner
@@ -101,13 +102,19 @@ public class Teenager {
         return false;
     }
 
+
+    public void addCriterion(CriterionName label, Criterion criterion) {
+        this.requirements.put(label, criterion);
+    }
+
     /**
      * méthode qui ajoute un critère
      * @param criterion
      */
     public void addCriterion(Criterion criterion) {
-        this.requirements.put(criterion.getLabel(), criterion);
+        this.addCriterion(criterion.getLabel(), criterion);;
     }
+
     /**
      * retourne un critère
      * @param label
@@ -116,6 +123,11 @@ public class Teenager {
     public Criterion getCriterion(CriterionName label) {
         return this.requirements.get(label);
     }
+
+    public Map<CriterionName, Criterion> getRequirements() {
+        return this.requirements;
+    }
+
     /**
      * retourne la valeur d'un critère
      * @param label
@@ -126,7 +138,13 @@ public class Teenager {
     }
 
     public boolean criterionIsProperlyDefine(CriterionName label) {
-        return this.requirements.containsKey(label) && this.requirements != null;
+        return this.requirements.containsKey(label) && this.getCriterion(label) != null;
+    }
+
+    public void initRequirements() {
+        for(CriterionName c : CriterionName.values()) {
+            this.requirements.put(c, null);
+        }
     }
 
     public static void main(String[] args) {
@@ -139,7 +157,9 @@ public class Teenager {
         teen1.addCriterion(new Criterion("HISTORY", "same"));
         teen1.addCriterion(new Criterion("HISTORY", "same"));
 
-        System.out.println(teen1.compatibleWithGuest(teen2));
+        for(Map.Entry<CriterionName, Criterion> entry : teen1.getRequirements().entrySet()) {
+            System.out.println(entry.toString());
+        }
 
 
     }
