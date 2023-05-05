@@ -14,17 +14,33 @@ public class TeenagerTest {
     Teenager t2= new Teenager("t2", LocalDate.of(2002, 1, 1), Country.FRANCE);
     Teenager t3= new Teenager("t3", LocalDate.of(2004, 1, 1), Country.ITALY);
     Teenager t4= new Teenager("t4", LocalDate.of(2000, 1, 1), Country.ITALY);
-    Teenager t5= new Teenager("t5", LocalDate.of(2000, 1, 1), Country.SPAIN);
-    Teenager t6= new Teenager("t6", LocalDate.of(2003, 12, 20), Country.SPAIN);
-    Teenager t7= new Teenager("t7", LocalDate.of(2000, 10, 11), Country.GERMANY);
-    Teenager t8= new Teenager("t8", LocalDate.of(2000, 4, 9), Country.GERMANY);
 
+    @BeforeEach
+    public void init() {
+        t1.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t1.addCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
+        t1.addCriterion(new Criterion("GENDER", "male"));
+        t1.addCriterion(new Criterion("HISTORY", "same"));
+        t1.addCriterion(new Criterion("HOST_FOOD", "vegetarian"));
 
-    t1.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-    t2.addCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        
+        t3.addCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        t3.addCriterion(new Criterion("HOST_FOOD", "vegetarian"));
+        t3.addCriterion(new Criterion("PAIR_GENDER", "female"));
+
+        t2.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t2.addCriterion(new Criterion("GUEST_FOOD", "nonuts"));
+        t2.addCriterion(new Criterion("HISTORY", "same"));
+
+        t4.addCriterion(new Criterion("HISTORY", "OTHER"));
+
+    }
 
     @Test
     public void compatibleWithGuesTest() {
-        assertTrue(t1.compatibleWithGuest(t2));
+        assertTrue(t3.compatibleWithGuest(t1));
+        assertTrue(t1.compatibleWithGuest(t2)); //devrait pas passer
+        assertFalse(t3.compatibleWithGuest(t2));//devrait pas passer
+         
     }
 }
