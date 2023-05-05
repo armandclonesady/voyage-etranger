@@ -142,12 +142,13 @@ public class Teenager {
     }
 
     /**
-     * Si le Criterion n'est pas valable selon Criterion.isValid(), sa valuer dans la Map deviens null. 
+     * Si le Criterion n'est pas valable selon Criterion.isValid(), sa valuer dans la Map deviens null.
+     * Si il est déjà null, on l'ignore.
      */
     public void purgeCriterion() {
         for (Map.Entry<CriterionName, Criterion> critere : this.requirements.entrySet()) {
-            if (!critere.getValue().isValid()) {
-                this.updateCriterion(critere.getKey(), null);
+            if (critere.getValue() != null && !critere.getValue().isValid()) {
+                this.updateCriterion(critere.getValue().getLabel(), null);
             }
         }
     }
@@ -162,16 +163,18 @@ public class Teenager {
         Teenager teen1 = new Teenager("ratio", null, Country.FRANCE);
         Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
         
-        teen1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
+        teen1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "azazaza"));
         teen2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
 
         teen1.updateCriterion(new Criterion("HISTORY", "same"));
-        teen1.updateCriterion(new Criterion("HISTORY", "same"));
-
+        teen1.updateCriterion(new Criterion("HISTORY", "SAMME"));
+        teen1.purgeCriterion();
+        
+        System.out.println("teen1");
         for(Map.Entry<CriterionName, Criterion> entry : teen1.getRequirements().entrySet()) {
             System.out.println(entry.toString());
         }
-
+        
 
     }
 
