@@ -1,12 +1,9 @@
 package devoo;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class TeenagerTest {
 
@@ -19,7 +16,7 @@ public class TeenagerTest {
         t2 = new Teenager("t2", LocalDate.of(2002, 1, 1), Country.FRANCE);
         t3 = new Teenager("t3", LocalDate.of(2004, 1, 1), Country.ITALY);
         t4 = new Teenager("t4", LocalDate.of(2000, 1, 1), Country.ITALY);
-        
+
         t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
         t1.updateCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
         t1.updateCriterion(new Criterion("GENDER", "male"));
