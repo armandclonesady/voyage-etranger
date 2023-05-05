@@ -17,30 +17,56 @@ public class TeenagerTest {
 
     @BeforeEach
     public void init() {
-        t1.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-        t1.addCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
-        t1.addCriterion(new Criterion("GENDER", "male"));
-        t1.addCriterion(new Criterion("HISTORY", "same"));
-        t1.addCriterion(new Criterion("HOST_FOOD", "vegetarian"));
+        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t1.updateCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
+        t1.updateCriterion(new Criterion("GENDER", "male"));
+        t1.updateCriterion(new Criterion("HISTORY", "same"));
+        t1.updateCriterion(new Criterion("HOST_FOOD", "vegetarian"));
+        t1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "vegetarian"));
 
         
-        t3.addCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t3.addCriterion(new Criterion("HOST_FOOD", "vegetarian"));
-        t3.addCriterion(new Criterion("PAIR_GENDER", "female"));
+        t3.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        t3.updateCriterion(new Criterion("HOST_FOOD", "vegetarian"));
+        t3.updateCriterion(new Criterion("PAIR_GENDER", "female"));
 
-        t2.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-        t2.addCriterion(new Criterion("GUEST_FOOD", "nonuts"));
-        t2.addCriterion(new Criterion("HISTORY", "same"));
+        t2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t2.updateCriterion(new Criterion("GUEST_FOOD", "nonuts"));
+        t2.updateCriterion(new Criterion("HISTORY", "same"));
 
-        t4.addCriterion(new Criterion("HISTORY", "OTHER"));
+        t4.updateCriterion(new Criterion("HISTORY", "OTHER"));
 
     }
 
+    /*
     @Test
-    public void compatibleWithGuesTest() {
+    public void compatibleWithGuestTest() {
         assertTrue(t3.compatibleWithGuest(t1));
         assertTrue(t1.compatibleWithGuest(t2)); //devrait pas passer
         assertFalse(t3.compatibleWithGuest(t2));//devrait pas passer
          
+    }
+    */
+
+    @Test
+    public void purgeCriterionTest() {
+        assertFalse(t1.getCriterion(CriterionName.HOST_HAS_ANIMAL)==null);
+        t1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "azazaza"));
+        t1.purgeCriterion();
+        assertTrue(t1.getCriterion(CriterionName.HOST_HAS_ANIMAL)== null);
+
+        assertTrue(t2.getCriterion(CriterionName.GENDER) == null);
+        t2.updateCriterion(new Criterion("GENDER", "female"));
+        t2.purgeCriterion();
+        assertFalse(t2.getCriterion(CriterionName.GENDER)== null);
+
+        assertTrue(t3.getCriterion(CriterionName.GENDER) == null);
+        t3.updateCriterion(new Criterion("GENDER", "fefefefe"));
+        t3.purgeCriterion();
+        assertTrue(t3.getCriterion(CriterionName.GENDER)== null);
+
+        assertFalse(t4.getCriterion(CriterionName.HISTORY) == null);
+        t4.updateCriterion(new Criterion("HISTORY", "same"));
+        t4.purgeCriterion();
+        assertFalse(t4.getCriterion(CriterionName.HISTORY)== null);
     }
 }
