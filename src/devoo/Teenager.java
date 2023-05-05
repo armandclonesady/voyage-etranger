@@ -18,7 +18,7 @@ public class Teenager {
     private String name;
     private LocalDate birth;
     private Country origin;
-    public Teenager lastGuest;
+    private Teenager lastGuest;
 
     private Map<CriterionName, Criterion> requirements = new HashMap<CriterionName, Criterion>();
 
@@ -38,6 +38,7 @@ public class Teenager {
         this.lastGuest = lastGuest;
         initRequirements();
     }
+
     /**
      * Constructeur de Teenager chaîner
      * @param name
@@ -75,12 +76,12 @@ public class Teenager {
      * @return Un boolean qui indique si le Teenager est compatible
      */
     public boolean compatibleWithGuest(Teenager t) {
-        if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY))) {
+        /*if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY))) {
             int historyCompatibility = historyCompatibility(t);
             if(historyCompatibility != -1) {
                 return historyCompatibility == 1 ? true : false;
             }
-        }
+        }*/
         if(this.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && t.criterionIsProperlyDefine(CriterionName.GUEST_HAS_ALLERGY)) {
             boolean animalCompatibility = animalCompatibility(t);
             if(!animalCompatibility) {
@@ -109,7 +110,7 @@ public class Teenager {
             }
         }
         return -1;
-    }
+    }*/
 
     /*
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des animaux
