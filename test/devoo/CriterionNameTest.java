@@ -1,3 +1,5 @@
+//fini
+
 package devoo;
 
 import static org.junit.Assert.assertNotEquals;

@@ -1,19 +1,15 @@
+
 package devoo;
 
-
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 public class CriterionTest {
-    Criterion c1; Criterion c2; Criterion c3; 
-    Criterion c4; Criterion c5; Criterion c6;
-    Criterion c7; Criterion c8; Criterion c9; 
-    Criterion c10; Criterion c11; Criterion c12;
-    Criterion c13; Criterion c14; Criterion c15; 
-    Criterion c16; Criterion c17; Criterion c18;
-    Criterion c19; Criterion c20;
-
+    Criterion c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21;
 
 /**
  * Y'a des champs qu'on peut laisser vide mais on les as pas prit en compte pour le moment je crois (genre History ou Hobbies)
@@ -41,33 +37,37 @@ public class CriterionTest {
         c16 = new Criterion( "HISTORY", "PAREIL");
 
         c17 = new Criterion( "PAIR_GENDER", "female");
-        c18 = new Criterion( "PAIR_GENDER", "HOMME");
-        c19 = new Criterion( "GENDER", "other");
-        c20 = new Criterion( "GENDER", "FEMME");
+        c18 = new Criterion( "PAIR_GENDER", "Homme");
+        c19 = new Criterion("PAIR_GENDER", "");
+        c20 = new Criterion( "GENDER", "other");
+        c21 = new Criterion( "GENDER", "FEMME");
     }
          
     @Test
     public void isValidTest() {
-        assertEquals(true, c1.isValid());
-        assertEquals(true, c2.isValid());
-        assertEquals(true, c3.isValid());
-        assertEquals(false, c4.isValid());
-        assertEquals(false, c5.isValid());
-        assertEquals(false, c6.isValid());
+        assertTrue(c1.isValid());
+        assertTrue(c2.isValid());
+        assertTrue(c3.isValid());
+        assertFalse(c4.isValid());
+        assertFalse(c5.isValid());
+        assertFalse(c6.isValid());
 
-        assertEquals(true, c7.isValid());
-        assertEquals(false, c8.isValid());
-        assertEquals(true, c9.isValid());
-        assertEquals(false, c10.isValid());
+        assertTrue(c7.isValid());
+        assertFalse(c8.isValid());
+        assertTrue(c9.isValid());
+        assertTrue(c10.isValid());
+        assertFalse(c11.isValid());
+        assertTrue(c12.isValid());
         
-        assertEquals(true, c11.isValid());
-        assertEquals(true, c12.isValid());
-        assertEquals(false, c13.isValid());
-        assertEquals(false, c14.isValid());
-
-        assertEquals(true, c15.isValid());
-        assertEquals(false, c16.isValid());
-        assertEquals(true, c17.isValid());
-        assertEquals(false, c18.isValid());
+        assertTrue(c13.isValid());
+        assertTrue(c14.isValid());
+        assertFalse(c15.isValid());
+        assertFalse(c16.isValid());
+        
+        assertTrue(c17.isValid());
+        assertFalse(c18.isValid());
+        assertTrue(c19.isValid());
+        assertTrue(c20.isValid());
+        assertFalse(c21.isValid());
     }
 }label
