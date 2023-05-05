@@ -95,7 +95,9 @@ public class Teenager {
         }
         return true;
     }
-
+    /*
+     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère de l'historique
+     */
     public int historyCompatibility(Teenager t) {
         if(this.lastGuest == t) {
             String historyHost = this.getValue(CriterionName.HISTORY);
@@ -109,12 +111,20 @@ public class Teenager {
         return -1;
     }
 
+    /*
+     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des animaux
+     * @param t
+     */
     public boolean animalCompatibility(Teenager t) {
         String hostAnimal = this.getValue(CriterionName.HOST_HAS_ANIMAL);
         String guestAnimal = t.getValue(CriterionName.GUEST_HAS_ALLERGY);
         return !(hostAnimal.equals("yes") && hostAnimal == guestAnimal);
     }
 
+    /*
+     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère du régime alimentaire
+     * @param t
+     */
     public boolean foodCompatibility(Teenager t) {
         if(t.getValue(CriterionName.GUEST_FOOD).equals("")) return true;
         ArrayList<String> hostRegime = new ArrayList<String>();
@@ -129,13 +139,17 @@ public class Teenager {
         return true;
     }
 
-
+    /*
+    * Permet de mettre ajour un critère
+    * @param label
+    * @param criterion
+    */
     public void updateCriterion(CriterionName label, Criterion criterion) {
         this.requirements.put(label, criterion);
     }
 
     /**
-     * méthode qui ajoute un critère
+     * méthode de surchargée de updateCriterion
      * @param criterion
      */
     public void updateCriterion(Criterion criterion) {
@@ -186,7 +200,7 @@ public class Teenager {
         }
     }
 
-    public static void main(String[] args) {
+   /*/ public static void main(String[] args) {
         Teenager teen1 = new Teenager("ratio", null, Country.FRANCE);
         Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
         
@@ -202,7 +216,7 @@ public class Teenager {
             System.out.println(entry.toString());
         }
 
-        /*teen1.lastGuest = teen2;*/
+        teen1.lastGuest = teen2;
         
         teen1.updateCriterion(new Criterion("HISTORY", "same"));
         teen2.updateCriterion(new Criterion("HISTORY", ""));
@@ -214,6 +228,6 @@ public class Teenager {
         System.out.println(teen1.compatibleWithGuest(teen2));
         
 
-    }
+    }*/
 
 }

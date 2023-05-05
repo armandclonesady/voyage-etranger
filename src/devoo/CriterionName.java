@@ -1,7 +1,7 @@
 package devoo;
 
 /*
-    La classe contient une liste de constantes énumérées, chacune étant un critère, qui peut être de trois types différents représentés par des lettres :
+    La classe contient une liste de constantes énumérées, chacune étant un critère, qui peut être de 2 types différents représentés par des lettres :
 
     'B' pour un critère binaire, c'est-à-dire qui a deux valeurs possibles (vrai ou faux),
     'T' pour un critère textuel, c'est-à-dire qui a une valeur textuelle,
