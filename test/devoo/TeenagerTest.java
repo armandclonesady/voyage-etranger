@@ -10,14 +10,16 @@ import java.util.ArrayList;
 
 public class TeenagerTest {
 
-    Teenager t1= new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
-    Teenager t2= new Teenager("t2", LocalDate.of(2002, 1, 1), Country.FRANCE);
-    Teenager t3= new Teenager("t3", LocalDate.of(2004, 1, 1), Country.ITALY);
-    Teenager t4= new Teenager("t4", LocalDate.of(2000, 1, 1), Country.ITALY);
+    Teenager t1; Teenager t2;
+    Teenager t3; Teenager t4;
 
     @BeforeEach
     public void init() {
-        t1.lastGuest = t2;
+        t1 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t2 = new Teenager("t2", LocalDate.of(2002, 1, 1), Country.FRANCE);
+        t3 = new Teenager("t3", LocalDate.of(2004, 1, 1), Country.ITALY);
+        t4 = new Teenager("t4", LocalDate.of(2000, 1, 1), Country.ITALY);
+        
         t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
         t1.updateCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
         t1.updateCriterion(new Criterion("GENDER", "male"));
@@ -35,17 +37,8 @@ public class TeenagerTest {
         t2.updateCriterion(new Criterion("HISTORY", "same"));
 
         t4.updateCriterion(new Criterion("HISTORY", "OTHER"));
-
     }
 
-    
-    @Test
-    public void compatibleWithGuestTest() {
-        // Allergie
-
-        // Regime
-         
-    }
     /*
     @Test
     public void historyCompatibilityTest() {
@@ -55,7 +48,20 @@ public class TeenagerTest {
 
     @Test
     public void animalCompatibilityTest() {
+        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
 
+        t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
+        assertFalse(t2.animalCompatibility(t1));
+        t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        assertTrue(t2.animalCompatibility(t1));
+
+
+        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+
+        t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
+        assertTrue(t2.animalCompatibility(t1));
+        t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        assertTrue(t2.animalCompatibility(t1));
     }
 
     @Test
@@ -74,35 +80,37 @@ public class TeenagerTest {
         t1.updateCriterion(new Criterion("GUEST_FOOD", "nonuts"));
 
         t2.updateCriterion(new Criterion("HOST_FOOD", ""));
-        assertTrue(t2.foodCompatibility(t1));
+        assertFalse(t2.foodCompatibility(t1));
         t2.updateCriterion(new Criterion("HOST_FOOD", "nonuts"));
-        assertFalse(t2.foodCompatibility(t1));
-        t2.updateCriterion(new Criterion("HOST_FOOD", "vegetarian"));
         assertTrue(t2.foodCompatibility(t1));
-        t2.updateCriterion(new Criterion("HOST_FOOD", "nonuts,vegetarian"));
+        t2.updateCriterion(new Criterion("HOST_FOOD", "vegetarian"));
         assertFalse(t2.foodCompatibility(t1));
+        t2.updateCriterion(new Criterion("HOST_FOOD", "nonuts,vegetarian"));
+        assertTrue(t2.foodCompatibility(t1));
+
 
         t1.updateCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
         
         t2.updateCriterion(new Criterion("HOST_FOOD", ""));
-        assertTrue(t2.foodCompatibility(t1));
+        assertFalse(t2.foodCompatibility(t1));
         t2.updateCriterion(new Criterion("HOST_FOOD", "nonuts"));
         assertFalse(t2.foodCompatibility(t1));
         t2.updateCriterion(new Criterion("HOST_FOOD", "vegetarian"));
         assertTrue(t2.foodCompatibility(t1));
         t2.updateCriterion(new Criterion("HOST_FOOD", "nonuts,vegetarian"));
-        assertFalse(t2.foodCompatibility(t1));
+        assertTrue(t2.foodCompatibility(t1));
+
 
         t1.updateCriterion(new Criterion("GUEST_FOOD", "nonuts,vegetarian"));
         
         t2.updateCriterion(new Criterion("HOST_FOOD", ""));
-        assertTrue(t2.foodCompatibility(t1));
+        assertFalse(t2.foodCompatibility(t1));
         t2.updateCriterion(new Criterion("HOST_FOOD", "nonuts"));
         assertFalse(t2.foodCompatibility(t1));
         t2.updateCriterion(new Criterion("HOST_FOOD", "vegetarian"));
         assertFalse(t2.foodCompatibility(t1));
         t2.updateCriterion(new Criterion("HOST_FOOD", "nonuts,vegetarian"));
-        assertFalse(t2.foodCompatibility(t1));
+        assertTrue(t2.foodCompatibility(t1));
     }
 
     @Test

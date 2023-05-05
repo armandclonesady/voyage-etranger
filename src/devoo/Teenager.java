@@ -203,7 +203,7 @@ public class Teenager {
         }
     }
 
-   /*/ public static void main(String[] args) {
+   /*public static void main(String[] args) {
         Teenager teen1 = new Teenager("ratio", null, Country.FRANCE);
         Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
         
@@ -226,11 +226,8 @@ public class Teenager {
         
         teen1.updateCriterion(new Criterion("HOST_FOOD", ""));
         teen2.updateCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
-
         
         System.out.println(teen1.compatibleWithGuest(teen2));
-        
-
     }*/
 
 }

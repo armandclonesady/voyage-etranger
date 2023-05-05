@@ -21,22 +21,18 @@ public class Criterion {
     final static public String F = "female"; 
     final static public String M = "male";
     final static public String OTH = "other";
-    final static public String BLANK = "";
     final static private ArrayList<String> GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH));
-    final static private ArrayList<String> PAIR_GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH, BLANK));
 
     /** Valeurs possible pour le critéres lié à l'Historique*/
     final static public String PREF_SAME = "same";
     final static public String PREF_OTH = "other";
-    final static public String PREF_BLANK = "";
-    final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH, PREF_BLANK));
+    final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH));
 
     /* Valeurs possible pour les critéres lié au Regime alimentaire */
     
     final static public String FOOD_N = "nonuts";
     final static public String FOOD_V = "vegetarian";
-    final static public String FOOD_BLANK = "";
-    final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V, FOOD_BLANK));
+    final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V));
 
     /* constructeur dr
      * @param label Nom du Criterion.
@@ -67,13 +63,13 @@ public class Criterion {
                     return GENDER_VALUES.contains(this.value);
                 } 
                 else if(this.label.equals(CriterionName.PAIR_GENDER)) {
-                    return PAIR_GENDER_VALUES.contains(this.value);
+                    return GENDER_VALUES.contains(this.value) || this.value.isEmpty();
                 }
                 else if(this.label.equals(CriterionName.HISTORY)) {
                     return HISTORY_VALUES.contains(this.value);
                 }
                 else if(this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) {
-                    return FOOD_VALUES.contains(this.value);
+                    return FOOD_VALUES.containsAll(Arrays.asList(this.value.split(","))) || this.value.isEmpty();
                 }
                 return true;
             default:

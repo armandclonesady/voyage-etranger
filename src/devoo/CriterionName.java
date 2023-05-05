@@ -50,8 +50,7 @@ public enum CriterionName {
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
-        return super.toString();
+        return this.getName() + " (" + this.getType() + ")";
     }
 
 }
