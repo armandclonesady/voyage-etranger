@@ -18,7 +18,7 @@ public class Teenager {
     private String name;
     private LocalDate birth;
     private Country origin;
-    private Teenager lastGuest;
+    public Teenager lastGuest;
 
     private Map<CriterionName, Criterion> requirements = new HashMap<CriterionName, Criterion>();
 
@@ -61,7 +61,7 @@ public class Teenager {
 
     /**
      * Constructeur de Teenager chaîner
-     * @param name
+     * @param name 
      * @param birth
      * @param origin
      */
@@ -75,31 +75,58 @@ public class Teenager {
      * @return Un boolean qui indique si le Teenager est compatible
      */
     public boolean compatibleWithGuest(Teenager t) {
-        if(this.lastGuest == t && (this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY))) {
-            String historyHost = this.getValue(CriterionName.HISTORY);
-            String historyGuest = t.getValue(CriterionName.HISTORY);
-            if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
-                return true;
-            } else if (historyHost.equals(Criterion.PREF_OTH) || historyGuest.equals(Criterion.PREF_OTH)) {
-                return false;
+        if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY))) {
+            int historyCompatibility = historyCompatibility(t);
+            if(historyCompatibility != -1) {
+                return historyCompatibility == 1 ? true : false;
             }
         }
         if(this.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && t.criterionIsProperlyDefine(CriterionName.GUEST_HAS_ALLERGY)) {
-            String hostAnimal = this.getValue(CriterionName.HOST_HAS_ANIMAL);
-            String guestAnimal = t.getValue(CriterionName.GUEST_HAS_ALLERGY);
-            if((guestAnimal.equals(Criterion.NEG)) || (hostAnimal.equals(Criterion.NEG) && guestAnimal.equals(Criterion.POS))) {
-                return true;
+            boolean animalCompatibility = animalCompatibility(t);
+            if(!animalCompatibility) {
+                return animalCompatibility;
             }
         }
         if(this.criterionIsProperlyDefine(CriterionName.HOST_FOOD) && t.criterionIsProperlyDefine(CriterionName.GUEST_FOOD)) {
-            ArrayList<String> hostRegime = new ArrayList<String>();
-            hostRegime.addAll(Arrays.asList(this.getValue(CriterionName.HOST_FOOD).split(",")));
-            ArrayList<String> guestRegime = new ArrayList<String>();
-            guestRegime.addAll(Arrays.asList(this.getValue(CriterionName.GUEST_FOOD).split(",")));
-            Collections.sort(hostRegime); Collections.sort(guestRegime);
-            if((hostRegime.containsAll(guestRegime))) {return true;}
+            boolean foodCompatibility = foodCompatibility(t);
+            if(!foodCompatibility) {
+                return foodCompatibility;
+            }
         }
-        return false;
+        return true;
+    }
+
+    public int historyCompatibility(Teenager t) {
+        if(this.lastGuest == t) {
+            String historyHost = this.getValue(CriterionName.HISTORY);
+            String historyGuest = t.getValue(CriterionName.HISTORY);
+            if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
+                return 1;
+            } else if (historyHost.equals(Criterion.PREF_OTH) || historyGuest.equals(Criterion.PREF_OTH)) {
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    public boolean animalCompatibility(Teenager t) {
+        String hostAnimal = this.getValue(CriterionName.HOST_HAS_ANIMAL);
+        String guestAnimal = t.getValue(CriterionName.GUEST_HAS_ALLERGY);
+        return !(hostAnimal.equals("yes") && hostAnimal == guestAnimal);
+    }
+
+    public boolean foodCompatibility(Teenager t) {
+        if(t.getValue(CriterionName.GUEST_FOOD).equals("")) return true;
+        ArrayList<String> hostRegime = new ArrayList<String>();
+        hostRegime.addAll(Arrays.asList(this.getValue(CriterionName.HOST_FOOD).split(",")));
+
+        ArrayList<String> guestRegime = new ArrayList<String>();
+        guestRegime.addAll(Arrays.asList(t.getValue(CriterionName.GUEST_FOOD).split(",")));
+
+        Collections.sort(hostRegime); Collections.sort(guestRegime);
+
+        if(!hostRegime.containsAll(guestRegime)) return false;
+        return true;
     }
 
 
@@ -150,18 +177,17 @@ public class Teenager {
     public static void main(String[] args) {
         Teenager teen1 = new Teenager("ratio", null, Country.FRANCE);
         Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
+
+        /*teen1.lastGuest = teen2;*/
         
-        teen1.addCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
-        teen2.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-
         teen1.addCriterion(new Criterion("HISTORY", "same"));
-        teen1.addCriterion(new Criterion("HISTORY", "same"));
+        teen2.addCriterion(new Criterion("HISTORY", ""));
+        
+        teen1.addCriterion(new Criterion("HOST_FOOD", ""));
+        teen2.addCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
 
-        for(Map.Entry<CriterionName, Criterion> entry : teen1.getRequirements().entrySet()) {
-            System.out.println(entry.toString());
-        }
-
-
+        
+        System.out.println(teen1.compatibleWithGuest(teen2));
     }
 
 }
