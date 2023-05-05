@@ -47,4 +47,11 @@ public enum CriterionName {
     public String getName() {
         return this.name();
     }
+
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return super.toString();
+    }
+
 }

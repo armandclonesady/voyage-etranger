@@ -103,7 +103,7 @@ public class Teenager {
     }
 
 
-    public void addCriterion(CriterionName label, Criterion criterion) {
+    public void updateCriterion(CriterionName label, Criterion criterion) {
         this.requirements.put(label, criterion);
     }
 
@@ -111,8 +111,8 @@ public class Teenager {
      * méthode qui ajoute un critère
      * @param criterion
      */
-    public void addCriterion(Criterion criterion) {
-        this.addCriterion(criterion.getLabel(), criterion);;
+    public void updateCriterion(Criterion criterion) {
+        this.updateCriterion(criterion.getLabel(), criterion);;
     }
 
     /**
@@ -141,6 +141,18 @@ public class Teenager {
         return this.requirements.containsKey(label) && this.getCriterion(label) != null;
     }
 
+    /**
+     * Si le Criterion n'est pas valable selon Criterion.isValid(), sa valuer dans la Map deviens null.
+     * Si il est déjà null, on l'ignore.
+     */
+    public void purgeCriterion() {
+        for (Map.Entry<CriterionName, Criterion> critere : this.requirements.entrySet()) {
+            if (critere.getValue() != null && !critere.getValue().isValid()) {
+                this.updateCriterion(critere.getValue().getLabel(), null);
+            }
+        }
+    }
+
     public void initRequirements() {
         for(CriterionName c : CriterionName.values()) {
             this.requirements.put(c, null);
@@ -151,16 +163,18 @@ public class Teenager {
         Teenager teen1 = new Teenager("ratio", null, Country.FRANCE);
         Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
         
-        teen1.addCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
-        teen2.addCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        teen1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "azazaza"));
+        teen2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
 
-        teen1.addCriterion(new Criterion("HISTORY", "same"));
-        teen1.addCriterion(new Criterion("HISTORY", "same"));
-
+        teen1.updateCriterion(new Criterion("HISTORY", "same"));
+        teen1.updateCriterion(new Criterion("HISTORY", "SAMME"));
+        teen1.purgeCriterion();
+        
+        System.out.println("teen1");
         for(Map.Entry<CriterionName, Criterion> entry : teen1.getRequirements().entrySet()) {
             System.out.println(entry.toString());
         }
-
+        
 
     }
 
