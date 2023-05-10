@@ -38,6 +38,12 @@ public class TeenagerTest {
 
     /*
     @Test
+    public void compatibleWithGuestTest() {
+        
+    }
+
+
+    @Test
     public void historyCompatibilityTest() {
 
     }
