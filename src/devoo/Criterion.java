@@ -2,6 +2,9 @@ package devoo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe Criterion
@@ -15,24 +18,31 @@ public class Criterion {
     /* Valeurs possible pour les critéres booléens */
     final static public String POS = "yes"; 
     final static public String NEG = "no";
-    final static private ArrayList<String> B_VALUES = new ArrayList<String>(Arrays.asList(POS, NEG));
 
     /* Valeurs possible pour les critéres lié au Genre */
     final static public String F = "female"; 
     final static public String M = "male";
     final static public String OTH = "other";
-    final static private ArrayList<String> GENDER_VALUES = new ArrayList<String>(Arrays.asList(F, M, OTH));
+    final static public String BLANK = "";
 
     /** Valeurs possible pour le critéres lié à l'Historique*/
     final static public String PREF_SAME = "same";
     final static public String PREF_OTH = "other";
-    final static private ArrayList<String> HISTORY_VALUES = new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH));
 
     /* Valeurs possible pour les critéres lié au Regime alimentaire */
     
     final static public String FOOD_N = "nonuts";
     final static public String FOOD_V = "vegetarian";
-    final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V));
+    final static public String FOOD_BLANK = "";
+
+    final static private Map<CriterionName, ArrayList<String>> possibleValues = Map.of(
+        CriterionName.GUEST_HAS_ALLERGY, new ArrayList<String>(Arrays.asList(POS, NEG)),
+        CriterionName.HOST_HAS_ANIMAL, new ArrayList<String>(Arrays.asList(POS, NEG)),
+        CriterionName.GENDER, new ArrayList<String>(Arrays.asList(F, M, OTH)),
+        CriterionName.PAIR_GENDER, new ArrayList<String>(Arrays.asList(F, M, OTH, BLANK)),
+        CriterionName.HISTORY, new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH)),
+        CriterionName.GUEST_FOOD, new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V, FOOD_BLANK)),
+        CriterionName.HOST_FOOD, new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V, FOOD_BLANK)));
 
     /** Constructeur de Criterion.
      * @param label 
@@ -49,41 +59,31 @@ public class Criterion {
      */
     public Criterion(String label, String value) {
         this(CriterionName.valueOf(label), value);
-    }   
+    }  
 
     /**
      * Méthode qui vérifie si le critère est valide
      * @return
      */ 
-    public boolean isValid() {
+    public void isValid() throws CriterionException {
         switch (this.label.getType()) {
             case 'B':
-                try {
-                    checkBoolean(this.value);
+                if (!possibleValues.get(this.label).contains(this.value)) {
+                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(B_VALUES.toArray())));
                 }
-                return B_VALUES.contains(this.value);
             case 'T':
-                if(this.label.equals(CriterionName.GENDER)) {
-                    return GENDER_VALUES.contains(this.value);
+                if(this.label.equals(CriterionName.GENDER) && !GENDER_VALUES.contains(this.value)) {
+                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(GENDER_VALUES.toArray())));
                 } 
-                else if(this.label.equals(CriterionName.PAIR_GENDER)) {
-                    return GENDER_VALUES.contains(this.value) || this.value.isEmpty();
+                else if(this.label.equals(CriterionName.PAIR_GENDER) && !(PAIR_GENDER_VALUES.contains(this.value))) {
+                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(PAIR_GENDER_VALUES.toArray())));
                 }
-                else if(this.label.equals(CriterionName.HISTORY)) {
-                    return HISTORY_VALUES.contains(this.value);
+                else if(this.label.equals(CriterionName.HISTORY) && !HISTORY_VALUES.contains(this.value)) {
+                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(PAIR_GENDER_VALUES.toArray())));
                 }
-                else if(this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) {
-                    return FOOD_VALUES.containsAll(Arrays.asList(this.value.split(","))) || this.value.isEmpty();
+                else if((this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) && !FOOD_VALUES.containsAll(Arrays.asList(this.value.split(",")))) {
+                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(FOOD_VALUES.toArray())));
                 }
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    public void checkBoolean (String str) throws BadBooleanCriterionExeption {
-        if (!B_VALUES.contains(str)) {
-            throw new BadBooleanCriterionExeption(String.format("La valeur \"%s\" n'est pas une valeur possible : %s", str, Arrays.toString(B_VALUES.toArray())));
         }
     }
 
@@ -107,4 +107,5 @@ public class Criterion {
     public String toString() {
         return this.label + " " + this.value;
     }
+
 }

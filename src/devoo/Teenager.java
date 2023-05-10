@@ -197,8 +197,15 @@ public class Teenager {
      */
     public void purgeCriterion() {
         for (Map.Entry<CriterionName, Criterion> critere : this.requirements.entrySet()) {
-            if (critere.getValue() != null && !critere.getValue().isValid()) {
-                this.updateCriterion(critere.getValue().getLabel(), null);
+            try {
+                critere.getValue().isValid();
+            }
+            catch (CriterionException e) {
+                System.out.println(e.getMessage());
+                this.updateCriterion(critere.getKey(), null);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
     }

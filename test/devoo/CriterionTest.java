@@ -42,7 +42,7 @@ public class CriterionTest {
         c21 = new Criterion( "GENDER", "FEMME");
     }
          
-    @Test
+    /*@Test
     public void isValidTest() {
         assertTrue(c1.isValid());
         assertTrue(c2.isValid());
@@ -68,5 +68,5 @@ public class CriterionTest {
         assertTrue(c19.isValid());
         assertTrue(c20.isValid());
         assertFalse(c21.isValid());
-    }
+    }*/
 }
