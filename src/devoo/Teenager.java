@@ -203,4 +203,20 @@ public class Teenager {
         }
     }
 
+    /**
+     * Retourne l'origine du Teenager
+     * @return
+     */
+
+    public Country getCountry() {
+         return this.origin;
+    }
+    /*
+     * Retourne l'id du Teenager
+     * @return
+     */
+    public int getId() {
+        return this.id;
+    
+
 }
