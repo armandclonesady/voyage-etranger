@@ -58,6 +58,9 @@ public class Criterion {
     public boolean isValid() {
         switch (this.label.getType()) {
             case 'B':
+                try {
+                    checkBoolean(this.value);
+                }
                 return B_VALUES.contains(this.value);
             case 'T':
                 if(this.label.equals(CriterionName.GENDER)) {
@@ -75,6 +78,12 @@ public class Criterion {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    public void checkBoolean (String str) throws BadBooleanCriterionExeption {
+        if (!B_VALUES.contains(str)) {
+            throw new BadBooleanCriterionExeption(String.format("La valeur \"%s\" n'est pas une valeur possible : %s", str, Arrays.toString(B_VALUES.toArray())));
         }
     }
 
