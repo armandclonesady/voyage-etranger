@@ -70,6 +70,12 @@ public class Teenager {
         this(name, birth, Country.valueOf(origin), null);
     }
 
+    public void initRequirements() {
+        for(CriterionName c : CriterionName.values()) {
+            this.requirements.put(c, null);
+        }
+    }
+
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager
      * @param t
@@ -96,7 +102,7 @@ public class Teenager {
         }
         return true;
     }
-    /*
+    /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère de l'historique
      */
     /*
@@ -114,7 +120,7 @@ public class Teenager {
     }
     */
 
-    /*
+    /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des animaux
      * @param t
      */
@@ -124,7 +130,7 @@ public class Teenager {
         return !(hostAnimal.equals("yes") && hostAnimal == guestAnimal);
     }
 
-    /*
+    /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère du régime alimentaire
      * @param t
      */
@@ -142,7 +148,7 @@ public class Teenager {
         return true;
     }
 
-    /*
+    /**
     * Permet de mettre ajour un critère
     * @param label
     * @param criterion
@@ -196,38 +202,5 @@ public class Teenager {
             }
         }
     }
-
-    public void initRequirements() {
-        for(CriterionName c : CriterionName.values()) {
-            this.requirements.put(c, null);
-        }
-    }
-
-   /*public static void main(String[] args) {
-        Teenager teen1 = new Teenager("ratio", null, Country.FRANCE);
-        Teenager teen2 = new Teenager("ratio2", null, Country.FRANCE);
-        
-        teen1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "azazaza"));
-        teen2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-
-        teen1.updateCriterion(new Criterion("HISTORY", "same"));
-        teen1.updateCriterion(new Criterion("HISTORY", "SAMME"));
-        teen1.purgeCriterion();
-        
-        System.out.println("teen1");
-        for(Map.Entry<CriterionName, Criterion> entry : teen1.getRequirements().entrySet()) {
-            System.out.println(entry.toString());
-        }
-
-        teen1.lastGuest = teen2;
-        
-        teen1.updateCriterion(new Criterion("HISTORY", "same"));
-        teen2.updateCriterion(new Criterion("HISTORY", ""));
-        
-        teen1.updateCriterion(new Criterion("HOST_FOOD", ""));
-        teen2.updateCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
-        
-        System.out.println(teen1.compatibleWithGuest(teen2));
-    }*/
 
 }

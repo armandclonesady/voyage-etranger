@@ -5,10 +5,10 @@ import java.util.Arrays;
 
 /**
  * Classe Criterion
- * @autor : Raphael Kiecken, Armand Sady, Antoine Gaienier
+ * @author : Raphael Kiecken, Armand Sady, Antoine Gaienier
  */
 public class Criterion {
-    /* Attributes */
+
     private CriterionName label;
     private String value;
 
@@ -34,26 +34,27 @@ public class Criterion {
     final static public String FOOD_V = "vegetarian";
     final static private ArrayList<String> FOOD_VALUES = new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V));
 
-    /* constructeur dr
-     * @param label Nom du Criterion.
-     * @param value Valeur du Criterion.
+    /** Constructeur de Criterion.
+     * @param label 
+     * @param value 
      */
     public Criterion(CriterionName label, String value) {
         this.label = label;
         this.value = value;
     }
 
-    /**
-     * @param label Chaine de caractère représentant le nom du Criterion.
-     * @param value Valeur du Criterion.
+    /** Constructeur de Criterion.
+     * @param label 
+     * @param value 
      */
-    public Criterion(String label, String value) {this(CriterionName.valueOf(label), value);}   
+    public Criterion(String label, String value) {
+        this(CriterionName.valueOf(label), value);
+    }   
 
     /**
      * Méthode qui vérifie si le critère est valide
      * @return
      */ 
-
     public boolean isValid() {
         switch (this.label.getType()) {
             case 'B':
