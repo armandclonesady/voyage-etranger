@@ -2,8 +2,6 @@ package devoo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -64,25 +62,32 @@ public class Criterion {
     /**
      * Méthode qui vérifie si le critère est valide
      * @return
-     */ 
+     */
+
+    /**
+     * Méthode retournant tous les 
+     * @return Une String qui contient toutes les valeurs possibles pour le critérion dans la variable this.label
+     */
+    public ArrayList<String> getRightValues() {
+        return possibleValues.get(this.label);
+    }
+
+    public String errorMsg() {
+        return String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(getRightValues().toArray()));
+    }
+    
     public void isValid() throws CriterionException {
         switch (this.label.getType()) {
             case 'B':
-                if (!possibleValues.get(this.label).contains(this.value)) {
-                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(B_VALUES.toArray())));
+                if (!getRightValues().contains(this.value)) {
+                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(possibleValues.get(this.label).toArray())));
                 }
             case 'T':
-                if(this.label.equals(CriterionName.GENDER) && !GENDER_VALUES.contains(this.value)) {
-                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(GENDER_VALUES.toArray())));
-                } 
-                else if(this.label.equals(CriterionName.PAIR_GENDER) && !(PAIR_GENDER_VALUES.contains(this.value))) {
-                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(PAIR_GENDER_VALUES.toArray())));
+                if(!getRightValues().contains(this.value)) {
+                    throw new CriterionException(errorMsg());
                 }
-                else if(this.label.equals(CriterionName.HISTORY) && !HISTORY_VALUES.contains(this.value)) {
-                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(PAIR_GENDER_VALUES.toArray())));
-                }
-                else if((this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) && !FOOD_VALUES.containsAll(Arrays.asList(this.value.split(",")))) {
-                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(FOOD_VALUES.toArray())));
+                else if((this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) && !getRightValues().containsAll(Arrays.asList(this.value.split(",")))) {  
+                    throw new CriterionException(errorMsg());
                 }
         }
     }

@@ -1,6 +1,7 @@
 
 package devoo;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,8 +41,24 @@ public class CriterionTest {
         c19 = new Criterion("PAIR_GENDER", "");
         c20 = new Criterion( "GENDER", "other");
         c21 = new Criterion( "GENDER", "FEMME");
+        
     }
-         
+
+    
+    @Test
+    public void isValidTest() {
+        Criterion[] cList = new Criterion[] {c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19,c20,c21};
+        for (Criterion criterion : cList) {
+            try {
+                criterion.isValid();
+            } catch (CriterionException e) {
+                assertEquals(criterion.errorMsg(), e.getMessage());
+            }   
+        }
+    }
+    /**
+     * Ancien test de isValid, avant que nous ayons refait toute la fonction avec les Exceptions
+     */
     /*@Test
     public void isValidTest() {
         assertTrue(c1.isValid());
