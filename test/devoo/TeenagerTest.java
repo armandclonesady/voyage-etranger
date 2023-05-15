@@ -117,6 +117,53 @@ public class TeenagerTest {
     }
 
     @Test
+    public void countryCompatibilityTest() {
+        
+        t1 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.SPAIN);
+        t1.updateCriterion(new Criterion("HOBBIES", "1, 2, 3, 4"));
+
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.SPAIN);
+        t2.updateCriterion(new Criterion("HOBBIES", "1, 2, 3, 4"));
+        assertTrue(t1.countryCompatibility(t2));
+
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
+        assertTrue(t1.countryCompatibility(t2));
+
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.GERMANY);
+        t2.updateCriterion(new Criterion("HOBBIES", ""));
+        assertTrue(t1.countryCompatibility(t2));
+
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
+        assertTrue(t1.countryCompatibility(t2));
+        
+
+        t1 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t1.updateCriterion(new Criterion("HOBBIES", "1,2,3,4"));
+        
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.SPAIN);
+        t2.updateCriterion(new Criterion("HOBBIES", " 1, 2, 3, 4"));
+        assertTrue(t1.countryCompatibility(t2));
+
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
+        assertFalse(t1.countryCompatibility(t2));
+
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.GERMANY);
+        t2.updateCriterion(new Criterion("HOBBIES", ""));
+        assertFalse(t1.countryCompatibility(t2));
+
+        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
+        assertFalse(t1.countryCompatibility(t2));
+        
+        t2.updateCriterion(new Criterion("HOBBIES", "1,5,2,5"));
+        assertTrue(t1.countryCompatibility(t2));
+
+    }
+
+    @Test
     public void purgeCriterionTest() {
         assertFalse(t1.getCriterion(CriterionName.HOST_HAS_ANIMAL)==null);
         t1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "azazaza"));
