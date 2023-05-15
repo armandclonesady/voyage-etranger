@@ -1,15 +1,13 @@
-package graph;
+package graphes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Locale;
+import java.util.List;
 import java.util.Set;
-
 import devoo.Country;
 import devoo.Criterion;
 import devoo.Teenager;
-import devoo.Platform;
 import fr.ulille.but.sae2_02.graphes.*;
 
 /*
@@ -37,6 +35,7 @@ public class AffectationUtil {
         if( !host.animalCompatibility(visitor) ) {
             poids += 100;
         }
+        //poids -= host.numberOfCommonHobbies(visitor);
         return poids;
     }
 
@@ -55,6 +54,21 @@ public class AffectationUtil {
         System.out.println(g);
         return g;
     }
+
+    // retourne une map du cour chemin entre deux sommets
+
+    public static List<Arete<Teenager>> compatibList(GrapheNonOrienteValue<Teenager> g,List<Teenager> host, List<Teenager> guest ){
+        CalculAffectation calcul = new CalculAffectation(g, host, guest);
+        List<Arete<Teenager>> list = calcul.calculerAffectation();
+
+        
+        return list;
+    }
+
+        
+
+                        
+    
 
     public static void main(String[] args) {
         Set<Teenager> promo = new HashSet<Teenager>();
@@ -87,9 +101,20 @@ public class AffectationUtil {
         promo.add(t5);
         promo.add(t6);
 
-        System.out.println(init(promo));
-        }
+        List<Teenager> host = new ArrayList<Teenager>();
+        host.add(t1);
+        host.add(t2);
+        host.add(t3);
+
+        List<Teenager> guest = new ArrayList<Teenager>();
+        guest.add(t4);
+        guest.add(t5);
+        guest.add(t6);
+
+        System.out.println(init(promo)+ "\n");
+        System.out.println(compatibList(init(promo),host,guest));
     }
+}
 
     /*
      * revoie une arrayList contenant tout les host et le visitor le plus compatible avec lui; 
