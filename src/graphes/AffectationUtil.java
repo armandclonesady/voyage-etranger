@@ -2,8 +2,10 @@ package graphes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import devoo.Country;
 import devoo.Criterion;
@@ -29,113 +31,43 @@ public class AffectationUtil {
     */
     public static double weight (Teenager host, Teenager visitor) {
         int poids= 10;
-        if (host.getCountry() != visitor.getCountry()) {
+        if (host.getCountry() == visitor.getCountry()) {
             poids += 10000;
         }
         if( !host.animalCompatibility(visitor) ) {
             poids += 100;
         }
-        //poids -= host.numberOfCommonHobbies(visitor);
+        // poids -= host.numberOfCommonHobbies(visitor);
         return poids;
     }
 
-    public static GrapheNonOrienteValue<Teenager> init(Set<Teenager> promo) {
+    public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest) {
         GrapheNonOrienteValue<Teenager> g = new GrapheNonOrienteValue<Teenager>();
-        for (Teenager t : promo) {
+        for (Teenager t : host) {
             g.ajouterSommet(t);
         }
-        for (Teenager t1 : promo) {
-            for (Teenager t2 : promo) {
+        for (Teenager t : guest) {
+            g.ajouterSommet(t);
+        }
+        for (Teenager t1 : host) {
+            for (Teenager t2 : guest) {
                 if (t1 != t2 && !g.contientArete(t2, t1)) {
                     g.ajouterArete(t1, t2, weight(t1, t2));
                 }
             }
         }
-        System.out.println(g);
         return g;
     }
 
-    // retourne une map du cour chemin entre deux sommets
+    // Retourne une map du cour chemin entre deux sommets
 
-    public static List<Arete<Teenager>> compatibList(GrapheNonOrienteValue<Teenager> g,List<Teenager> host, List<Teenager> guest ){
-        CalculAffectation calcul = new CalculAffectation(g, host, guest);
-        List<Arete<Teenager>> list = calcul.calculerAffectation();
-
+    public static Map<Teenager, Teenager> compatibilityMap(List<Teenager> host, List<Teenager> guest) {
+        CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest), host, guest);
+        Map<Teenager, Teenager> dico = new HashMap<Teenager, Teenager>();
         
-        return list;
-    }
-
-        
-
-                        
-    
-
-    public static void main(String[] args) {
-        Set<Teenager> promo = new HashSet<Teenager>();
-        Teenager t1, t2, t3, t4, t5, t6;
-
-        t1= new Teenager("A", LocalDate.of(2000, 1, 1),Country.FRANCE);
-        t2= new Teenager("B", LocalDate.of(2000, 1, 1),Country.FRANCE);
-        t3= new Teenager("C", LocalDate.of(2000, 1, 1),Country.FRANCE);
-        t4= new Teenager("X", LocalDate.of(2000, 1, 1),Country.ITALY);
-        t5= new Teenager("Y", LocalDate.of(2000, 1, 1),Country.ITALY);
-        t6= new Teenager("Z", LocalDate.of(2000, 1, 1),Country.ITALY);
-
-        t1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
-        t3.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
-        t2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-        t3.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
-        t4.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t5.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
-        t6.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t4.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
-        t5.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-        t6.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
-
-        promo.add(t1);
-        promo.add(t2);
-        promo.add(t3);
-        promo.add(t4);
-        promo.add(t5);
-        promo.add(t6);
-
-        List<Teenager> host = new ArrayList<Teenager>();
-        host.add(t1);
-        host.add(t2);
-        host.add(t3);
-
-        List<Teenager> guest = new ArrayList<Teenager>();
-        guest.add(t4);
-        guest.add(t5);
-        guest.add(t6);
-
-        System.out.println(init(promo)+ "\n");
-        System.out.println(compatibList(init(promo),host,guest));
+        for (Arete<Teenager> a : calcul.calculerAffectation()) {
+            dico.put(a.getExtremite1(), a.getExtremite2());
+        }
+        return dico;
     }
 }
-
-    /*
-     * revoie une arrayList contenant tout les host et le visitor le plus compatible avec lui; 
-     */
-
-    /*public ArrayList<Teenager> meilleur_poid(ArrayList<Teenager> host, ArrayList<Teenager> guest){
-        ArrayList<Teenager> meilleur_poid = new ArrayList<Teenager>();
-        for (Teenager h : host) {
-            for (Teenager g : guest) {
-                if( weight(h, g)<100000){
-                    meilleur_poid.add(h,g,weight(h,g));
-                }
-                else if(weight(h,g)< meilleur_poid){
-                    meilleur_poid.remove(-1);
-                    meilleur_poid.add(h,g,weight(h,g));
-                }
-
-                        
-        }
-        return meilleur_poid;
-    }*/
-        
-
-    // ... ajouter toutes autres méthodes jugées nécessaires

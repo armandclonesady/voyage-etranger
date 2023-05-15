@@ -9,13 +9,18 @@ import devoo.Teenager;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class TestAffectationVersion1 {
 
     Teenager t1, t2, t3, t4, t5, t6;
     Set<Teenager> promo;
+    Map<Teenager, Teenager> dico, trueMap;
     
     @BeforeEach
     public void init() {
@@ -41,16 +46,28 @@ public class TestAffectationVersion1 {
         t5.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
         t6.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
 
-        promo.add(t1);
-        promo.add(t2);
-        promo.add(t3);
-        promo.add(t4);
-        promo.add(t5);
-        promo.add(t6);
+        List<Teenager> host = new ArrayList<Teenager>();
+        host.add(t1);
+        host.add(t2);
+        host.add(t3);
+
+        List<Teenager> guest = new ArrayList<Teenager>();
+        guest.add(t4);
+        guest.add(t5);
+        guest.add(t6);
+        
+
+        dico = AffectationUtil.compatibilityMap(host,guest);
+
+        trueMap = Map.of(
+            t3, t5,
+            t1, t4,
+            t2, t6);
     }   
 
     @Test
-    public void calculTest() {
-        
+    public void calculTest(){
+        System.out.println(trueMap);
+        assertEquals(trueMap, dico);
     }
 }
