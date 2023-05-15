@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 
-public class TeenagerTest {
+public class TestTeenager {
 
     Teenager t1; Teenager t2;
     Teenager t3; Teenager t4;

@@ -88,8 +88,8 @@ public class AffectationUtil {
         promo.add(t6);
 
         System.out.println(init(promo));
-        }
     }
+}
 
     /*
      * revoie une arrayList contenant tout les host et le visitor le plus compatible avec lui; 
