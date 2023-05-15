@@ -190,7 +190,6 @@ public class Teenager {
     public boolean criterionIsProperlyDefine(CriterionName label) {
         return this.requirements.containsKey(label) && this.getCriterion(label) != null;
     }
-
     /**
      * Si le Criterion n'est pas valable selon Criterion.isValid(), sa valuer dans la Map deviens null.
      * Si il est déjà null, on l'ignore.

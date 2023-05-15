@@ -47,7 +47,7 @@ public class AffectationUtil {
         }
         for (Teenager t1 : promo) {
             for (Teenager t2 : promo) {
-                if (t1 != t2) {
+                if (t1 != t2 && !g.contientArete(t2, t1)) {
                     g.ajouterArete(t1, t2, weight(t1, t2));
                 }
             }
@@ -67,12 +67,18 @@ public class AffectationUtil {
         t5= new Teenager("Y", LocalDate.of(2000, 1, 1),Country.ITALY);
         t6= new Teenager("Z", LocalDate.of(2000, 1, 1),Country.ITALY);
 
+        t1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
+        t3.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
         t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
         t2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
         t3.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
         t4.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
         t5.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
         t6.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        t4.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        t5.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t6.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
 
         promo.add(t1);
         promo.add(t2);
@@ -108,4 +114,3 @@ public class AffectationUtil {
         
 
     // ... ajouter toutes autres méthodes jugées nécessaires
-}
