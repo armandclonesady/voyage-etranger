@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-class CriterionNameTest {
+class TestCriterionName {
     /**
      * Il n'y a pas plus a mettre dans ce test car c'est un test sur des enum.
      */

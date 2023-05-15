@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-public class CriterionTest {
+public class TestCriterion {
     Criterion c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21;
 
 /**
@@ -41,7 +41,6 @@ public class CriterionTest {
         c21 = new Criterion( "GENDER", "FEMME");
         
     }
-
     
     @Test
     public void isValidTest() {
@@ -54,34 +53,4 @@ public class CriterionTest {
             }   
         }
     }
-    /**
-     * Ancien test de isValid, avant que nous ayons refait toute la fonction avec les Exceptions
-     */
-    /*@Test
-    public void isValidTest() {
-        assertTrue(c1.isValid());
-        assertTrue(c2.isValid());
-        assertTrue(c3.isValid());
-        assertFalse(c4.isValid());
-        assertFalse(c5.isValid());
-        assertFalse(c6.isValid());
-
-        assertTrue(c7.isValid());
-        assertFalse(c8.isValid());
-        assertTrue(c9.isValid());
-        assertTrue(c10.isValid());
-        assertFalse(c11.isValid());
-        assertTrue(c12.isValid());
-        
-        assertTrue(c13.isValid());
-        assertTrue(c14.isValid());
-        assertFalse(c15.isValid());
-        assertFalse(c16.isValid());
-        
-        assertTrue(c17.isValid());
-        assertFalse(c18.isValid());
-        assertTrue(c19.isValid());
-        assertTrue(c20.isValid());
-        assertFalse(c21.isValid());
-    }*/
 }

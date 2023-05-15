@@ -103,11 +103,11 @@ public class Teenager {
         }
         return true;
     }
+
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère de l'historique
      */
-    /*
-    public int historyCompatibility(Teenager t) {
+    /*public int historyCompatibility(Teenager t) {
         if(this.lastGuest == t) {
             String historyHost = this.getValue(CriterionName.HISTORY);
             String historyGuest = t.getValue(CriterionName.HISTORY);
@@ -118,8 +118,7 @@ public class Teenager {
             }
         }
         return -1;
-    }
-    */
+    }*/
 
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des animaux
@@ -226,7 +225,7 @@ public class Teenager {
     }
 
     public boolean criterionIsProperlyDefine(CriterionName label) {
-        return this.requirements.containsKey(label) && this.getCriterion(label) != null;
+        return this.getCriterion(label) != null;
     }
 
     /**
@@ -256,12 +255,16 @@ public class Teenager {
     public Country getCountry() {
          return this.origin;
     }
+
     /*
      * Retourne l'id du Teenager
      * @return
      */
     public int getId() {
         return this.id;
-    
+    }
+
+    public String toString() {
+        return this.name;
     }
 }
