@@ -8,6 +8,8 @@ Version 1
 
 ### Étude d'un premier exemple
 
+*Énumérer tous les appariements acceptables (c'est à dire qui asocient des adolescents compatibles) pour les données de l'Exemple 1, en supposant que les français rendent visite aux italiens.*
+
 Appariements acceptables : 
 
 - A avec X
@@ -21,13 +23,31 @@ Appariements acceptables :
 - C avec Y
 - C avec Z
 
-*Énumérer tous les appariements acceptables (c'est à dire qui asocient des adolescents compatibles) pour les données de l'Exemple 1, en supposant que les français rendent visite aux italiens.*
-
 *Justifier pourquoi l'appariement optimal est Bellatrix--Xolag, Adonia--Zander, et Callista--Yak; cette explication ne doit pas parler de graphes, mais se baser uniquement sur les données du problème.*
+
+Bellatrix--Xolag ont un point commun "culture" et Bellatrix--Zander n'en ont aucun.
+
+Adonia--Zander ont un point commun "technology", Adonia--Xolag ont aussi un point commun mais cela n'est pas possible car Xolag déjà affecté et Adonia--Yak n'ont aucun point commun.
+
+Callista--Yak ont deux points commun "science,reading" et Callista n'a de point commun avec personnes d'autres 
 
 ### Modélisation de l'exemple
 
 *Donner un graphe qui modélise l'Exemple 1, plus précisément, la matrice d'adjacence de ce graphe. Expliquez comment vous avez choisi le poids pour chacune des arêtes.*
+
+|   | X | Y | Z |
+| --- | - | - | - |
+| A | 9 | 10 | 9 |
+| B | 9 | 110 | 10 |
+| C | 10 | 8 | 10
+
+
+Pour A-X poid initialle 10, -1 car un point commun.
+Pour A-Y poid initialle 10 et aucun point commun donc on n'y touche pas.
+Pour A-Z poid initialle 10, -1 car un point commun.
+
+Pour B-X Pour A-X poid initialle 10, -1 car un point commun.
+Pour B-Y poid initialle 10, +100 car B est allergique au animaux et Y possède un 
 
 
 ### Modélisation pour la Version 1
