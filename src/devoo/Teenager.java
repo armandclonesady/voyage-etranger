@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Classe Teenager
@@ -146,6 +147,43 @@ public class Teenager {
         if(!hostRegime.containsAll(guestRegime)) return false;
         return true;
     }
+    /**
+     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des pays,
+     * ceci est particulièrement important quand le Teenager est Français.
+     * @param t
+     * @return
+     */
+    public boolean countryCompatibility(Teenager t) {
+        if (this.origin.equals(Country.FRANCE)) {
+            ArrayList<String> hostCriterion = new ArrayList<String>(splitValues(this.getCriterion(CriterionName.HOBBIES)));
+            ArrayList<String> guestCriterion = new ArrayList<>(splitValues(t.getCriterion(CriterionName.HOBBIES)));
+            return (containsAllValuesCriterionName(hostCriterion, guestCriterion)) != 0;
+        }
+        return true;
+    }
+
+    List<String> splitValues(Criterion criterion) {
+        String criterionString = criterion.toString();
+        criterionString = criterionString.replace(" ","");
+        return Arrays.asList(criterionString.split(","));
+    }
+
+    public int containsAllValuesCriterionName(ArrayList<String> myCriterionsValues, ArrayList<String> otherCriterionValues) {
+        int res = 0;
+        for (int i = 0; i < Integer.min(myCriterionsValues.size(), otherCriterionValues.size()); i++) {
+            //System.out.println("i = "+i);
+            //System.out.println("teenager 1"+"\n"+myCriterionsValues+"\n");
+            //System.out.println("teenager 2"+"\n"+otherCriterionValues+"\n");
+            if (myCriterionsValues.contains(otherCriterionValues.get(i))){
+                //System.out.println("teenager 1 contient : [" + otherCriterionValues.get(i)+"]");
+                res++;
+            } else {
+                //System.out.println("teenager 1 ne contient pas : [" + otherCriterionValues.get(i)+"]");
+            }
+        }
+        //System.out.println("nombre de choses en commun: "+res);
+        return res;
+    }
 
     /**
     * Permet de mettre ajour un critère
@@ -161,7 +199,7 @@ public class Teenager {
      * @param criterion
      */
     public void updateCriterion(Criterion criterion) {
-        this.updateCriterion(criterion.getLabel(), criterion);;
+        this.updateCriterion(criterion.getLabel(), criterion);
     }
 
     /**

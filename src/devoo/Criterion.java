@@ -80,7 +80,7 @@ public class Criterion {
         switch (this.label.getType()) {
             case 'B':
                 if (!getRightValues().contains(this.value)) {
-                    throw new CriterionException(String.format("Valeur \"%s\" incorrect | Valeurs possibles (%s) : %s", this.value, this.label.getName(), Arrays.toString(possibleValues.get(this.label).toArray())));
+                    throw new CriterionException(errorMsg());
                 }
             case 'T':
                 if(!getRightValues().contains(this.value)) {
