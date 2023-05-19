@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class TestAffectationVersion1 {
 
-    Teenager t1, t2, t3, t4, t5, t6;
+    Teenager A, B, C, X, Y, Z;
     Set<Teenager> promo;
     Map<Teenager, Teenager> dico, trueMap;
     
@@ -26,43 +26,54 @@ public class TestAffectationVersion1 {
     public void init() {
         promo = new HashSet<Teenager>();
         
-        t1 = new Teenager("A", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        t2 = new Teenager("B", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        t3 = new Teenager("C", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        t4 = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
-        t5 = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
-        t6 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
+        A = new Teenager("A", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        B = new Teenager("B", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        C = new Teenager("C", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        X = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
+        Y = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
+        Z = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
 
-        t1.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
-        t3.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
-        t2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-        t3.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
-        t4.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t5.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
-        t6.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
-        t4.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
-        t5.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
-        t6.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        A.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        A.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        A.updateCriterion(new Criterion("HOBBIES", "sports,technology"));
+
+        B.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
+        B.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        B.updateCriterion(new Criterion("HOBBIES", "culture,science"));
+
+        C.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        C.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        C.updateCriterion(new Criterion("HOBBIES", "science,reading"));
+
+        X.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        X.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        X.updateCriterion(new Criterion("HOBBIES", "culture,technology"));
+
+        Y.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
+        Y.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        Y.updateCriterion(new Criterion("HOBBIES", "science,reading"));
+
+        Z.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        Z.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        Z.updateCriterion(new Criterion("HOBBIES", "technology"));
 
         List<Teenager> host = new ArrayList<Teenager>();
-        host.add(t1);
-        host.add(t2);
-        host.add(t3);
+        host.add(A);
+        host.add(B);
+        host.add(C);
 
         List<Teenager> guest = new ArrayList<Teenager>();
-        guest.add(t4);
-        guest.add(t5);
-        guest.add(t6);
+        guest.add(X);
+        guest.add(Y);
+        guest.add(Z);
         
 
         dico = AffectationUtil.compatibilityMap(host,guest);
 
         trueMap = Map.of(
-            t3, t5,
-            t1, t4,
-            t2, t6);
+            C, Y,
+            A, Z,
+            B, X);
     }   
 
     @Test
