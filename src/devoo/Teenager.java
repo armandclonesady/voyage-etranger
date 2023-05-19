@@ -101,6 +101,12 @@ public class Teenager {
                 return foodCompatibility;
             }
         }
+        if(this.criterionIsProperlyDefine(CriterionName.HOBBIES) && t.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
+            boolean countryCompatibility = countryCompatibility(t);
+            if(!countryCompatibility) {
+                return countryCompatibility;
+            }
+        }
         return true;
     }
 

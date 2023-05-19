@@ -54,6 +54,10 @@ Pour B-Y poid initialle 10, +100 car B est allergique au animaux et Y possède u
 
 *Décrire une modélisation générale pour la Version 1. C'est à dire, donner une formule ou une description précise qui décrit comment, étant donné un adolescent hôte et un adolescent visiteur, on détermine le poids de l'arête entre ces deux adolescents en fonction des critères considérés dans la Version 1.*
 
+Le poids de l'arête entre deux adolescents est calculé en fonction des critères suivants :
+- Nous testons si les deux adolescents sont compatibles (Uniquement en se basant sur l'allergie aux animaux), si non, nous ajoutons 999 au poids de l'arête.
+- Nous testons si les deux adolescents ont un point commun, si oui, nous retirons 1 au poids de l'arête. 
+
 ### Implémentation de la Version 1
 
 *Cette partie du travail sera évaluée à partir du code. Implémenter la fonction weight de la classe AffectationUtil en suivant la modélisation proposée. Puis, implémenter une classe TestAffectationVersion1 qui montre que votre implémentation est correcte. La classe de test doit contenir au moins une méthode de test comme ceci:*
@@ -64,6 +68,8 @@ Pour B-Y poid initialle 10, +100 car B est allergique au animaux et Y possède u
 
 *Si vous n'êtes pas à l'aise avec les tests unitaires, votre classe TestAffectationVersion1 peut contenir une méthode main à la palce de la méthode de test, dans ce cas vous afficherez dans le terminal l'appariement résultat.*
 
+Nous avons un problèmes concernant l'affectation, en effet là où nous devrions retrouver B-X nous retrouvons B-Z. Cela peux s'expliquer par le fait que l'affectation se faisant par ordre alphabétique, A-X est affecté en premier, puis B-Z et enfin C-Y.
+Nous n'avons pas su trouver de solution à ce problème pour l'instant.
 
 ### Exemple de vérification de l'incompatibilité 
 
