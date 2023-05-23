@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -95,8 +94,8 @@ public class TestAffectationVersion1 {
     public void calculTest(){
         System.out.println(trueMap);
         assertEquals(trueMap, dico);
-        assertEquals(t1.AffectationUtil.weight(t2),0);
-        assertEquals(t3.AffectationUtil.weight(t4),0);
-        assertEquals(t1.AffectationUtil.weight(t5),1009);
+        assertEquals(AffectationUtil.weight(t1,t2),0);
+        assertEquals(AffectationUtil.weight(t3, t4),0);
+        assertEquals(AffectationUtil.weight(t6, t5),1009);
     }
 }
