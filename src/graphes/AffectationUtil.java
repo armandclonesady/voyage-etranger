@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import devoo.Country;
 import devoo.Criterion;
-import devoo.CriterionName;
 import devoo.Teenager;
 import fr.ulille.but.sae2_02.graphes.*;
 
@@ -32,8 +31,8 @@ public class AffectationUtil {
     */
     public static double weight (Teenager host, Teenager visitor) {
         int poids= 10;
-        if( !host.animalCompatibility(visitor) ) {
-            poids += 999;
+        if (host.getCountry() == visitor.getCountry()) {
+            poids += 10000;
         }
         if(host.historyCompatibility(visitor) == 1){
             return 0;
@@ -47,12 +46,16 @@ public class AffectationUtil {
         return poids;
     }
 
-    public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> visitor) {
+    public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest) {
         GrapheNonOrienteValue<Teenager> g = new GrapheNonOrienteValue<Teenager>();
+        for (Teenager t : host) {
+            g.ajouterSommet(t);
+        }
+        for (Teenager t : guest) {
+            g.ajouterSommet(t);
+        }
         for (Teenager t1 : host) {
-            g.ajouterSommet(t1);
-            for (Teenager t2 : visitor) {
-                g.ajouterSommet(t2);
+            for (Teenager t2 : guest) {
                 if (t1 != t2 && !g.contientArete(t2, t1)) {
                     g.ajouterArete(t1, t2, weight(t1, t2));
                 }
@@ -63,8 +66,8 @@ public class AffectationUtil {
 
     // Retourne une map du cour chemin entre deux sommets
 
-    public static Map<Teenager, Teenager> compatibilityMap(List<Teenager> host, List<Teenager> visitor) {
-        CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, visitor), host, visitor);
+    public static Map<Teenager, Teenager> compatibilityMap(List<Teenager> host, List<Teenager> guest) {
+        CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest), host, guest);
         Map<Teenager, Teenager> dico = new HashMap<Teenager, Teenager>();
         
         for (Arete<Teenager> a : calcul.calculerAffectation()) {

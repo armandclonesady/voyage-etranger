@@ -101,12 +101,6 @@ public class Teenager {
                 return foodCompatibility;
             }
         }
-        if(this.criterionIsProperlyDefine(CriterionName.HOBBIES) && t.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
-            boolean countryCompatibility = countryCompatibility(t);
-            if(!countryCompatibility) {
-                return countryCompatibility;
-            }
-        }
         return true;
     }
 
@@ -162,19 +156,19 @@ public class Teenager {
     public boolean countryCompatibility(Teenager t) {
         if (this.origin.equals(Country.FRANCE)) {
             ArrayList<String> hostCriterion = new ArrayList<String>(splitValues(this.getCriterion(CriterionName.HOBBIES)));
-            ArrayList<String> guestCriterion = new ArrayList<String>(splitValues(t.getCriterion(CriterionName.HOBBIES)));
-            return (containsAllValuesCriterionName(hostCriterion, guestCriterion)) >= 1;
+            ArrayList<String> guestCriterion = new ArrayList<>(splitValues(t.getCriterion(CriterionName.HOBBIES)));
+            return (containsAllValuesCriterionName(hostCriterion, guestCriterion)) != 0;
         }
         return true;
     }
 
-    public List<String> splitValues(Criterion criterion) {
+    List<String> splitValues(Criterion criterion) {
         String criterionString = criterion.toString();
         criterionString = criterionString.replace(" ","");
         return Arrays.asList(criterionString.split(","));
     }
 
-    public static int containsAllValuesCriterionName(List<String> myCriterionsValues, List<String> otherCriterionValues) {
+    public int containsAllValuesCriterionName(ArrayList<String> myCriterionsValues, ArrayList<String> otherCriterionValues) {
         int res = 0;
         for (int i = 0; i < Integer.min(myCriterionsValues.size(), otherCriterionValues.size()); i++) {
             //System.out.println("i = "+i);

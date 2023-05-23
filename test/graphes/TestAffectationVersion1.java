@@ -26,12 +26,12 @@ public class TestAffectationVersion1 {
     public void init() {
         promo = new HashSet<Teenager>();
         
-        A = new Teenager("A", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        B = new Teenager("B", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        C = new Teenager("C", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        X = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
-        Y = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
-        Z = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t1 = new Teenager("A", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t2 = new Teenager("B", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t3 = new Teenager("C", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t4 = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t5 = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t6 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
 
 
         A.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
@@ -91,9 +91,9 @@ public class TestAffectationVersion1 {
         dico = AffectationUtil.compatibilityMap(host,guest);
 
         trueMap = Map.of(
-            C, Y,
-            A, Z,
-            B, X);
+            t3, t5,
+            t1, t4,
+            t2, t6);
     }   
 
     @Test
