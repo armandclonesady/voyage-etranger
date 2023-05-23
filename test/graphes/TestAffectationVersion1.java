@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class TestAffectationVersion1 {
 
-    Teenager A, B, C, X, Y, Z;
+    Teenager A, B, C, X, Y, Z, t1, t2, t3, t4, t5, t6;
     Set<Teenager> promo;
     Map<Teenager, Teenager> dico, trueMap;
     
@@ -32,6 +32,7 @@ public class TestAffectationVersion1 {
         X = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
         Y = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
         Z = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
+
 
         A.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
         A.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
@@ -57,15 +58,34 @@ public class TestAffectationVersion1 {
         Z.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
         Z.updateCriterion(new Criterion("HOBBIES", "technology"));
 
+        t1 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.FRANCE,t2);
+        t2 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY,t1);
+        t3 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.FRANCE,t4);
+        t4 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY,t3);
+        t5 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.FRANCE,t6);
+        t6 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY,t5);
+
+        t1.updateCriterion(new Criterion("HISTORY", "same"));
+        t2.updateCriterion(new Criterion("HISTORY", "same"));
+        t3.updateCriterion(new Criterion("HISTORY", "same"));
+        t5.updateCriterion(new Criterion("HISTORY", "other"));
+
+
         List<Teenager> host = new ArrayList<Teenager>();
         host.add(A);
         host.add(B);
         host.add(C);
+        host.add(t1);
+        host.add(t3);
+        host.add(t5);
 
         List<Teenager> guest = new ArrayList<Teenager>();
         guest.add(X);
         guest.add(Y);
         guest.add(Z);
+        guest.add(t2);
+        guest.add(t4);
+        guest.add(t6);
         
 
         dico = AffectationUtil.compatibilityMap(host,guest);

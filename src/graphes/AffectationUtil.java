@@ -35,6 +35,12 @@ public class AffectationUtil {
         if( !host.animalCompatibility(visitor) ) {
             poids += 999;
         }
+        if(host.historyCompatibility(visitor) == 1){
+            return 0;
+        }
+        if(host.historyCompatibility(visitor) == 0){
+            poids += 999;
+        }
         poids -= (1 * Teenager.containsAllValuesCriterionName(
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
             visitor.splitValues(visitor.getCriterion(CriterionName.HOBBIES))));

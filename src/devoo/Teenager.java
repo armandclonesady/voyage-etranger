@@ -113,7 +113,7 @@ public class Teenager {
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère de l'historique
      */
-    /*public int historyCompatibility(Teenager t) {
+    public int historyCompatibility(Teenager t) {
         if(this.lastGuest == t) {
             String historyHost = this.getValue(CriterionName.HISTORY);
             String historyGuest = t.getValue(CriterionName.HISTORY);
@@ -124,7 +124,7 @@ public class Teenager {
             }
         }
         return -1;
-    }*/
+    }
 
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des animaux
