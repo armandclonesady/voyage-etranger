@@ -26,12 +26,12 @@ public class TestAffectationVersion1 {
     public void init() {
         promo = new HashSet<Teenager>();
         
-        t1 = new Teenager("A", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        t2 = new Teenager("B", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        t3 = new Teenager("C", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        t4 = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
-        t5 = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
-        t6 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
+        A = new Teenager("A", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        B = new Teenager("B", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        C = new Teenager("C", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        X = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
+        Y = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
+        Z = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
 
 
         A.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
@@ -75,30 +75,28 @@ public class TestAffectationVersion1 {
         host.add(A);
         host.add(B);
         host.add(C);
-        host.add(t1);
-        host.add(t3);
-        host.add(t5);
 
         List<Teenager> guest = new ArrayList<Teenager>();
         guest.add(X);
         guest.add(Y);
         guest.add(Z);
-        guest.add(t2);
-        guest.add(t4);
-        guest.add(t6);
+        
         
 
         dico = AffectationUtil.compatibilityMap(host,guest);
 
         trueMap = Map.of(
-            t3, t5,
-            t1, t4,
-            t2, t6);
+            C, Y,
+            A, X,
+            B, Z);
     }   
 
     @Test
     public void calculTest(){
         System.out.println(trueMap);
         assertEquals(trueMap, dico);
+        assertEquals(t1.AffectationUtil.weight(t2),0);
+        assertEquals(t3.AffectationUtil.weight(t4),0);
+        assertEquals(t1.AffectationUtil.weight(t5),1009);
     }
 }
