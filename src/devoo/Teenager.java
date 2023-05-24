@@ -267,4 +267,8 @@ public class Teenager {
     public String toString() {
         return this.name;
     }
+
+    public void addLastguest(Teenager t){
+        this.lastGuest = t;
+    }
 }
