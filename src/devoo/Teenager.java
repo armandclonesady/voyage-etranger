@@ -268,6 +268,10 @@ public class Teenager {
         return this.name;
     }
 
+    public String getForename() {
+        return this.name; // a changer quand le forename sera introduit
+    }
+
     public void addLastguest(Teenager t){
         this.lastGuest = t;
     }
