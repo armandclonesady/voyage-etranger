@@ -24,16 +24,18 @@ public class AffectationUtil {
     * Peut avoir d’autres paramètres si nécessaire.
     */
     public static double weight (Teenager host, Teenager visitor) {
-        int poids= 10;
+        int poids = 10;
         if(host.historyCompatibility(visitor) == 1){
             return 0;
         }
         if(host.historyCompatibility(visitor) == 0){
-            poids += 999;
+            return 999;
         }
-        poids -= (1 * Teenager.containsAllValuesCriterionName(
+        if (host.criterionIsProperlyDefine(CriterionName.HOBBIES) && visitor.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
+            poids -= (1 * Teenager.containsAllValuesCriterionName (
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
             visitor.splitValues(visitor.getCriterion(CriterionName.HOBBIES))));
+        }
         return poids;
     }
 
