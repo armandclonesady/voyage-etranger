@@ -271,4 +271,22 @@ public class Teenager {
     public String getForename() {
         return this.name; // a changer quand le forename sera introduit
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String extractValuesHost() {
+        return ""+ getName() + ", " + getForename() +", " + getId() + ", " +
+        getCriterion(CriterionName.GENDER)+ ", " + getCriterion(CriterionName.HOST_FOOD) + ", " +
+        getCriterion(CriterionName.HOST_HAS_ANIMAL) + ", " + getCriterion(CriterionName.HOBBIES) + ", " +
+        getCriterion(CriterionName.HISTORY) + ", " + getCriterion(CriterionName.PAIR_GENDER);
+    }
+
+    public String extractValuesGuest() {
+        return ""+ getName() + ", " + getForename() + ", " + getId() + ", " + 
+        getCriterion(CriterionName.GENDER)+ ", " + getCriterion(CriterionName.GUEST_FOOD) + ", " + 
+        getCriterion(CriterionName.GUEST_HAS_ALLERGY) +", " + getCriterion(CriterionName.HOBBIES) + ", " +
+        getCriterion(CriterionName.HISTORY) + ", " + getCriterion(CriterionName.PAIR_GENDER);
+    }
 }

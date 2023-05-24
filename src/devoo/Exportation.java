@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class Exportation {
@@ -29,7 +30,7 @@ public class Exportation {
     public static void main(String[] args) {
         System.out.println("\n"+sourcePath+victimPath);
         
-        HashMap<Teenager,Teenager> teenagerMap = new HashMap<Teenager,Teenager>();
+        Map<Teenager,Teenager> teenagerMap = new HashMap<Teenager,Teenager>();
         Teenager armand = new Teenager("Armand", LocalDate.now(), Country.FRANCE);
         Teenager noa = new Teenager("Noa", LocalDate.of(2004, 1, 1), Country.GERMANY);
         Teenager antoine = new Teenager("Antoine", LocalDate.of(2008, 11, 30), Country.ITALY);
