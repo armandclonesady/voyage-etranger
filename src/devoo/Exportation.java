@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class Exportation {
@@ -12,8 +13,18 @@ public class Exportation {
     final static String sourcePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "src" + System.getProperty("file.separator") + "devoo" + System.getProperty("file.separator");
     final static String victimPath = "Output.txt";
 
-    String extractValues(Teenager teenager) {
-        return ""+ teenager + teenager.getId() +  
+    static String extractValuesHost(Teenager teenager) {
+        return ""+ teenager + ", " + teenager.getForename() +", " + teenager.getId() + ", " +
+        teenager.getCriterion(CriterionName.GENDER)+ ", " + teenager.getCriterion(CriterionName.HOST_FOOD) + ", " +
+        teenager.getCriterion(CriterionName.HOST_HAS_ANIMAL) + ", " + teenager.getCriterion(CriterionName.HOBBIES) + ", " +
+        teenager.getCriterion(CriterionName.HISTORY) + ", " + teenager.getCriterion(CriterionName.PAIR_GENDER);
+    }
+
+    static String extractValuesGuest(Teenager teenager) {
+        return ""+ teenager + ", " + teenager.getForename() + ", " + teenager.getId() + ", " + 
+        teenager.getCriterion(CriterionName.GENDER)+ ", " + teenager.getCriterion(CriterionName.GUEST_FOOD) + ", " + 
+        teenager.getCriterion(CriterionName.GUEST_HAS_ALLERGY) +", " + teenager.getCriterion(CriterionName.HOBBIES) + ", " +
+        teenager.getCriterion(CriterionName.HISTORY) + ", " + teenager.getCriterion(CriterionName.PAIR_GENDER);
     }
 
     public static void main(String[] args) {
@@ -35,9 +46,10 @@ public class Exportation {
         }
         System.out.println("here's the map");
         try (BufferedWriter br = new BufferedWriter(new FileWriter(sourcePath+victimPath))) {
-            br.write("host_name, host_forename, host_id, host_gender, host_diet, host_animal, host_hobbies, host_history, guest_name, gues_forename, guest_id, guest_gender, guest_diet, guest_allergy, guest_history");
+            br.write("host_name, host_forename, host_id, host_gender, host_diet, host_animal, host_hobbies, host_history, host_same_gender, guest_name, guest_forename, guest_id, guest_gender, guest_diet, guest_allergy, guest_history, guest_same_gender");
+            br.newLine();
             for (Teenager teenager : teenagerMap.keySet()) {
-                br.write(""+teenager + "," + teenagerMap.get(teenager));
+                br.write(""+ extractValuesHost(teenager) + "," + extractValuesGuest(teenagerMap.get(teenager)));
                 br.newLine();
             }
         } catch (IOException e) {

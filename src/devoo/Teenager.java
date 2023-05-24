@@ -110,8 +110,15 @@ public class Teenager {
         return true;
     }
 
+    public static int diffAge(Teenager t1, Teenager t2) {
+        if (t1.birth.isBefore(t2.birth)) {
+            return t1.birth.getYear() - t2.birth.getYear();
+        }
+        return t2.birth.getYear() - t1.birth.getYear();
+    }
+
     /**
-     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère de l'historique
+     * Vérifie si le Teenager est compatible avec   un autre Teenager sur le critère de l'historique
      */
     public int historyCompatibility(Teenager t) {
         if(this.lastGuest == t) {
@@ -276,5 +283,27 @@ public class Teenager {
 
     public String getForename() {
         return this.forename;
+    }
+
+    public void addLastguest(Teenager t){
+        this.lastGuest = t;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String extractValuesHost() {
+        return ""+ getName() + ", " + getForename() +", " + getId() + ", " +
+        getCriterion(CriterionName.GENDER)+ ", " + getCriterion(CriterionName.HOST_FOOD) + ", " +
+        getCriterion(CriterionName.HOST_HAS_ANIMAL) + ", " + getCriterion(CriterionName.HOBBIES) + ", " +
+        getCriterion(CriterionName.HISTORY) + ", " + getCriterion(CriterionName.PAIR_GENDER);
+    }
+
+    public String extractValuesGuest() {
+        return ""+ getName() + ", " + getForename() + ", " + getId() + ", " + 
+        getCriterion(CriterionName.GENDER)+ ", " + getCriterion(CriterionName.GUEST_FOOD) + ", " + 
+        getCriterion(CriterionName.GUEST_HAS_ALLERGY) +", " + getCriterion(CriterionName.HOBBIES) + ", " +
+        getCriterion(CriterionName.HISTORY) + ", " + getCriterion(CriterionName.PAIR_GENDER);
     }
 }
