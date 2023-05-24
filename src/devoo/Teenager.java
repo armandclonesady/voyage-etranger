@@ -268,5 +268,7 @@ public class Teenager {
         return this.name;
     }
 
-    
+    public String getForename() {
+        return this.name; // a changer quand le forename sera introduit
+    }
 }
