@@ -87,6 +87,10 @@ public class TestAffectationVersion1 {
 
         t7.updateCriterion(new Criterion("HISTORY", ""));
         t8.updateCriterion(new Criterion("HISTORY", ""));
+        t7.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        t7.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        t8.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));
+        t8.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
 
 
         List<Teenager> host = new ArrayList<Teenager>();
