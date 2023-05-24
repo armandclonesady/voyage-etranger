@@ -30,11 +30,11 @@ public class Exportation {
     public static void main(String[] args) {
         System.out.println("\n"+sourcePath+victimPath);
         
-        Map<Teenager,Teenager> teenagerMap = new HashMap<Teenager,Teenager>();
-        Teenager armand = new Teenager("Armand", LocalDate.now(), Country.FRANCE);
-        Teenager noa = new Teenager("Noa", LocalDate.of(2004, 1, 1), Country.GERMANY);
-        Teenager antoine = new Teenager("Antoine", LocalDate.of(2008, 11, 30), Country.ITALY);
-        Teenager raphale = new Teenager("Raphael", LocalDate.of(2000, 12, 31), Country.SPAIN);
+        HashMap<Teenager,Teenager> teenagerMap = new HashMap<Teenager,Teenager>();
+        Teenager armand = new Teenager("Armand", "SADY", Country.FRANCE, LocalDate.now());
+        Teenager noa = new Teenager("Noa", "MOREAU",  Country.GERMANY, LocalDate.of(2004, 1, 1));
+        Teenager antoine = new Teenager("Antoine", "GAIENIER", Country.ITALY, LocalDate.of(2008, 11, 30));
+        Teenager raphale = new Teenager("Raphael", "KIECKEN", Country.SPAIN, LocalDate.of(2000, 12, 31));
         Teenager[] list = new Teenager[] {armand, noa, antoine, raphale};
         for (Teenager teenager : list) {
             for (int i = 0 ; i < list.length; i++) {

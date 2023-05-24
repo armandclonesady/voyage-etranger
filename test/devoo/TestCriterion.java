@@ -15,11 +15,11 @@ public class TestCriterion {
 
     @BeforeEach
     public void initTest() {
-        c1 = new Criterion("GUEST_HAS_ALLERGY", "yes");
+        c1 = new Criterion("GUEST_ANIMAL_ALLERGY", "yes");
         c2 = new Criterion( "HOST_HAS_ANIMAL", "no");
-        c3 = new Criterion( "GUEST_HAS_ALLERGY" ,"yes");
+        c3 = new Criterion( "GUEST_ANIMAL_ALLERGY" ,"yes");
         c4 = new Criterion( "HOST_HAS_ANIMAL", "non");
-        c5 = new Criterion( "GUEST_HAS_ALLERGY", "oui");
+        c5 = new Criterion( "GUEST_ANIMAL_ALLERGY", "oui");
         c6 = new Criterion( "HOST_HAS_ANIMAL", "noN");
 
         c7 = new Criterion("HOST_FOOD", "nonuts");

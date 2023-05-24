@@ -12,7 +12,7 @@ class TestCriterionName {
      */
     @Test
     void getTypeTest() {
-        assertEquals('B', CriterionName.GUEST_HAS_ALLERGY.getType());
+        assertEquals('B', CriterionName.GUEST_ANIMAL_ALLERGY.getType());
         assertEquals('B', CriterionName.HOST_HAS_ANIMAL.getType());
         assertEquals('T', CriterionName.GUEST_FOOD.getType());
         assertEquals('T', CriterionName.HOST_FOOD.getType());

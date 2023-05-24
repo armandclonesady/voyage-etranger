@@ -12,12 +12,12 @@ public class TestTeenager {
 
     @BeforeEach
     public void init() {
-        t1 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        t2 = new Teenager("t2", LocalDate.of(2002, 1, 1), Country.FRANCE);
-        t3 = new Teenager("t3", LocalDate.of(2004, 1, 1), Country.ITALY);
-        t4 = new Teenager("t4", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t1 = new Teenager("t", "one", Country.FRANCE, LocalDate.of(2000, 1, 1));
+        t2 = new Teenager("t", "two", Country.FRANCE, LocalDate.of(2002, 1, 1));
+        t3 = new Teenager("t", "three", Country.ITALY, LocalDate.of(2004, 1, 1));
+        t4 = new Teenager("t", "four", Country.ITALY, LocalDate.of(2000, 1, 1));
 
-        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t1.updateCriterion(new Criterion("GUEST_ANIMAL_ALLERGY", "yes"));
         t1.updateCriterion(new Criterion("GUEST_FOOD", "vegetarian"));
         t1.updateCriterion(new Criterion("GENDER", "male"));
         t1.updateCriterion(new Criterion("HISTORY", "same"));
@@ -29,7 +29,7 @@ public class TestTeenager {
         t3.updateCriterion(new Criterion("HOST_FOOD", "vegetarian"));
         t3.updateCriterion(new Criterion("PAIR_GENDER", "female"));
 
-        t2.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t2.updateCriterion(new Criterion("GUEST_ANIMAL_ALLERGY", "yes"));
         t2.updateCriterion(new Criterion("GUEST_FOOD", "nonuts"));
         t2.updateCriterion(new Criterion("HISTORY", "same"));
 
@@ -51,7 +51,7 @@ public class TestTeenager {
 
     @Test
     public void animalCompatibilityTest() {
-        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "yes"));
+        t1.updateCriterion(new Criterion("GUEST_ANIMAL_ALLERGY", "yes"));
 
         t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
         assertFalse(t2.animalCompatibility(t1));
@@ -59,7 +59,7 @@ public class TestTeenager {
         assertTrue(t2.animalCompatibility(t1));
 
 
-        t1.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
+        t1.updateCriterion(new Criterion("GUEST_ANIMAL_ALLERGY", "no"));
 
         t2.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "yes"));
         assertTrue(t2.animalCompatibility(t1));
@@ -119,42 +119,42 @@ public class TestTeenager {
     @Test
     public void countryCompatibilityTest() {
         
-        t1 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.SPAIN);
+        t1 = new Teenager("t", "one", Country.SPAIN, LocalDate.of(2000, 1, 1));
         t1.updateCriterion(new Criterion("HOBBIES", "1, 2, 3, 4"));
 
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.SPAIN);
+        t2 = new Teenager("t", "two", Country.SPAIN, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", "1, 2, 3, 4"));
         assertTrue(t1.countryCompatibility(t2));
 
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t2 = new Teenager("t", "two", Country.GERMANY, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
         assertTrue(t1.countryCompatibility(t2));
 
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.GERMANY);
+        t2 = new Teenager("t", "two", Country.GERMANY, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", ""));
         assertTrue(t1.countryCompatibility(t2));
 
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t2 = new Teenager("t", "two", Country.FRANCE, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
         assertTrue(t1.countryCompatibility(t2));
         
-
-        t1 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        
+        t1 = new Teenager("t", "one", Country.FRANCE, LocalDate.of(2000, 1, 1));
         t1.updateCriterion(new Criterion("HOBBIES", "1,2,3,4"));
         
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.SPAIN);
+        t2 = new Teenager("t", "two", Country.SPAIN, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", " 1, 2, 3, 4"));
         assertTrue(t1.countryCompatibility(t2));
 
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.ITALY);
+        t2 = new Teenager("t", "two", Country.ITALY, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
         assertFalse(t1.countryCompatibility(t2));
 
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.GERMANY);
+        t2 = new Teenager("t", "two", Country.GERMANY, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", ""));
         assertFalse(t1.countryCompatibility(t2));
 
-        t2 = new Teenager("t1", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t2 = new Teenager("t", "two", Country.FRANCE, LocalDate.of(2000, 1, 1));
         t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
         assertFalse(t1.countryCompatibility(t2));
         

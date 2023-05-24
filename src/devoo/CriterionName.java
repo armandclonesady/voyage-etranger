@@ -14,7 +14,7 @@ package devoo;
     @autor : Raphael Kiecken, Armand Sady, Antoine Gaienier
 */
 public enum CriterionName {
-    GUEST_HAS_ALLERGY('B'),
+    GUEST_ANIMAL_ALLERGY('B'),
     HOST_HAS_ANIMAL('B'),
     GUEST_FOOD('T'),
     HOST_FOOD('T'),

@@ -16,6 +16,7 @@ public class Teenager {
     private static int count = 1;
     
     private int id;
+    private String forename;
     private String name;
     private LocalDate birth;
     private Country origin;
@@ -25,50 +26,55 @@ public class Teenager {
 
     /**
      * Constructeur de Teenager
+     * @param forename
      * @param name
      * @param birth
      * @param origin
      * @param lastGuest
      */
-    public Teenager(String name, LocalDate birth, Country origin, Teenager lastGuest) {
+    public Teenager(String forename, String name, Country origin, LocalDate birth, Teenager lastGuest) {
         this.id = Teenager.count;
         Teenager.count++;
+        this.forename = forename;
         this.name = name;
-        this.birth = birth;
         this.origin = origin;
+        this.birth = birth;
         this.lastGuest = lastGuest;
         initRequirements();
     }
 
     /**
      * Constructeur de Teenager chaîner
+     * @param forename
      * @param name
      * @param birth
      * @param origin
      */
-    public Teenager(String name, LocalDate birth, Country origin) {
-        this(name, birth, origin, null);
+    public Teenager(String forename, String name, Country origin, LocalDate birth) {
+        this(forename, name, origin, birth, null);
     }
 
     /**
      * Constructeur de Teenager chaîner
+     * @param forename
      * @param name
      * @param birth
      * @param origin
      * @param lastGuest
      */
-    public Teenager(String name, LocalDate birth, String origin, Teenager lastGuest) {
-        this(name, birth, Country.valueOf(origin), lastGuest);
+    public Teenager(String forename, String name, String origin, LocalDate birth, Teenager lastGuest) {
+        this(forename, name, Country.valueOf(origin), birth, lastGuest);
     }
 
     /**
      * Constructeur de Teenager chaîner
+     * @param forename
      * @param name 
      * @param birth
      * @param origin
      */
-    public Teenager(String name, LocalDate birth, String origin) {
-        this(name, birth, Country.valueOf(origin), null);
+    public Teenager(String forename, String name, String origin, LocalDate birth) {
+        this(forename, name, Country.valueOf(origin), birth, null);
     }
 
     public void initRequirements() {
@@ -89,7 +95,7 @@ public class Teenager {
                 return historyCompatibility == 1 ? true : false;
             }
         }*/
-        if(this.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && t.criterionIsProperlyDefine(CriterionName.GUEST_HAS_ALLERGY)) {
+        if(this.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && t.criterionIsProperlyDefine(CriterionName.GUEST_ANIMAL_ALLERGY)) {
             boolean animalCompatibility = animalCompatibility(t);
             if(!animalCompatibility) {
                 return animalCompatibility;
@@ -104,8 +110,15 @@ public class Teenager {
         return true;
     }
 
+    public static int diffAge(Teenager t1, Teenager t2) {
+        if (t1.birth.isBefore(t2.birth)) {
+            return t1.birth.getYear() - t2.birth.getYear();
+        }
+        return t2.birth.getYear() - t1.birth.getYear();
+    }
+
     /**
-     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère de l'historique
+     * Vérifie si le Teenager est compatible avec   un autre Teenager sur le critère de l'historique
      */
     public int historyCompatibility(Teenager t) {
         if(this.lastGuest == t) {
@@ -126,7 +139,7 @@ public class Teenager {
      */
     public boolean animalCompatibility(Teenager t) {
         String hostAnimal = this.getValue(CriterionName.HOST_HAS_ANIMAL);
-        String guestAnimal = t.getValue(CriterionName.GUEST_HAS_ALLERGY);
+        String guestAnimal = t.getValue(CriterionName.GUEST_ANIMAL_ALLERGY);
         return !(hostAnimal.equals("yes") && hostAnimal == guestAnimal);
     }
 
@@ -265,11 +278,11 @@ public class Teenager {
     }
 
     public String toString() {
-        return this.name;
+        return this.forename + " " + this.name + " ";
     }
 
     public String getForename() {
-        return this.name; // a changer quand le forename sera introduit
+        return this.forename;
     }
 
     public void addLastguest(Teenager t){
