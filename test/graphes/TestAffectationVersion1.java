@@ -25,12 +25,12 @@ public class TestAffectationVersion1 {
     public void init() {
         promo = new HashSet<Teenager>();
         
-        A = new Teenager("A", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        B = new Teenager("B", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        C = new Teenager("C", LocalDate.of(2000, 1, 1), Country.FRANCE);
-        X = new Teenager("X", LocalDate.of(2000, 1, 1), Country.ITALY);
-        Y = new Teenager("Y", LocalDate.of(2000, 1, 1), Country.ITALY);
-        Z = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
+        A = new Teenager("t", "A", Country.FRANCE, LocalDate.of(2000, 1, 1));
+        B = new Teenager("t", "B", Country.FRANCE, LocalDate.of(2000, 1, 1));
+        C = new Teenager("t", "C", Country.FRANCE, LocalDate.of(2000, 1, 1));
+        X = new Teenager("t", "X", Country.ITALY, LocalDate.of(2000, 1, 1));
+        Y = new Teenager("t", "Y", Country.ITALY, LocalDate.of(2000, 1, 1));
+        Z = new Teenager("t", "Z", Country.ITALY, LocalDate.of(2000, 1, 1));
 
 
         A.updateCriterion(new Criterion("HOST_HAS_ANIMAL", "no"));

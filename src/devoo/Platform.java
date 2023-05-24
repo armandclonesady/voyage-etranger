@@ -35,10 +35,11 @@ public class Platform {
             header = lineScanner.nextLine().split(";");
             while (lineScanner.hasNextLine()) {
                 Scanner fieldScanner = new Scanner(lineScanner.nextLine());
-                students = new Teenager(fieldScanner.next(), LocalDate.parse(fieldScanner.next()), fieldScanner.next());
-                i = 2;
-                while (fieldScanner.hasNextLine()) {
-                    students.updateCriterion(new Criterion(header[i], fieldScanner.nextLine()));
+                fieldScanner.useDelimiter(";");
+                students = new Teenager(fieldScanner.next(), fieldScanner.next(), fieldScanner.next(), LocalDate.parse(fieldScanner.next()));
+                i = 4;
+                while (fieldScanner.hasNext()) {
+                    students.updateCriterion(new Criterion(header[i], fieldScanner.next()));
                     i++;
                 }
                 this.addStudents(students);
@@ -52,6 +53,10 @@ public class Platform {
     public static void main(String[] args) {
         Platform platform = new Platform();
         platform.importCSV("adosAleatoires.csv");
+        System.out.println(platform.students.size());
+        for (Teenager t : platform.students) {
+            System.out.println();
+        }
     
     }
 

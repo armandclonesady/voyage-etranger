@@ -34,7 +34,7 @@ public class Criterion {
     final static public String FOOD_BLANK = "";
 
     final static private Map<CriterionName, ArrayList<String>> possibleValues = Map.of(
-        CriterionName.GUEST_HAS_ALLERGY, new ArrayList<String>(Arrays.asList(POS, NEG)),
+        CriterionName.GUEST_ANIMAL_ALLERGY, new ArrayList<String>(Arrays.asList(POS, NEG)),
         CriterionName.HOST_HAS_ANIMAL, new ArrayList<String>(Arrays.asList(POS, NEG)),
         CriterionName.GENDER, new ArrayList<String>(Arrays.asList(F, M, OTH)),
         CriterionName.PAIR_GENDER, new ArrayList<String>(Arrays.asList(F, M, OTH, BLANK)),
