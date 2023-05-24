@@ -37,6 +37,8 @@ public class Platform {
         }
     }
 
+    public void exportToCSV(HashMap<Teenager, Teenager>     )
+
     public static void main(String[] args) {
         Platform platform = new Platform();
         platform.importCSV("adosAleatoires.csv");
