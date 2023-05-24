@@ -107,7 +107,7 @@ public class Teenager {
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère de l'historique
      */
-    /*public int historyCompatibility(Teenager t) {
+    public int historyCompatibility(Teenager t) {
         if(this.lastGuest == t) {
             String historyHost = this.getValue(CriterionName.HISTORY);
             String historyGuest = t.getValue(CriterionName.HISTORY);
@@ -118,7 +118,7 @@ public class Teenager {
             }
         }
         return -1;
-    }*/
+    }
 
     /**
      * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des animaux
@@ -162,13 +162,13 @@ public class Teenager {
         return true;
     }
 
-    List<String> splitValues(Criterion criterion) {
+    public List<String> splitValues(Criterion criterion) {
         String criterionString = criterion.toString();
         criterionString = criterionString.replace(" ","");
         return Arrays.asList(criterionString.split(","));
     }
 
-    public int containsAllValuesCriterionName(ArrayList<String> myCriterionsValues, ArrayList<String> otherCriterionValues) {
+    public static int containsAllValuesCriterionName(List<String> myCriterionsValues, List<String> otherCriterionValues) {
         int res = 0;
         for (int i = 0; i < Integer.min(myCriterionsValues.size(), otherCriterionValues.size()); i++) {
             //System.out.println("i = "+i);

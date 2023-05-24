@@ -1,15 +1,9 @@
 package graphes;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import devoo.Country;
-import devoo.Criterion;
-import devoo.Teenager;
+import devoo.*;
 import fr.ulille.but.sae2_02.graphes.*;
 
 /*
@@ -31,26 +25,24 @@ public class AffectationUtil {
     */
     public static double weight (Teenager host, Teenager visitor) {
         int poids= 10;
-        if (host.getCountry() == visitor.getCountry()) {
-            poids += 10000;
+        if(host.historyCompatibility(visitor) == 1){
+            return 0;
         }
-        if( !host.animalCompatibility(visitor) ) {
-            poids += 100;
+        if(host.historyCompatibility(visitor) == 0){
+            poids += 999;
         }
-        // poids -= host.numberOfCommonHobbies(visitor);
+        poids -= (1 * Teenager.containsAllValuesCriterionName(
+            host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
+            visitor.splitValues(visitor.getCriterion(CriterionName.HOBBIES))));
         return poids;
     }
 
     public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest) {
         GrapheNonOrienteValue<Teenager> g = new GrapheNonOrienteValue<Teenager>();
-        for (Teenager t : host) {
-            g.ajouterSommet(t);
-        }
-        for (Teenager t : guest) {
-            g.ajouterSommet(t);
-        }
         for (Teenager t1 : host) {
+            g.ajouterSommet(t1);
             for (Teenager t2 : guest) {
+                g.ajouterSommet(t2);
                 if (t1 != t2 && !g.contientArete(t2, t1)) {
                     g.ajouterArete(t1, t2, weight(t1, t2));
                 }
