@@ -19,75 +19,46 @@ public class Teenager {
     private String forename;
     private String name;
     private LocalDate birth;
-    private Country origin;
+    private Country pays;
     private Teenager lastGuest;
 
-    private Map<CriterionName, Criterion> requirements = new HashMap<CriterionName, Criterion>();
+    private Map<CriterionName, Criterion> requirements;
 
-    /**
-     * Constructeur de Teenager
-     * @param forename
-     * @param name
-     * @param birth
-     * @param origin
-     * @param lastGuest
-     */
-    public Teenager(String forename, String name, Country origin, LocalDate birth, Teenager lastGuest) {
+    /* Constructeur de Teenager (forename, name, pays, birth, lastGuest). */
+    public Teenager(String forename, String name, Country pays, LocalDate birth, Teenager lastGuest) {
         this.id = Teenager.count;
         Teenager.count++;
         this.forename = forename;
         this.name = name;
-        this.origin = origin;
+        this.pays = pays;
         this.birth = birth;
         this.lastGuest = lastGuest;
         initRequirements();
     }
 
-    /**
-     * Constructeur de Teenager chaîner
-     * @param forename
-     * @param name
-     * @param birth
-     * @param origin
-     */
-    public Teenager(String forename, String name, Country origin, LocalDate birth) {
-        this(forename, name, origin, birth, null);
+    /* Constructeur de Teenager (forename, name, pays, birth). */
+    public Teenager(String forename, String name, Country pays, LocalDate birth) {
+        this(forename, name, pays, birth, null);
     }
 
-    /**
-     * Constructeur de Teenager chaîner
-     * @param forename
-     * @param name
-     * @param birth
-     * @param origin
-     * @param lastGuest
-     */
-    public Teenager(String forename, String name, String origin, LocalDate birth, Teenager lastGuest) {
-        this(forename, name, Country.valueOf(origin), birth, lastGuest);
+    /* Constructeur de Teenager (forename, name, pays, birth, lastGuest) avec une chaîne de caractères pour le pays. */
+    public Teenager(String forename, String name, String pays, LocalDate birth, Teenager lastGuest) {
+        this(forename, name, Country.valueOf(pays), birth, lastGuest);
     }
 
-    /**
-     * Constructeur de Teenager chaîner
-     * @param forename
-     * @param name 
-     * @param birth
-     * @param origin
-     */
-    public Teenager(String forename, String name, String origin, LocalDate birth) {
-        this(forename, name, Country.valueOf(origin), birth, null);
+    /* Constructeur de Teenager (forename, name, pays, birth) avec une chaîne de caractères pour le pays. */
+    public Teenager(String forename, String name, String pays, LocalDate birth) {
+        this(forename, name, Country.valueOf(pays), birth, null);
     }
 
     public void initRequirements() {
+        this.requirements = new HashMap<CriterionName, Criterion>();
         for(CriterionName c : CriterionName.values()) {
             this.requirements.put(c, null);
         }
     }
 
-    /**
-     * Vérifie si le Teenager est compatible avec un autre Teenager
-     * @param t
-     * @return Un boolean qui indique si le Teenager est compatible
-     */
+    /* Vérifie si le Teenager est compatible avec un autre Teenager. */
     public boolean compatibleWithGuest(Teenager t) {
         /*if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY))) {
             int historyCompatibility = historyCompatibility(t);
@@ -117,9 +88,7 @@ public class Teenager {
         return t2.birth.getYear() - t1.birth.getYear();
     }
 
-    /**
-     * Vérifie si le Teenager est compatible avec   un autre Teenager sur le critère de l'historique
-     */
+    /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère de l'historique). */
     public int historyCompatibility(Teenager t) {
         if(this.lastGuest == t) {
             String historyHost = this.getValue(CriterionName.HISTORY);
@@ -133,126 +102,99 @@ public class Teenager {
         return -1;
     }
 
-    /**
-     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des animaux
-     * @param t
-     */
+    /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère des animaux). */
     public boolean animalCompatibility(Teenager t) {
         String hostAnimal = this.getValue(CriterionName.HOST_HAS_ANIMAL);
         String guestAnimal = t.getValue(CriterionName.GUEST_ANIMAL_ALLERGY);
         return !(hostAnimal.equals("yes") && hostAnimal == guestAnimal);
     }
 
-    /**
-     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère du régime alimentaire
-     * @param t
-     */
+    /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère des régimes alimentaires). */
     public boolean foodCompatibility(Teenager t) {
         if(t.getValue(CriterionName.GUEST_FOOD).equals("")) return true;
-        ArrayList<String> hostRegime = new ArrayList<String>();
-        hostRegime.addAll(Arrays.asList(this.getValue(CriterionName.HOST_FOOD).split(",")));
-
-        ArrayList<String> guestRegime = new ArrayList<String>();
-        guestRegime.addAll(Arrays.asList(t.getValue(CriterionName.GUEST_FOOD).split(",")));
+        ArrayList<String> hostRegime = new ArrayList<String>(splitValues(this.getCriterion(CriterionName.HOST_FOOD)));
+        ArrayList<String> guestRegime = new ArrayList<String>(splitValues(t.getCriterion(CriterionName.GUEST_FOOD)));
 
         Collections.sort(hostRegime); Collections.sort(guestRegime);
 
-        if(!hostRegime.containsAll(guestRegime)) return false;
-        return true;
+        return (containsAllValuesCriterionName(hostRegime, guestRegime)) == guestRegime.size();
     }
-    /**
-     * Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des pays,
-     * ceci est particulièrement important quand le Teenager est Français.
-     * @param t
-     * @return
-     */
+
+    /* Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des pays (Uniquement pour la France). */
     public boolean countryCompatibility(Teenager t) {
-        if (this.origin.equals(Country.FRANCE)) {
-            ArrayList<String> hostCriterion = new ArrayList<String>(splitValues(this.getCriterion(CriterionName.HOBBIES)));
-            ArrayList<String> guestCriterion = new ArrayList<>(splitValues(t.getCriterion(CriterionName.HOBBIES)));
-            return (containsAllValuesCriterionName(hostCriterion, guestCriterion)) != 0;
+        if (this.pays.equals(Country.FRANCE)) {
+            ArrayList<String> hostHobbies = new ArrayList<String>(splitValues(this.getCriterion(CriterionName.HOBBIES)));
+            ArrayList<String> guestHobbies = new ArrayList<String>(splitValues(t.getCriterion(CriterionName.HOBBIES)));
+            
+            Collections.sort(hostHobbies); Collections.sort(guestHobbies);
+
+            return (containsAllValuesCriterionName(hostHobbies, guestHobbies)) >= 1;
         }
         return true;
     }
 
     public List<String> splitValues(Criterion criterion) {
-        String criterionString = criterion.toString();
+        String criterionString = criterion.getValue();
         criterionString = criterionString.replace(" ","");
         return Arrays.asList(criterionString.split(","));
     }
 
-    public static int containsAllValuesCriterionName(List<String> myCriterionsValues, List<String> otherCriterionValues) {
+    public static int containsAllValuesCriterionName(List<String> hostCriterionsValues, List<String> guestCriterionValues) {
         int res = 0;
-        for (int i = 0; i < Integer.min(myCriterionsValues.size(), otherCriterionValues.size()); i++) {
-            //System.out.println("i = "+i);
-            //System.out.println("teenager 1"+"\n"+myCriterionsValues+"\n");
-            //System.out.println("teenager 2"+"\n"+otherCriterionValues+"\n");
-            if (myCriterionsValues.contains(otherCriterionValues.get(i))){
-                //System.out.println("teenager 1 contient : [" + otherCriterionValues.get(i)+"]");
+        for (int i = 0; i < Integer.min(hostCriterionsValues.size(), guestCriterionValues.size()); i++) {
+            if (hostCriterionsValues.contains(guestCriterionValues.get(i))){
                 res++;
-            } else {
-                //System.out.println("teenager 1 ne contient pas : [" + otherCriterionValues.get(i)+"]");
             }
         }
-        //System.out.println("nombre de choses en commun: "+res);
         return res;
     }
 
-    /**
-    * Permet de mettre ajour un critère
-    * @param label
-    * @param criterion
-    */
+    /* Permet de mettre ajour un critère dans la map requirements en fonction de son label. */
     public void updateCriterion(CriterionName label, Criterion criterion) {
         this.requirements.put(label, criterion);
     }
 
-    /**
-     * méthode de surchargée de updateCriterion
-     * @param criterion
-     */
+    /* Permet de mettre ajour un critère dans la map requirements. */
     public void updateCriterion(Criterion criterion) {
         this.updateCriterion(criterion.getLabel(), criterion);
     }
 
-    /**
-     * retourne un critère
-     * @param label
-     * @return
-     */
+    /* Getter pour un critère. */
     public Criterion getCriterion(CriterionName label) {
         return this.requirements.get(label);
     }
 
+    /* Getter pour la map requirements. */
     public Map<CriterionName, Criterion> getRequirements() {
         return this.requirements;
     }
 
-    /**
-     * retourne la valeur d'un critère
-     * @param label
-     * @return
-     */
+    /* Retourne la valeur d'un critère dans la map requirements. */
     public String getValue(CriterionName label) {
+        Criterion criterion = this.getCriterion(label);
+        if (criterion == null) {
+            return "";
+        }
         return this.getCriterion(label).getValue();
     }
 
+    /* Vérifie si un critère est bien initialisé dans la map requirements. */
     public boolean criterionIsProperlyDefine(CriterionName label) {
         return this.getCriterion(label) != null;
     }
 
     /**
-     * Si le Criterion n'est pas valable selon Criterion.isValid(), sa valuer dans la Map deviens null.
+     * Si le Criterion n'est pas valable selon la méthodes isValid(), sa valuer dans la Map deviens null.
      * Si il est déjà null, on l'ignore.
      */
     public void purgeCriterion() {
-        for (Map.Entry<CriterionName, Criterion> critere : this.requirements.entrySet()) {
+        for (Map.Entry<CriterionName, Criterion> criterion : this.requirements.entrySet()) {
             try {
-                critere.getValue().isValid();
+                criterion.getValue().isValid();
             }
             catch (CriterionException e) {
                 System.out.println(e.getMessage());
-                this.updateCriterion(critere.getKey(), null);
+                this.updateCriterion(criterion.getKey(), null);
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -260,50 +202,48 @@ public class Teenager {
         }
     }
 
-    /**
-     * Retourne l'origine du Teenager
-     * @return
-     */
+    /* Getter pour le prénom. */
+    public String getForename() {return this.forename;}
 
-    public Country getCountry() {
-         return this.origin;
-    }
+    /* Getter pour le nom. */
+    public String getName() {return this.name;}
 
-    /*
-     * Retourne l'id du Teenager
-     * @return
-     */
-    public int getId() {
-        return this.id;
-    }
+    /* Getter pour le pays. */
+    public Country getCountry() {return this.pays;}
 
+    /* Getter pour l'id. */
+    public int getId() {return this.id;}
+
+    /* Getter pour la date de naissance. */
+    public LocalDate getBirth() {return this.birth;}
+
+    /* Setter pour le dernier invité. */
+    public void setLastguest(Teenager t) {this.lastGuest = t;}
+
+    /* Méthodes toString. */
     public String toString() {
-        return this.forename + " " + this.name + " ";
+        return this.getId() + ", " + this.getForename() + ", " + this.getName() + ", " + this.getCountry() + ", " + 
+        this.getBirth() + ", " + this.getValue(CriterionName.GENDER);
     }
 
-    public String getForename() {
-        return this.forename;
-    }
-
-    public void addLastguest(Teenager t){
-        this.lastGuest = t;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
+    /* Méthodes extractValues pour l'écriture dans un fichier (Récupère les valeurs des critères d'un host). */
     public String extractValuesHost() {
-        return ""+ getName() + ", " + getForename() +", " + getId() + ", " +
-        getCriterion(CriterionName.GENDER)+ ", " + getCriterion(CriterionName.HOST_FOOD) + ", " +
-        getCriterion(CriterionName.HOST_HAS_ANIMAL) + ", " + getCriterion(CriterionName.HOBBIES) + ", " +
-        getCriterion(CriterionName.HISTORY) + ", " + getCriterion(CriterionName.PAIR_GENDER);
+        return toString() + ", " +
+        getValue(CriterionName.HOST_FOOD) + ", " + getValue(CriterionName.HOST_HAS_ANIMAL) + ", [" + 
+        getValue(CriterionName.HOBBIES) + "], " + getValue(CriterionName.HISTORY) + ", " + 
+        getValue(CriterionName.PAIR_GENDER);
     }
 
+    /* Méthodes extractValues pour l'écriture dans un fichier (Récupère les valeurs des critères d'un guest). */
     public String extractValuesGuest() {
-        return ""+ getName() + ", " + getForename() + ", " + getId() + ", " + 
-        getCriterion(CriterionName.GENDER)+ ", " + getCriterion(CriterionName.GUEST_FOOD) + ", " + 
-        getCriterion(CriterionName.GUEST_HAS_ALLERGY) +", " + getCriterion(CriterionName.HOBBIES) + ", " +
-        getCriterion(CriterionName.HISTORY) + ", " + getCriterion(CriterionName.PAIR_GENDER);
+        return toString() + ", " +
+        getValue(CriterionName.GUEST_FOOD) + ", " + getValue(CriterionName.GUEST_ANIMAL_ALLERGY) + ", [" + 
+        getValue(CriterionName.HOBBIES) + "], " + getValue(CriterionName.HISTORY) + ", " + 
+        getValue(CriterionName.PAIR_GENDER);
+    }
+
+    /*Méthodes equals. */
+    public boolean equals(Teenager t) {
+        return this.getId() == t.getId();
     }
 }

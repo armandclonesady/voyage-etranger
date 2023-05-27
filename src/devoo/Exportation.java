@@ -23,7 +23,7 @@ public class Exportation {
     static String extractValuesGuest(Teenager teenager) {
         return ""+ teenager + ", " + teenager.getForename() + ", " + teenager.getId() + ", " + 
         teenager.getCriterion(CriterionName.GENDER)+ ", " + teenager.getCriterion(CriterionName.GUEST_FOOD) + ", " + 
-        teenager.getCriterion(CriterionName.GUEST_HAS_ALLERGY) +", " + teenager.getCriterion(CriterionName.HOBBIES) + ", " +
+        teenager.getCriterion(CriterionName.GUEST_ANIMAL_ALLERGY) +", " + teenager.getCriterion(CriterionName.HOBBIES) + ", " +
         teenager.getCriterion(CriterionName.HISTORY) + ", " + teenager.getCriterion(CriterionName.PAIR_GENDER);
     }
 

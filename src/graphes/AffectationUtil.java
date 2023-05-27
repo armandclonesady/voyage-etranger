@@ -56,9 +56,8 @@ public class AffectationUtil {
         return g;
     }
 
-    // Retourne une map du cour chemin entre deux sommets
-
-    public static Map<Teenager, Teenager> compatibilityMap(List<Teenager> host, List<Teenager> guest) {
+    // Retourne une map du cour chemin entre deux sommet
+    public static Map<Teenager, Teenager> affectation(List<Teenager> host, List<Teenager> guest) {
         CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest), host, guest);
         Map<Teenager, Teenager> dico = new HashMap<Teenager, Teenager>();
         

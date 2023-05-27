@@ -58,7 +58,7 @@ public class TestAffectationVersion1 {
         Z.updateCriterion(new Criterion("GUEST_HAS_ALLERGY", "no"));
         Z.updateCriterion(new Criterion("HOBBIES", "technology"));
 
-        t1 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.FRANCE);
+        t1 = new Teenager("Z", Country.FRANCE, LocalDate.of(2000, 1, 1));
         t2 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);
         t3 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.FRANCE);
         t4 = new Teenager("Z", LocalDate.of(2000, 1, 1), Country.ITALY);

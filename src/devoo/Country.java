@@ -1,7 +1,7 @@
 package devoo;
 
 /**
- * enum Country
+ * Enum Country.
  * @author Raphael Kieken, Armand Sady, Antoine Gaienier
  */
 public enum Country {
