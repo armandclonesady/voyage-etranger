@@ -246,4 +246,26 @@ public class Teenager {
     public boolean equals(Teenager t) {
         return this.getId() == t.getId();
     }
+
+    /*
+    *Méthodes qui revoie la différence d'age entre deux Teenager.     
+    */
+    public  int diffAge(Teenager t2) {
+        if (this.birth.isBefore(t2.birth)) {
+            return this.birth.getYear() - t2.birth.getYear();
+        }
+        return t2.birth.getYear() - this.birth.getYear();
+    }
+
+    /* 
+     * Méthode qui renvoie vérifie si la préférence du genre est respectée.
+     */
+
+    public boolean genderPref(Teenager t2){
+        if (this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER))){
+            return true;
+        }
+        if(this.getValue(CriterionName.PAIR_GENDER).equals("")) return true;
+        return false;
+    }
 }
