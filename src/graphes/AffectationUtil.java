@@ -1,5 +1,6 @@
 package graphes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,6 @@ import fr.ulille.but.sae2_02.graphes.*;
  * - Si les deux ados ne sont pas compatibles sur le critère des animaux, le poids est de 100.
  * - Si les deux ados on 1 passe temps en commun, le poids est de -1.
  * 
- * 
- * 
  * @author Raphael Kieken, Armand Sady, Antoine Gaienier
  */
 
@@ -24,22 +23,37 @@ public class AffectationUtil {
     * Peut avoir d’autres paramètres si nécessaire.
     */
     public static double weight (Teenager host, Teenager visitor) {
-        int poids = 10;
-        if(host.historyCompatibility(visitor) == 1){
-            return 0;
+        double weight = 0;
+        if (host.criterionIsProperlyDefine(CriterionName.HISTORY) && visitor.criterionIsProperlyDefine(CriterionName.HISTORY)) {
+            if (host.hasLastGuest(visitor)) {
+                if (!(host.getValue(CriterionName.HISTORY).isBlank() && visitor.getValue(CriterionName.HISTORY).isBlank())) {
+                    return host.historyCompatibility(visitor) ? -100 : 100;
+                }
+            }
         }
-        if(host.historyCompatibility(visitor) == 0){
-            return 999;
+        if (host.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && visitor.criterionIsProperlyDefine(CriterionName.GUEST_ANIMAL_ALLERGY)) {
+            if (!host.animalCompatibility(visitor)) {
+                return 100;
+            }
         }
-        //if(!host.foodCompatibility(visitor)) poids+=10;
-        if(!host.animalCompatibility(visitor)) poids +=10;
-
+        if (host.criterionIsProperlyDefine(CriterionName.HOST_FOOD) && visitor.criterionIsProperlyDefine(CriterionName.GUEST_FOOD)) {
+            if (!host.foodCompatibility(visitor)) {
+                return 100;
+            }
+        }
+        if (!host.countryCompatibility(visitor)) {
+            return 100;
+        }
+        if (host.criterionIsProperlyDefine(CriterionName.GENDER) && visitor.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)) {
+            if (host.getValue(CriterionName.GENDER).equals(visitor.getValue(CriterionName.PAIR_GENDER))) weight -= 1;
+        }
         if (host.criterionIsProperlyDefine(CriterionName.HOBBIES) && visitor.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
-            poids -= (1 * Teenager.containsAllValuesCriterionName (
+            weight -= (1 * Teenager.containsAllValuesCriterionName (
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
             visitor.splitValues(visitor.getCriterion(CriterionName.HOBBIES))));
         }
-        return poids;
+
+        return weight;
     }
 
     public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest) {
@@ -60,9 +74,9 @@ public class AffectationUtil {
     public static Map<Teenager, Teenager> affectation(List<Teenager> host, List<Teenager> guest) {
         CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest), host, guest);
         Map<Teenager, Teenager> dico = new HashMap<Teenager, Teenager>();
-        
         for (Arete<Teenager> a : calcul.calculerAffectation()) {
             dico.put(a.getExtremite1(), a.getExtremite2());
+            a.getExtremite1().setLastguest(a.getExtremite2());
         }
         return dico;
     }

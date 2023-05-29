@@ -2,9 +2,13 @@ package devoo;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +31,6 @@ public class Platform {
     public static final String SEPARATOR = System.getProperty("file.separator");
 
     /* Constantes pour le nom des fichiers. */
-    public static final String INPUT = "Input.csv";
     public static final String OUTPUT = "Output.txt";
 
     /* Constante pour le chemin d'accès au fichier. */
@@ -37,22 +40,39 @@ public class Platform {
     private Set<Teenager> students;
 
     /* Map des couples d'étudiants après l'affection. */
-    private Map<Teenager, Teenager> affectation;;
+    private Map<Teenager, Teenager> currentAffectation;
+
+    /* Map des couples d'étudiants sauvegardé. */
+    private Map<Teenager, Teenager> previousAffectation;
 
     /* Constructeur de Platform. */
     public Platform() {
         this.students = new HashSet<Teenager>();
-        this.affectation = new HashMap<Teenager, Teenager>();
+        this.currentAffectation = new HashMap<Teenager, Teenager>();
     }
 
     /* Ajoute un étudiant à l'ensemble. */
     public void addStudents(Teenager teen) {
         this.students.add(teen);
     }
+
+    public void affectation(Country hostCountry, Country guestCountry) {
+        List<Teenager> host = new ArrayList<Teenager>();
+        List<Teenager> guest = new ArrayList<Teenager>();
+        for (Teenager t : this.students) {
+            if (t.getCountry().equals(hostCountry)) {
+                host.add(t);
+            }
+            else if (t.getCountry().equals(guestCountry)) {
+                guest.add(t);
+            }
+        }
+        this.currentAffectation = AffectationUtil.affectation(host, guest);
+
+    }
     
     /* Importe les étudiants depuis un fichier CSV. */
-    public void importCSV() {
-        File file = new File(path, INPUT);
+    public void importCSV(File file) {
         String[] header;
         Teenager students;
         try (Scanner lineScanner = new Scanner(file)) {
@@ -86,12 +106,16 @@ public class Platform {
         }
     }
 
+    public void importCSV(String filename) {
+        this.importCSV(new File(path + SEPARATOR + filename));
+    } 
+
     /* Exporte les couples d'étudiants dans un fichier CSV. */
     public void exportCSV() {
         try (BufferedWriter br = new BufferedWriter(new FileWriter(path + SEPARATOR + OUTPUT))) {
             br.write("hostId, hostForename, hostName, hostGender, hostDiet, hostAnimal, hostHobbies, hostHistory, hostPairGender, guestId, guestForename, guestName, guestGender, guestDiet, guestAllergy, guestHistory, guestPairGender");
             br.newLine();
-            for (Map.Entry<Teenager, Teenager> couple : this.affectation.entrySet()) {
+            for (Map.Entry<Teenager, Teenager> couple : this.currentAffectation.entrySet()) {
                 br.write(couple.getKey().extractValuesHost() + ", " + couple.getValue().extractValuesGuest());
                 br.newLine();
             }
@@ -102,31 +126,48 @@ public class Platform {
         }
     }
 
-    public void affectation(Country hostCountry, Country guesCountry) {
-        List<Teenager> host = new ArrayList<Teenager>();
-        List<Teenager> guest = new ArrayList<Teenager>();
-        for (Teenager t : this.students) {
-            if (t.getCountry().equals(hostCountry)) {
-                host.add(t);
-            }
-            else if (t.getCountry().equals(guesCountry)) {
-                guest.add(t);
-            }
+    public void exportBin() {
+        String filename = LocalDate.now().toString() + ".bin";
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path + SEPARATOR + filename))) {
+            oos.writeObject(this.currentAffectation);
+        } catch (IOException e) {
+            System.out.println("IOEXCEPTION ;\n"+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Exception\n" + e.getMessage());
         }
-        this.affectation = AffectationUtil.affectation(host, guest);
+    }
+
+    public void readBin(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path + SEPARATOR + filename))) {
+            this.previousAffectation = (Map<Teenager, Teenager>) ois.readObject();
+        } catch (IOException e) {
+            System.out.println("IOEXCEPTION ;\n"+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Exception\n" + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
         Platform platform = new Platform();
-        platform.importCSV();
+        /*platform.importCSV();*/
         System.out.println(platform.students.size());
         /*for (Teenager t : platform.students) {
             System.out.println(t.toString());
         }*/
         platform.affectation(Country.FRANCE, Country.ITALY);
-        for (Map.Entry<Teenager, Teenager> couple : platform.affectation.entrySet()) {
+        for (Map.Entry<Teenager, Teenager> couple : platform.currentAffectation.entrySet()) {
             System.out.println(couple.getKey().getName() + ", " + couple.getValue().getName());
         }
+        System.out.println("\n");
         platform.exportCSV();
+        platform.exportBin();
+        platform.readBin("2023-05-29.bin");
+        for (Map.Entry<Teenager, Teenager> couple : platform.previousAffectation.entrySet()) {
+            System.out.println(couple.getKey().getName() + ", " + couple.getValue().getName());
+        }
+    }
+
+    public Map<Teenager, Teenager> getAffectation() {
+        return this.currentAffectation;
     }
 }

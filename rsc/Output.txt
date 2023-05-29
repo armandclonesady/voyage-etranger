@@ -1,4 +1,4 @@
-hostName, hostForename, hostId, hostGender, hostDiet, hostAnimal, hostHobbies, hostHistory, hostPairGender, guestName, guestForename, guestId, guestGender, guestDiet, guestAllergy, guestHistory, guestPairGender
+hostId, hostForename, hostName, hostGender, hostDiet, hostAnimal, hostHobbies, hostHistory, hostPairGender, guestId, guestForename, guestName, guestGender, guestDiet, guestAllergy, guestHistory, guestPairGender
 107, Clulilkir, Shurune, FRANCE, 2006-07-08, male, vegetarian, yes, [], same, , 65, Goppeg, Izolin, ITALY, 2006-03-14, male, , no, [culture], same, 
 150, Gul, Reji, FRANCE, 2007-12-12, male, , no, [culture], other, male, 10, Jensmebur, Ekey, ITALY, 2008-08-19, male, nonuts, no, [culture], same, 
 128, Ravynne, Hunt, FRANCE, 2007-05-08, male, nonuts, yes, [], same, , 146, Lallbaa, Dhutorn, ITALY, 2008-09-27, female, , no, [], , 

@@ -1,5 +1,6 @@
 package devoo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Map;
  * Classe Criterion.
  * @author : Raphael Kiecken, Armand Sady, Antoine Gaienier
  */
-public class Criterion {
+public class Criterion implements Serializable {
 
     private CriterionName label;
     private String value;

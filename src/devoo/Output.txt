@@ -1,5 +1,0 @@
-host_name, host_forename, host_id, host_gender, host_diet, host_animal, host_hobbies, host_history, host_same_gender, guest_name, guest_forename, guest_id, guest_gender, guest_diet, guest_allergy, guest_history, guest_same_gender
-Noa, Noa, 2, null, null, null, null, null, null,Raphael, Raphael, 4, null, null, null, null, null, null
-Raphael, Raphael, 4, null, null, null, null, null, null,Antoine, Antoine, 3, null, null, null, null, null, null
-Armand, Armand, 1, null, null, null, null, null, null,Raphael, Raphael, 4, null, null, null, null, null, null
-Antoine, Antoine, 3, null, null, null, null, null, null,Raphael, Raphael, 4, null, null, null, null, null, null

@@ -1,6 +1,7 @@
 package devoo;
 
 import java.util.Map;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.List;
  * Classe Teenager
  * @author Raphael Kiecken, Armand Sady, Antoine Gaienier
  */
-public class Teenager {
+public class Teenager implements Serializable {
     private static int count = 1;
     
     private int id;
@@ -60,12 +61,11 @@ public class Teenager {
 
     /* Vérifie si le Teenager est compatible avec un autre Teenager. */
     public boolean compatibleWithGuest(Teenager t) {
-        /*if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY))) {
-            int historyCompatibility = historyCompatibility(t);
-            if(historyCompatibility != -1) {
-                return historyCompatibility == 1 ? true : false;
+        if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY)) && this.hasLastGuest(t)) {
+            if (!(this.getValue(CriterionName.HISTORY).isBlank() && t.getValue(CriterionName.HISTORY).isBlank())) {
+                return historyCompatibility(t);
             }
-        }*/
+        }
         if(this.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && t.criterionIsProperlyDefine(CriterionName.GUEST_ANIMAL_ALLERGY)) {
             boolean animalCompatibility = animalCompatibility(t);
             if(!animalCompatibility) {
@@ -89,17 +89,14 @@ public class Teenager {
     }
 
     /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère de l'historique). */
-    public int historyCompatibility(Teenager t) {
-        if(this.lastGuest == t) {
-            String historyHost = this.getValue(CriterionName.HISTORY);
-            String historyGuest = t.getValue(CriterionName.HISTORY);
-            if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
-                return 1;
-            } else if (historyHost.equals(Criterion.PREF_OTH) || historyGuest.equals(Criterion.PREF_OTH)) {
-                return 0;
-            }
+    public boolean historyCompatibility(Teenager t) {
+        String historyHost = this.getValue(CriterionName.HISTORY);
+        String historyGuest = t.getValue(CriterionName.HISTORY);
+        if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
+            return true;
+        } else {
+            return false;
         }
-        return -1;
     }
 
     /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère des animaux). */
@@ -147,6 +144,10 @@ public class Teenager {
             }
         }
         return res;
+    }
+
+    public boolean hasLastGuest(Teenager t) {
+        return this.lastGuest == t;
     }
 
     /* Permet de mettre ajour un critère dans la map requirements en fonction de son label. */
