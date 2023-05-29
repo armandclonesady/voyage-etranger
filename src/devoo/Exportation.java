@@ -5,8 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class Exportation {
 
