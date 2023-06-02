@@ -55,7 +55,7 @@ public class Platform {
     public void addStudents(Teenager teen) {
         this.students.add(teen);
     }
-
+    // Méthode pour affecter les étudiants dans arrayList Host and Guest.
     public void affectation(Country hostCountry, Country guestCountry) {
         List<Teenager> host = new ArrayList<Teenager>();
         List<Teenager> guest = new ArrayList<Teenager>();
@@ -105,7 +105,7 @@ public class Platform {
             System.out.println(e.getMessage());
         }
     }
-
+    // Surcharge de la méthode importCSV pour importer le fichier par défaut.
     public void importCSV(String filename) {
         this.importCSV(new File(path + SEPARATOR + filename));
     } 
@@ -125,7 +125,7 @@ public class Platform {
             System.out.println("Exception\n" + e.getMessage());
         }
     }
-
+    // Surcharge de la méthode exportCSV pour exporter le fichier par défaut.
     public void exportBin() {
         String filename = LocalDate.now().toString() + ".bin";
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path + SEPARATOR + filename))) {
@@ -136,7 +136,7 @@ public class Platform {
             System.out.println("Exception\n" + e.getMessage());
         }
     }
-
+    // Méthode pour lire un fichier binaire.
     public void readBin(String filename) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path + SEPARATOR + filename))) {
             this.previousAffectation = (Map<Teenager, Teenager>) ois.readObject();
