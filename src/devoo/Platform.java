@@ -68,7 +68,6 @@ public class Platform {
             }
         }
         this.currentAffectation = AffectationUtil.affectation(host, guest);
-
     }
     
     /* Importe les étudiants depuis un fichier CSV. */
