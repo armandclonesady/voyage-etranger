@@ -34,7 +34,8 @@ public class Platform {
     public static final String OUTPUT = "Output.txt";
 
     /* Constante pour le chemin d'accès au fichier. */
-    public static File path = new File(DIRECTORY + SEPARATOR + "rsc" + SEPARATOR);
+    public static File ressourcesPath = new File(DIRECTORY + SEPARATOR + "rsc" + SEPARATOR);
+    public static File historyPath = new File(DIRECTORY + SEPARATOR + "hist" + SEPARATOR);
 
     /* Ensemble des étudiants. */
     private Set<Teenager> students;
@@ -106,12 +107,12 @@ public class Platform {
     }
     // Surcharge de la méthode importCSV pour importer le fichier par défaut.
     public void importCSV(String filename) {
-        this.importCSV(new File(path + SEPARATOR + filename));
+        this.importCSV(new File(ressourcesPath + SEPARATOR + filename));
     } 
 
     /* Exporte les couples d'étudiants dans un fichier CSV. */
     public void exportCSV() {
-        try (BufferedWriter br = new BufferedWriter(new FileWriter(path + SEPARATOR + OUTPUT))) {
+        try (BufferedWriter br = new BufferedWriter(new FileWriter(ressourcesPath + SEPARATOR + OUTPUT))) {
             br.write("hostId, hostForename, hostName, hostGender, hostDiet, hostAnimal, hostHobbies, hostHistory, hostPairGender, guestId, guestForename, guestName, guestGender, guestDiet, guestAllergy, guestHistory, guestPairGender");
             br.newLine();
             for (Map.Entry<Teenager, Teenager> couple : this.currentAffectation.entrySet()) {
@@ -126,8 +127,10 @@ public class Platform {
     }
     // Surcharge de la méthode exportCSV pour exporter le fichier par défaut.
     public void exportBin() {
-        String filename = LocalDate.now().toString() + ".bin";
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path + SEPARATOR + filename))) {
+        Country hostCountry = this.currentAffectation.keySet().iterator().next().getCountry();
+        Country guestCountry = this.currentAffectation.values().iterator().next().getCountry();
+        String filename = String.format("%s-%s (%d).bin", hostCountry, guestCountry, LocalDate.now().getYear());
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(historyPath + SEPARATOR + filename))) {
             oos.writeObject(this.currentAffectation);
         } catch (IOException e) {
             System.out.println("IOEXCEPTION ;\n"+e.getMessage());
@@ -137,7 +140,7 @@ public class Platform {
     }
     // Méthode pour lire un fichier binaire.
     public void readBin(String filename) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path + SEPARATOR + filename))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(historyPath + SEPARATOR + filename))) {
             this.previousAffectation = (Map<Teenager, Teenager>) ois.readObject();
         } catch (IOException e) {
             System.out.println("IOEXCEPTION ;\n"+e.getMessage());
@@ -146,13 +149,13 @@ public class Platform {
         }
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Platform platform = new Platform();
-        /*platform.importCSV();*/
+        platform.importCSV("adosAléatoires.csv");
         System.out.println(platform.students.size());
-        /*for (Teenager t : platform.students) {
+        for (Teenager t : platform.students) {
             System.out.println(t.toString());
-        }*/
+        }
         platform.affectation(Country.FRANCE, Country.ITALY);
         for (Map.Entry<Teenager, Teenager> couple : platform.currentAffectation.entrySet()) {
             System.out.println(couple.getKey().getName() + ", " + couple.getValue().getName());
@@ -160,13 +163,13 @@ public class Platform {
         System.out.println("\n");
         platform.exportCSV();
         platform.exportBin();
-        platform.readBin("2023-05-29.bin");
-        for (Map.Entry<Teenager, Teenager> couple : platform.previousAffectation.entrySet()) {
-            System.out.println(couple.getKey().getName() + ", " + couple.getValue().getName());
-        }
-    }
+    }*/
 
     public Map<Teenager, Teenager> getAffectation() {
         return this.currentAffectation;
+    }
+
+    public Set<Teenager> getStudents() {
+        return this.students;
     }
 }

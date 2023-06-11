@@ -223,8 +223,7 @@ public class Teenager implements Serializable {
 
     /* Méthodes toString. */
     public String toString() {
-        return this.getId() + ", " + this.getForename() + ", " + this.getName() + ", " + this.getCountry() + ", " + 
-        this.getBirth() + ", " + this.getValue(CriterionName.GENDER);
+        return String.format("(%d) %s %s", this.id, this.forename, this.name);
     }
 
     /* Méthodes extractValues pour l'écriture dans un fichier (Récupère les valeurs des critères d'un host). */
