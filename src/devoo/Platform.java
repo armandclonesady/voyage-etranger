@@ -46,6 +46,8 @@ public class Platform {
     /* Map des couples d'étudiants sauvegardé. */
     private Map<Teenager, Teenager> previousAffectation;
 
+    private Map<Teenager, Teenager> pairFixed;
+
     /* Constructeur de Platform. */
     public Platform() {
         this.students = new HashSet<Teenager>();

@@ -1,5 +1,7 @@
 package ihm;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -12,33 +14,34 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class AppController implements EventHandler<ActionEvent> {
-    @FXML
-    ComboBox<Country> countryComboBox;
-    @FXML
-    ListView<Teenager> teenagerList;
-    @FXML
-    Label name;
-    @FXML
-    Label forename;
-    @FXML 
-    TextField search;
+    @FXML ComboBox<Country> countryComboBox;
+    @FXML ListView<Teenager> teenagerList;
+    @FXML Label name;
+    @FXML Label forename;
+    @FXML TextField search;
 
-    @FXML
-    Button reaffect;
-    @FXML 
-    ComboBox<Country> hostComboBox;
-    @FXML
-    ComboBox<Country> guestComboBox;
-    @FXML
-    ListView<Map.Entry<Teenager,Teenager>> list;
+    @FXML Button reaffect;
+    @FXML ComboBox<Country> hostComboBox;
+    @FXML ComboBox<Country> guestComboBox;
+    @FXML ListView<Map.Entry<Teenager,Teenager>> list;
+
+    @FXML ListView<Teenager> hostList;
+    @FXML ListView<Teenager> guestList;
+
+    @FXML ListView<Map.Entry<Teenager,Teenager>> pairList;
 
     public void initialize() {
         hostComboBox.getItems().setAll(Country.values());
@@ -70,6 +73,9 @@ public class AppController implements EventHandler<ActionEvent> {
         teenagerList.getItems().sort(new IdComparator());
 
         list.setCellFactory(new AffectListFactory());
+
+        pairList.setCellFactory(new AffectListFactory());
+        pairList.getItems().setAll(App.platform.getAffectation().entrySet());
     }
 
     public void handle(ActionEvent event) {
@@ -140,5 +146,26 @@ public class AppController implements EventHandler<ActionEvent> {
             items.add(entry);
         }
         list.setItems(items);
+    }
+
+    public void addNewPair() throws IOException {
+        Stage stage2 = new Stage();
+
+        FXMLLoader loader = new FXMLLoader();
+        URL fxmlFileUrl = getClass().getResource("FixationModal.fxml");
+        if (fxmlFileUrl == null) {
+                System.out.println("Impossible de charger le fichier fxml");
+                System.exit(-1);
+        }
+        loader.setLocation(fxmlFileUrl);
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+
+        stage2.initModality(Modality.WINDOW_MODAL);
+        stage2.initOwner(App.stage);
+        stage2.setScene(scene);
+        stage2.setTitle("Fixation Modal");
+        stage2.show();
     }
 }
