@@ -92,11 +92,21 @@ public class AffectationUtil {
         if (!host.countryCompatibility(visitor)) {
             weight += AffectationUtil.weightCountry;
         }
-        if (host.criterionIsProperlyDefine(CriterionName.GENDER) && visitor.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)) {
+        /*if (host.criterionIsProperlyDefine(CriterionName.GENDER) && visitor.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)) {
             if (host.getValue(CriterionName.GENDER).equals(visitor.getValue(CriterionName.PAIR_GENDER))) weight -= AffectationUtil.weightGender;
             
-            else weight += AffectationUtil.weightGender;
+            else weight += AffectationUtil.weightGender /2;
+        }*/
+        if(host.genderPref(visitor)== -1){
+            weight += AffectationUtil.weightGender;
         }
+        if(host.genderPref(visitor)== 1){
+            weight -= AffectationUtil.weightGender *2;
+        }
+        if( host.genderPref(visitor)== 0){
+            weight -= AffectationUtil.weightGender;
+        }
+
         if (host.criterionIsProperlyDefine(CriterionName.HOBBIES) && visitor.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
             weight -= (AffectationUtil.weightHobbies * Teenager.containsAllValuesCriterionName (
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
@@ -135,7 +145,7 @@ public class AffectationUtil {
 
 
     /*
-     * Setters and Getters pour les poids
+     * Setters/Getters/resetter pour les poids
      */
 
     // retourne le poids de l'historique
@@ -146,6 +156,11 @@ public class AffectationUtil {
     public static void setWeightHistori(int weightHistori) {
         AffectationUtil.weightHistori = weightHistori;
     }
+    // reset le poids de l'historique
+    public static void resetWeightHistori() {
+        AffectationUtil.weightHistori = 100;
+    }
+
     // retourne le poids des animaux
     public static int getWeightAlergi() {
         return weightAlergi;
@@ -154,6 +169,11 @@ public class AffectationUtil {
     public static void setWeightAlergi(int weightAlergi) {
         AffectationUtil.weightAlergi = weightAlergi;
     }
+    // reset le poids des allérgies
+    public static void resetWeightAlergi() {
+        AffectationUtil.weightAlergi = 100;
+    }
+
     // retourne le poids du regime alimentaire
     public static int getWeightFood() {
         return weightFood;
@@ -161,6 +181,10 @@ public class AffectationUtil {
     // modifie le poids du regime alimentaire
     public static void setWeightFood(int weightFood) {
         AffectationUtil.weightFood = weightFood;
+    }
+    // reset le poids du regime alimentaire
+    public static void resetWeightFood() {
+        AffectationUtil.weightFood = 100;
     }
     // retourne le poids du pays
     public static int getWeightCountry() {
@@ -170,6 +194,10 @@ public class AffectationUtil {
     public static void setWeightCountry(int weightCountry) {
         AffectationUtil.weightCountry = weightCountry;
     }
+    // reset le poids du pays
+    public static void resetWeightCountry() {
+        AffectationUtil.weightCountry = 100;
+    }
     // retourne le poids du genre
     public static int getWeightGender() {
         return weightGender;
@@ -178,6 +206,10 @@ public class AffectationUtil {
     public static void setWeightGender(int weightGender) {
         AffectationUtil.weightGender = weightGender;
     }
+    // reset le poids du genre
+    public static void resetWeightGender() {
+        AffectationUtil.weightGender = 1;
+    }
     // retourne le poids des hobbies
     public static int getWeightHobbies() {
         return weightHobbies;
@@ -185,6 +217,10 @@ public class AffectationUtil {
     // modifie le poids des hobbies
     public static void setWeightHobbies(int weightHobbies) {
         AffectationUtil.weightHobbies = weightHobbies;
+    }
+    // reset le poids des hobbies
+    public static void resetWeightHobbies() {
+        AffectationUtil.weightHobbies = 1;
     }
 
     
