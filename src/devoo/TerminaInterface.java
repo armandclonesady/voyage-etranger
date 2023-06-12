@@ -1,8 +1,10 @@
 package devoo;
 
 import java.io.File;
+import java.net.InterfaceAddress;
 import java.util.ArrayList;
 import graphes.*;
+
 import java.util.Scanner;
 
 public class TerminaInterface {
@@ -70,6 +72,27 @@ public class TerminaInterface {
         countries[1] = Country.values()[choix];
         return countries;
     }
+
+    public void menuInterface(Platform plat){
+        System.out.println("1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 paraméère \n4 : Créer des binôme \n5 : Changer les pays hote et inviter  \n6 : Quitter");
+        Scanner sc = new Scanner(System.in);
+        int choix = sc.nextInt();
+        if(choix == 1){
+            plat.importCSV(chooseCSV());
+        }else if(choix == 2){
+            System.out.println("Voici les binomes : ");
+            // afficher les binomes
+        }else if(choix == 3){
+            // paramétrer
+        }else if(choix == 4){
+            // créer des binomes
+        }else if(choix == 5){
+            Country[] hostAndGuest =chooseCountry();
+                plat.affectation(hostAndGuest[0], hostAndGuest[1]);
+        }else if(choix == 6){
+            System.exit(0);
+        }
+    }
            
     /*
      * Permet l'utilisation de l'applications pour créer les binome des échange l'inguistique
@@ -81,11 +104,7 @@ public class TerminaInterface {
         System.out.println("choisiser le pays Hôte : ");
         Country[] hostAndGuest =chooseCountry();
         plat.affectation(hostAndGuest[0], hostAndGuest[1]);
-        System.out.println("Voici les binomes : ");
-        System.out.println(plat.getAffectation());
-
-        
-        
+        //menuInterface(plat);
 
     }
 }
