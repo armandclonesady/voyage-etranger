@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -17,7 +20,45 @@
   <tabs>
     <Tab text="Affectations">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <BorderPane layoutX="187.0" layoutY="85.0" prefHeight="370.6666666666667" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox prefHeight="27.0" prefWidth="600.0" spacing="200.0">
+                                 <children>
+                                    <ComboBox fx:id="hostComboBox" prefWidth="100.0" promptText="HOST" />
+                                    <ComboBox fx:id="guestComboBox" prefWidth="100.0" promptText="GUEST" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="100.0" />
+                                 </padding>
+                              </HBox>
+                              <SplitPane prefHeight="371.0" prefWidth="482.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <ListView fx:id="list" layoutX="110.0" layoutY="7.0" prefHeight="304.0" prefWidth="597.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </VBox>
+                     </center>
+                     <top>
+                        <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <items>
+                            <Button fx:id="reaffect" mnemonicParsing="false" onAction="#onReaffect" text="Réaffecter" />
+                          </items>
+                        </ToolBar>
+                     </top>
+                  </BorderPane>
+               </children></AnchorPane>
       </content>
     </Tab>
     <Tab text="Participants">
@@ -35,7 +76,7 @@
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <ComboBox fx:id="countryComboBox" prefHeight="25.0" prefWidth="103.0" promptText="ALL" />
+                                    <ComboBox fx:id="countryComboBox" prefHeight="25.0" prefWidth="100.0" promptText="ALL" />
                                     <TextField fx:id="search" />
                                  </children>
                               </HBox>
