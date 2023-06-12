@@ -1,26 +1,18 @@
 package ihm;
-
 import java.io.IOException;
 import java.net.URL;
 
-import devoo.Platform;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class App extends Application {
-
-
-        
-        public static Platform platform;
+public class EcranIntro extends Application {
 
         public void start(Stage stage) throws IOException {
-                platform = new Platform();
-
                 FXMLLoader loader = new FXMLLoader();
-                URL fxmlFileUrl = getClass().getResource("PageTwo.fxml");
+                URL fxmlFileUrl = getClass().getResource("EcranIntro.fxml");
                 if (fxmlFileUrl == null) {
                         System.out.println("Impossible de charger le fichier fxml");
                         System.exit(-1);
@@ -30,11 +22,11 @@ public class App extends Application {
 
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
-                stage.setTitle("Application SAE");
+                stage.setTitle("FXML demo");
                 stage.show();
         }
 
         public static void main(String[] args) {
-                App.launch(args);
+                Application.launch(args);
         }
 }
