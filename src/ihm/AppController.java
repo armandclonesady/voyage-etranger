@@ -1,5 +1,6 @@
 package ihm;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
@@ -23,33 +24,61 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class AppController implements EventHandler<ActionEvent> {
-    @FXML ComboBox<Country> countryComboBox;
-    @FXML ListView<Teenager> teenagerList;
-    @FXML Label name;
-    @FXML Label forename;
-    @FXML TextField search;
+    /**
+     * PageTwo ids
+     */
+    @FXML
+    ComboBox<Country> countryComboBox;
+    @FXML
+    ListView<Teenager> teenagerList;
+    @FXML
+    Label name;
+    @FXML
+    Label forename;
+    @FXML 
+    TextField search;
+    @FXML
+    Button reaffect;
+    @FXML 
+    ComboBox<Country> hostComboBox;
+    @FXML
+    ComboBox<Country> guestComboBox;
+    @FXML
+    ListView<Map.Entry<Teenager,Teenager>> list;
+    /**
+     * EcrenIntro ids
+     */
+    @FXML
+    Label selectedLabel;
+    @FXML 
+    ComboBox<Country> hostComboBoxMenu;
+    @FXML
+    ComboBox<Country> guestComboBoxMenu;
 
-    @FXML Button reaffect;
-    @FXML ComboBox<Country> hostComboBox;
-    @FXML ComboBox<Country> guestComboBox;
-    @FXML ListView<Map.Entry<Teenager,Teenager>> list;
+    static Country currentHost;
+    static Country currentGuest;
 
-    @FXML ListView<Teenager> hostList;
-    @FXML ListView<Teenager> guestList;
-
-    @FXML ListView<Map.Entry<Teenager,Teenager>> pairList;
+    static Country currentHost;
+    static Country currentGuest;
 
     public void initialize() {
+        System.out.println("Initialisation...");
         hostComboBox.getItems().setAll(Country.values());
         guestComboBox.getItems().setAll(Country.values());
+        hostComboBox.getSelectionModel().selectedItemProperty().addListener(this::onHostComboBoxChange);
+        guestComboBox.getSelectionModel().selectedItemProperty().addListener(this::onGuestComboBoxChange);
+        
+    }
 
-
-        countryComboBox.getItems().setAll(Country.values());
-        countryComboBox.getItems().add(0, null);
+    public void initializePageTwo() {
+        hostComboBox.getItems().setAll(Country.values());
+        guestComboBox.getItems().setAll(Country.values());
 
         countryComboBox.setOnAction(this);
         teenagerList.getSelectionModel().selectionModeProperty().set(SelectionMode.SINGLE);
@@ -129,6 +158,7 @@ public class AppController implements EventHandler<ActionEvent> {
             guestComboBox.getItems().add(oldCountry);
         }
         guestComboBox.getItems().remove(newCountry);
+        currentHost = newCountry;
     }
 
     public void onGuestComboBoxChange(ObservableValue<? extends Country> observable, Country oldCountry, Country newCountry) {
@@ -136,6 +166,7 @@ public class AppController implements EventHandler<ActionEvent> {
             hostComboBox.getItems().add(oldCountry);
         }
         hostComboBox.getItems().remove(newCountry);
+        currentGuest = newCountry;
     }
 
     public void onReaffect() {
@@ -146,6 +177,38 @@ public class AppController implements EventHandler<ActionEvent> {
             items.add(entry);
         }
         list.setItems(items);
+    }
+
+    public void onStartAction() {
+        FileChooser fc = new FileChooser();
+        fc.setSelectedExtensionFilter(new ExtensionFilter("csv", "CSV File"));
+        File selectedFile = fc.showOpenDialog(null);
+        while (!(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
+            selectedFile = fc.showOpenDialog(null);
+        }
+        selectedLabel.setText(selectedFile.getName().substring(0, selectedFile.getName().lastIndexOf(".")));
+        hostComboBox.setDisable(false);
+        guestComboBox.setDisable(false);
+        
+    }
+
+    public void onSettingsAction() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        URL fxmlFileUrl = getClass().getResource("Param.fxml");
+        if (fxmlFileUrl == null) {
+            System.out.println("Impossible de charger le fichier fxml");
+            System.exit(-1);
+        }
+        loader.setLocation(fxmlFileUrl);
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+        Stage paramStage = new Stage();
+        paramStage.initOwner(stage);
+        paramStage.initModality(Modality.WINDOW_MODAL);
+        paramStage.setScene(scene);
+        paramStage.setTitle("FXML demo");
+        paramStage.show();
     }
 
     public void addNewPair() throws IOException {

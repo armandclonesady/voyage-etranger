@@ -7,6 +7,8 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar", "lib/*.jar"
     ],
-    "java.debug.settings.vmArgs": "--module-path ./lib/javafx/ --add-modules javafx.controls,javafx.fxml",
+    "java.debug.settings.vmArgs": "--module-path /home/public/javafx-sdk-17.0.2/lib --add-modules=javafx.controls,javafx.fxml",
     "java.debug.settings.onBuildFailureProceed": true
 }
+
+//"--module-path ./lib/javafx/ --add-modules javafx.controls,javafx.fxml"

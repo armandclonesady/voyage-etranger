@@ -9,19 +9,18 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ihm.ModalController">
    <center>
       <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ListView layoutX="23.0" layoutY="56.0" prefHeight="262.6666666666667" prefWidth="245.33333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ListView fx:id="hostList" layoutX="23.0" layoutY="56.0" prefHeight="262.6666666666667" prefWidth="245.33333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ListView layoutX="46.0" prefHeight="262.6666666666667" prefWidth="246.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ListView fx:id="guestList" layoutX="46.0" prefHeight="262.6666666666667" prefWidth="246.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
         </items>
@@ -30,8 +29,8 @@
    <top>
       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
-            <ComboBox prefHeight="25.0" prefWidth="115.0" />
-            <ComboBox prefHeight="25.0" prefWidth="115.0">
+            <ComboBox fx:id="hostComboBox" prefHeight="25.0" prefWidth="115.0" />
+            <ComboBox fx:id="guestComboBox" prefHeight="25.0" prefWidth="115.0">
                <HBox.margin>
                   <Insets left="75.0" />
                </HBox.margin>
