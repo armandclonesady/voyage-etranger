@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import devoo.*;
 import fr.ulille.but.sae2_02.graphes.*;
+import javafx.util.Pair;
 
 /*
  *  Régle de calcul V1 :
@@ -24,12 +25,28 @@ public class AffectationUtil {
     static int weightHobbies = 1;
 
 
+
+    final double DEFAULT_HISTORY_VALUE = 100;
+    final double DEFAULT_ALLERGY_VALUE = 100;
+    final double DEFAULT_FOOD_VALUE = 100;
+    final double DEFAULT_GENDER_VALUE = 1;
+    final double DEFAULT_HOBBIES_VALUE = 1;
+
+
     /** Calcule le poids de l’arête entre host et visitor dans le graphe modèle.
     * Doit faire appel à la méthode compatibleWithGuest(Teenager) de Teenager.
     * Peut avoir d’autres paramètres si nécessaire.
     */
-    public static double weight (Teenager host, Teenager visitor) {
+    public static double weight (Teenager host, Teenager visitor, Map<Teenager,Teenager> pairFixed) {
         double weight = 0;
+        if(!pairFixed.isEmpty()){
+            for( Map.Entry<Teenager, Teenager> e : pairFixed.entrySet()){
+                if( host.equals(e.getKey()) && visitor.equals(e.getValue())){
+                    return -10000;
+                }
+            }
+        }
+        
         if (host.criterionIsProperlyDefine(CriterionName.HISTORY) && visitor.criterionIsProperlyDefine(CriterionName.HISTORY)) {
             if (host.hasLastGuest(visitor)) {
                 if (!(host.getValue(CriterionName.HISTORY).isBlank() && visitor.getValue(CriterionName.HISTORY).isBlank())) {
@@ -113,14 +130,14 @@ public class AffectationUtil {
     }
 
     // Création du graphe
-    public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest) {
+    public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest, Map<Teenager,Teenager> pairFixed) {
         GrapheNonOrienteValue<Teenager> g = new GrapheNonOrienteValue<Teenager>();
         for (Teenager t1 : host) {
             g.ajouterSommet(t1);
             for (Teenager t2 : guest) {
                 g.ajouterSommet(t2);
                 if (t1 != t2 && !g.contientArete(t2, t1)) {
-                    g.ajouterArete(t1, t2, weight(t1, t2));
+                    g.ajouterArete(t1, t2, weight(t1, t2, pairFixed));
                 }
             }
         }
@@ -128,8 +145,8 @@ public class AffectationUtil {
     }
 
     // Retourne une map du cour chemin entre deux sommet
-    public static Map<Teenager, Teenager> affectation(List<Teenager> host, List<Teenager> guest) {
-        CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest), host, guest);
+    public static Map<Teenager, Teenager> affectation(List<Teenager> host, List<Teenager> guest, Map<Teenager,Teenager> pairFixed) {
+        CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest, pairFixed), host, guest);
         Map<Teenager, Teenager> dico = new HashMap<Teenager, Teenager>();
         for (Arete<Teenager> a : calcul.calculerAffectation()) {
             dico.put(a.getExtremite1(), a.getExtremite2());

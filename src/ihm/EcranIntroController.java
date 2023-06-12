@@ -43,7 +43,7 @@ public class EcranIntroController {
         selectedFile = fc.showOpenDialog(null);
         while (!(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
             Alert alertImport = new Alert(AlertType.ERROR, "Vous n'avez pas importer de fichier CSV");
-            alertImport.show();
+            alertImport.showAndWait();
             if (!alertImport.isShowing()) {
                 selectedFile = fc.showOpenDialog(null);
             }
@@ -58,7 +58,7 @@ public class EcranIntroController {
         EcranIntro.paramModalStage = new Stage();
 
         FXMLLoader loader = new FXMLLoader();
-        URL fxmlFileUrl = getClass().getResource("Param.fxml");
+        URL fxmlFileUrl = getClass().getResource("ParamModal.fxml");
         if (fxmlFileUrl == null) {
             System.out.println("Impossible de charger le fichier fxml");
             System.exit(-1);
@@ -85,11 +85,11 @@ public class EcranIntroController {
                 }
             } else {
                 Alert alertCountry = new Alert(javafx.scene.control.Alert.AlertType.ERROR, "Vous n'avez pas choisis les pays nécessaires !");
-                alertCountry.show();
+                alertCountry.showAndWait();
             }
         } else {
             Alert alertImport = new Alert(AlertType.ERROR, "Vous n'avez pas importer de fichier CSV");
-            alertImport.show();
+            alertImport.showAndWait();
         }
     }
 
