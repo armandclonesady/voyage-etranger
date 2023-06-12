@@ -41,8 +41,6 @@ public class TerminaInterface {
         Scanner sc = new Scanner(System.in);
         int choix = sc.nextInt()-1;
         return csvFiles[choix].getName();
-       
-
     }
     /*
      * fonction qui vériifie si le fichier est bien un .csv
@@ -78,13 +76,14 @@ public class TerminaInterface {
         return countries;
     }
 
-    public static boolean menuInterface(Platform plat){
+    public static boolean menuInterface(Platform plat,Country[] hostAndGuest){
         System.out.println("1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 : paraméère \n4 : Créer des binôme \n5 : Changer les pays hote et inviter  \n6 : Quitter");
         Scanner sc = new Scanner(System.in);
         int choix = sc.nextInt();
         if(choix == 1){
             plat.importCSV(chooseCSV());
         }else if(choix == 2){
+            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
             System.out.println("Voici les binomes : ");
             for( Map.Entry< Teenager, Teenager> e : plat.getAffectation().entrySet()){
                 System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
@@ -97,18 +96,20 @@ public class TerminaInterface {
 
         }else if(choix == 3){
             while(parametreMenu()){}
+            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
         }else if(choix == 4){
-            // créer des binomes
+            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
+            addBinome(plat, hostAndGuest);
         }else if(choix == 5){
-            Country[] hostAndGuest =chooseCountry();
-                plat.affectation(hostAndGuest[0], hostAndGuest[1]);
+            hostAndGuest =chooseCountry();
+            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
         }else if(choix == 6){
             return false;
         }
         return true;
     }
 
-
+    // choix entre modifier et reset
     public static int option(){
         System.out.print("1 : modifier \n2 : reset\nChoix  : ");
         Scanner sc = new Scanner(System.in);
@@ -118,7 +119,7 @@ public class TerminaInterface {
 
     // menu des parametre
     public static boolean  parametreMenu(){
-        System.out.print("1 : tout rétablir les ppoids\n2 : poids de l'historique : " + AffectationUtil.getWeightHistori()+
+        System.out.print("1 : rétablir tout les poids\n2 : poids de l'historique : " + AffectationUtil.getWeightHistori()+
             "\n3 : poids des allergie : "+AffectationUtil.getWeightAlergi() +
             "\n4 : poids de l'alimentation : "+AffectationUtil.getWeightFood() +
             "\n5 : poids des hobbies :" +AffectationUtil.getWeightHobbies()+
@@ -171,7 +172,29 @@ public class TerminaInterface {
         if(choix == 7)return false;
         return true;
     }
+
+    public static void addBinome(Platform plat,Country[] hostAndGuest){
+        plat.guest.clear();
+        plat.host.clear();
+        plat.listGuestAndHost(hostAndGuest[0],hostAndGuest[1]);
+        for( int i = 0 ; i< plat.host.size() ; i++){
+                System.out.println( (i+1) +" : "+ plat.host.get(i).toString());
+            }
+        System.out.print("Host choisie : ");
+        Scanner sc = new Scanner(System.in);
+        int choix1 = sc.nextInt() -1;
+        System.out.println("");
+
            
+        for( int i = 0 ; i< plat.guest.size() ; i++){
+            System.out.println( (i+1) +" : "+ plat.guest.get(i).toString());
+        }
+        System.out.print("Guest choisie : ");
+        int choix2 = sc.nextInt()-1;
+        System.out.println(plat.guest.get(choix1).toString()+ "\n " +plat.host.get(choix2).toString());
+        plat.addPair(plat.host.get(choix1), plat.guest.get(choix2));
+
+    }
     /*
      * Permet l'utilisation de l'applications pour créer les binome des échange l'inguistique
      */
@@ -181,8 +204,8 @@ public class TerminaInterface {
         plat.importCSV(chooseCSV());
         System.out.println("choisiser le pays Hôte : ");
         Country[] hostAndGuest =chooseCountry();
-        plat.affectation(hostAndGuest[0], hostAndGuest[1]);
-        while(menuInterface(plat)){}
+    
+        while(menuInterface(plat, hostAndGuest)){}
         System.exit(0);
     }
 }

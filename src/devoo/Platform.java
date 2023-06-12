@@ -39,6 +39,8 @@ public class Platform {
 
     /* Ensemble des étudiants. */
     private Set<Teenager> students;
+    List<Teenager> host = new ArrayList<Teenager>();
+    List<Teenager> guest = new ArrayList<Teenager>();
 
     /* Map des couples d'étudiants après l'affection. */
     private Map<Teenager, Teenager> currentAffectation;
@@ -72,7 +74,7 @@ public class Platform {
                 guest.add(t);
             }
         }
-        this.currentAffectation = AffectationUtil.affectation(host, guest);
+        this.currentAffectation = AffectationUtil.affectation(host, guest, this.pairFixed);
     }
     
     /* Importe les étudiants depuis un fichier CSV. */
@@ -184,4 +186,16 @@ public class Platform {
     public Map<Teenager, Teenager> getPairFixed() {
         return this.pairFixed;
     }
+
+    public void listGuestAndHost(Country hostCountry, Country guestCountry){
+        for (Teenager t : this.students) {
+            if (t.getCountry().equals(hostCountry)) {
+                host.add(t);
+            }
+            else if (t.getCountry().equals(guestCountry)) {
+                guest.add(t);
+            }
+        }
+        
+    } 
 }
