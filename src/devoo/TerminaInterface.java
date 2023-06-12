@@ -3,6 +3,8 @@ package devoo;
 import java.io.File;
 import java.net.InterfaceAddress;
 import java.util.ArrayList;
+import java.util.Map;
+
 import graphes.*;
 
 import java.util.Scanner;
@@ -73,25 +75,34 @@ public class TerminaInterface {
         return countries;
     }
 
-    public void menuInterface(Platform plat){
-        System.out.println("1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 paraméère \n4 : Créer des binôme \n5 : Changer les pays hote et inviter  \n6 : Quitter");
+    public static boolean menuInterface(Platform plat){
+        System.out.println("1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 : paraméère \n4 : Créer des binôme \n5 : Changer les pays hote et inviter  \n6 : Quitter");
         Scanner sc = new Scanner(System.in);
         int choix = sc.nextInt();
         if(choix == 1){
             plat.importCSV(chooseCSV());
         }else if(choix == 2){
             System.out.println("Voici les binomes : ");
-            // afficher les binomes
+            for( Map.Entry< Teenager, Teenager> e : plat.getAffectation().entrySet()){
+                System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
+            }
+            try{
+                Thread.sleep(10000);
+            } catch( InterruptedException e){
+                e.printStackTrace();
+            }
+
         }else if(choix == 3){
-            // paramétrer
+            // parametre 
         }else if(choix == 4){
             // créer des binomes
         }else if(choix == 5){
             Country[] hostAndGuest =chooseCountry();
                 plat.affectation(hostAndGuest[0], hostAndGuest[1]);
         }else if(choix == 6){
-            System.exit(0);
+            return false;
         }
+        return true;
     }
            
     /*
@@ -104,7 +115,7 @@ public class TerminaInterface {
         System.out.println("choisiser le pays Hôte : ");
         Country[] hostAndGuest =chooseCountry();
         plat.affectation(hostAndGuest[0], hostAndGuest[1]);
-        //menuInterface(plat);
-
+        while(menuInterface(plat)){}
+        System.exit(0);
     }
 }

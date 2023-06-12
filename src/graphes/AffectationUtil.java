@@ -186,4 +186,6 @@ public class AffectationUtil {
     public static void setWeightHobbies(int weightHobbies) {
         AffectationUtil.weightHobbies = weightHobbies;
     }
+
+    
 }
