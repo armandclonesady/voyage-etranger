@@ -52,6 +52,8 @@ public class Platform {
     public Platform() {
         this.students = new HashSet<Teenager>();
         this.currentAffectation = new HashMap<Teenager, Teenager>();
+        this.previousAffectation = new HashMap<Teenager, Teenager>();
+        this.pairFixed = new HashMap<Teenager, Teenager>();
     }
 
     /* Ajoute un étudiant à l'ensemble. */
@@ -173,5 +175,13 @@ public class Platform {
 
     public Set<Teenager> getStudents() {
         return this.students;
+    }
+
+    public void addPair(Teenager host, Teenager guest) {
+        this.pairFixed.put(host, guest);
+    }
+
+    public Map<Teenager, Teenager> getPairFixed() {
+        return this.pairFixed;
     }
 }

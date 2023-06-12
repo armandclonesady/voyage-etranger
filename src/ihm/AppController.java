@@ -33,150 +33,21 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class AppController implements EventHandler<ActionEvent> {
+    
+    @FXML Label selectedLabel;
+    @FXML ComboBox<Country> hostComboBox;
+    @FXML ComboBox<Country> guestComboBox;
+
     File selectedFile;
-    /**
-     * PageTwo ids
-     */
-    @FXML
-    ComboBox<Country> countryComboBox;
-    @FXML
-    ListView<Teenager> teenagerList;
-    @FXML
-    Label name;
-    @FXML
-    Label forename;
-    @FXML 
-    TextField search;
-    @FXML
-    Button reaffect;
-    @FXML 
-    ComboBox<Country> hostComboBox;
-    @FXML
-    ComboBox<Country> guestComboBox;
-    @FXML
-    ListView<Map.Entry<Teenager,Teenager>> list;
-    /**
-     * EcrenIntro ids
-     */
-    @FXML
-    Label selectedLabel;
-    @FXML 
-    ComboBox<Country> hostComboBoxMenu;
-    @FXML
-    ComboBox<Country> guestComboBoxMenu;
-    static Country currentHost;
-    static Country currentGuest;
+    static Country selectedHost;
+    static Country selectedGuest;
 
     public void initialize() {
         System.out.println("Initialisation...");
         hostComboBox.getItems().setAll(Country.values());
         guestComboBox.getItems().setAll(Country.values());
-        hostComboBox.getSelectionModel().selectedItemProperty().addListener(this::onHostComboBoxChange);
-        guestComboBox.getSelectionModel().selectedItemProperty().addListener(this::onGuestComboBoxChange);
-        
-    }
-
-    public void initializePageTwo() {
-        hostComboBox.getItems().setAll(Country.values());
-        guestComboBox.getItems().setAll(Country.values());
-
-        countryComboBox.setOnAction(this);
-        teenagerList.getSelectionModel().selectionModeProperty().set(SelectionMode.SINGLE);
-        teenagerList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            onStudentsListChange();
-        });
-
-        search.textProperty().addListener((observable, oldValue, newValue) -> {
-            onSearch();
-        });
-
-        hostComboBox.getSelectionModel().selectedItemProperty().addListener(this::onHostComboBoxChange);
-        guestComboBox.getSelectionModel().selectedItemProperty().addListener(this::onGuestComboBoxChange);
-
-        hostComboBox.getSelectionModel().selectFirst();
-        guestComboBox.getSelectionModel().selectFirst();
-
-        App.platform.importCSV("adosAléatoires.csv");
-
-        teenagerList.getItems().setAll(App.platform.getStudents());
-        teenagerList.getItems().sort(new IdComparator());
-
-        list.setCellFactory(new AffectListFactory());
-
-        //pairList.setCellFactory(new AffectListFactory());
-        //pairList.getItems().setAll(App.platform.getAffectation().entrySet());
-    }
-
-    public void handle(ActionEvent event) {
-        if (event.getTarget() == countryComboBox) {
-            onCountryComboBoxChange();
-        }
-        else if (event.getTarget() == teenagerList) {
-            onStudentsListChange();
-        }
-    }
-    
-    public void onCountryComboBoxChange() {
-        teenagerList.getItems().clear();
-        if (countryComboBox.getSelectionModel().getSelectedItem() == null) {
-            teenagerList.getItems().setAll(App.platform.getStudents());
-        }
-        for (Teenager student : App.platform.getStudents()) {
-            if (student.getCountry() == countryComboBox.getSelectionModel().getSelectedItem()) {
-                teenagerList.getItems().add(student);
-            }
-        }
-        teenagerList.getItems().sort(new IdComparator());
-        teenagerList.getSelectionModel().selectFirst();
-    }
-
-    public void onStudentsListChange() {
-        if (teenagerList.getSelectionModel().getSelectedItem() == null) {
-            name.setText("");
-            forename.setText("");
-            return;
-        }
-        name.setText(teenagerList.getSelectionModel().getSelectedItem().getName());
-        forename.setText(teenagerList.getSelectionModel().getSelectedItem().getForename());
-    }
-
-    public void onSearch() {
-        onCountryComboBoxChange();
-        Iterator<Teenager> it = teenagerList.getItems().iterator();
-        while (it.hasNext()) {
-            Teenager student = it.next();
-            if (!student.toString().toLowerCase().contains(search.getText().toLowerCase())) {
-                it.remove();
-            }
-        }
-        teenagerList.getItems().sort(new IdComparator());
-        teenagerList.getSelectionModel().selectFirst();
-    }
-
-    public void onHostComboBoxChange(ObservableValue<? extends Country> observable, Country oldCountry, Country newCountry) {
-        if (oldCountry != null) {
-            guestComboBox.getItems().add(oldCountry);
-        }
-        guestComboBox.getItems().remove(newCountry);
-        currentHost = newCountry;
-    }
-
-    public void onGuestComboBoxChange(ObservableValue<? extends Country> observable, Country oldCountry, Country newCountry) {
-        if (oldCountry != null) {
-            hostComboBox.getItems().add(oldCountry);
-        }
-        hostComboBox.getItems().remove(newCountry);
-        currentGuest = newCountry;
-    }
-
-    public void onReaffect() {
-        list.getItems().clear();
-        App.platform.affectation(hostComboBox.getSelectionModel().getSelectedItem(), guestComboBox.getSelectionModel().getSelectedItem());
-        ObservableList<Map.Entry<Teenager, Teenager>> items = FXCollections.observableArrayList();
-        for (Map.Entry<Teenager, Teenager> entry : App.platform.getAffectation().entrySet()) {
-            items.add(entry);
-        }
-        list.setItems(items);
+        /*hostComboBox.getSelectionModel().selectedItemProperty().addListener(this::onHostComboBoxChange);
+        guestComboBox.getSelectionModel().selectedItemProperty().addListener(this::onGuestComboBoxChange);*/
     }
 
     public void onImportAction() {
@@ -196,7 +67,7 @@ public class AppController implements EventHandler<ActionEvent> {
     }
 
     public void onSettingsAction() throws IOException {
-        Stage paramStage = new Stage();
+        App.paramModalStage = new Stage();
 
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("Param.fxml");
@@ -208,16 +79,15 @@ public class AppController implements EventHandler<ActionEvent> {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
-
-        paramStage.initOwner(App.stage);
-        paramStage.initModality(Modality.WINDOW_MODAL);
-        paramStage.setScene(scene);
-        paramStage.setTitle("Settings");
-        paramStage.show();
+        App.paramModalStage.initOwner(App.mainStage);
+        App.paramModalStage.initModality(Modality.WINDOW_MODAL);
+        App.paramModalStage.setScene(scene);
+        App.paramModalStage.setTitle("FXML demo");
+        App.paramModalStage.show();
     }
 
     public void addNewPair() throws IOException {
-        Stage stage2 = new Stage();
+        App.pairModalStage = new Stage();
 
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("FixationModal.fxml");
@@ -230,17 +100,23 @@ public class AppController implements EventHandler<ActionEvent> {
 
         Scene scene = new Scene(root);
 
-        stage2.initModality(Modality.WINDOW_MODAL);
-        stage2.initOwner(App.stage);
-        stage2.setScene(scene);
-        stage2.setTitle("Fixation Modal");
-        stage2.show();
+        App.pairModalStage.initModality(Modality.WINDOW_MODAL);
+        App.pairModalStage.initOwner(App.mainStage);
+        App.pairModalStage.setScene(scene);
+        App.pairModalStage.setTitle("Fixation Modal");
+        App.pairModalStage.show();
+    }
+
+    public void updatePair() {
+        /*pairlist.getItems().clear();
+        list.getItems().setAll(App.platform.getAffectation().entrySet());*/
     }
 
     public void onStartAction() {
         if (selectedFile != null) {
             if (hostComboBox.getSelectionModel().getSelectedItem() != null && guestComboBox.getSelectionModel().getSelectedItem() != null) {
-                App.stage.hide();
+                App.ecranIntroStage.hide();
+                App.mainStage.show();
             } else {
                 Alert alertCountry = new Alert(javafx.scene.control.Alert.AlertType.ERROR, "Vous n'avez pas choisis les pays nécessaires !");
                 alertCountry.show();

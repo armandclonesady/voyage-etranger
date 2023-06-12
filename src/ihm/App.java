@@ -12,15 +12,16 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
-
-        
         public static Platform platform;
-        public static Stage stage;
+        public static Stage ecranIntroStage;
+        public static Stage mainStage;
+        public static Stage paramModalStage;
+        public static Stage pairModalStage;
 
         public void start(Stage stage) throws IOException {
                 platform = new Platform();
-                App.stage = stage;
-                App.stage.setResizable(false);
+                App.ecranIntroStage = stage;
+                App.ecranIntroStage.setResizable(false);
 
                 FXMLLoader loader = new FXMLLoader();
                 URL fxmlFileUrl = getClass().getResource("EcranIntro.fxml");
@@ -32,11 +33,10 @@ public class App extends Application {
                 Parent root = loader.load();
 
                 Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.setTitle("Application SAE");
-                stage.show();
+                ecranIntroStage.setScene(scene);
+                ecranIntroStage.setTitle("Application SAE");
+                ecranIntroStage.show();
         }
-
         public static void main(String[] args) {
                 App.launch(args);
         }
