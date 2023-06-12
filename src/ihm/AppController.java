@@ -43,13 +43,15 @@ public class AppController implements EventHandler<ActionEvent> {
 
     @FXML ListView<Map.Entry<Teenager,Teenager>> pairList;
 
+    static Country currentHost;
+    static Country currentGuest;
+
     public void initialize() {
-        hostComboBox.getItems().setAll(Country.values());
-        guestComboBox.getItems().setAll(Country.values());
-
-
         countryComboBox.getItems().setAll(Country.values());
         countryComboBox.getItems().add(0, null);
+
+        hostComboBox.getItems().setAll(Country.values());
+        guestComboBox.getItems().setAll(Country.values());
 
         countryComboBox.setOnAction(this);
         teenagerList.getSelectionModel().selectionModeProperty().set(SelectionMode.SINGLE);
@@ -129,6 +131,7 @@ public class AppController implements EventHandler<ActionEvent> {
             guestComboBox.getItems().add(oldCountry);
         }
         guestComboBox.getItems().remove(newCountry);
+        currentHost = newCountry;
     }
 
     public void onGuestComboBoxChange(ObservableValue<? extends Country> observable, Country oldCountry, Country newCountry) {
@@ -136,6 +139,7 @@ public class AppController implements EventHandler<ActionEvent> {
             hostComboBox.getItems().add(oldCountry);
         }
         hostComboBox.getItems().remove(newCountry);
+        currentGuest = newCountry;
     }
 
     public void onReaffect() {

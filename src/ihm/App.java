@@ -18,6 +18,7 @@ public class App extends Application {
         public void start(Stage stage) throws IOException {
                 platform = new Platform();
                 App.stage = stage;
+                App.stage.setResizable(false);
 
                 FXMLLoader loader = new FXMLLoader();
                 URL fxmlFileUrl = getClass().getResource("PageTwo.fxml");
