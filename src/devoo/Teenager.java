@@ -256,7 +256,6 @@ public class Teenager implements Serializable {
         }
         return t2.birth.getYear() - this.birth.getYear();
     }
-
     /* 
      * Méthode qui renvoie vérifie si la préférence du genre est respectée.
      */

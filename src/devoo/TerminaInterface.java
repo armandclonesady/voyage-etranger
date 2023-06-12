@@ -70,8 +70,11 @@ public class TerminaInterface {
             }
         }
         System.out.println("Choisissez le pays Visiteur : ");
-        choix = sc.nextInt()-1;
-        countries[1] = Country.values()[choix];
+        int newChoix;
+        do{
+        newChoix = sc.nextInt()-1;}
+        while(newChoix == choix);
+        countries[1] = Country.values()[newChoix];
         return countries;
     }
 
@@ -93,7 +96,7 @@ public class TerminaInterface {
             }
 
         }else if(choix == 3){
-            // parametre 
+            while(parametreMenu()){}
         }else if(choix == 4){
             // créer des binomes
         }else if(choix == 5){
@@ -102,6 +105,70 @@ public class TerminaInterface {
         }else if(choix == 6){
             return false;
         }
+        return true;
+    }
+
+
+    public static int option(){
+        System.out.print("1 : modifier \n2 : reset\nChoix  : ");
+        Scanner sc = new Scanner(System.in);
+        int option = sc.nextInt();
+        return option;
+    }
+
+    // menu des parametre
+    public static boolean  parametreMenu(){
+        System.out.print("1 : tout rétablir les ppoids\n2 : poids de l'historique : " + AffectationUtil.getWeightHistori()+
+            "\n3 : poids des allergie : "+AffectationUtil.getWeightAlergi() +
+            "\n4 : poids de l'alimentation : "+AffectationUtil.getWeightFood() +
+            "\n5 : poids des hobbies :" +AffectationUtil.getWeightHobbies()+
+            "\n6 : poids de sur la préfèrence des genres :" +AffectationUtil.getWeightGender() + 
+            "\n7 : retour menu\nChoix : ");
+        Scanner sc = new Scanner(System.in);
+        int choix = sc.nextInt();
+        if(choix==1){AffectationUtil.allReset();}
+
+        if( choix == 2){
+            if(option() == 1){
+                System.out.print("nouveau poids : ");
+                Scanner scann = new Scanner(System.in);
+                int newPoids  = scann.nextInt();
+                AffectationUtil.setWeightHistori(newPoids);
+            }else{AffectationUtil.resetWeightHistori();}
+        }
+        if(choix == 3){
+            if(option()==1){
+                System.out.print("nouveau poids : ");
+                Scanner scann = new Scanner(System.in);
+                int newPoids  = scann.nextInt();
+                AffectationUtil.setWeightAlergi(newPoids);
+            }else{AffectationUtil.resetWeightAlergi();}
+        }
+        if(choix == 4){
+            if(option()==1){
+                System.out.print("nouveau poids : ");
+                Scanner scann = new Scanner(System.in);
+                int newPoids  = scann.nextInt();
+                AffectationUtil.setWeightFood(newPoids);
+            }else{AffectationUtil.resetWeightFood();}
+        }
+        if(choix == 5){
+            if(option()==1){
+                System.out.print("nouveau poids : ");
+                Scanner scann = new Scanner(System.in);
+                int newPoids  = scann.nextInt();
+                AffectationUtil.setWeightHobbies(newPoids);
+            }else{AffectationUtil.resetWeightHobbies();}
+        }
+        if(choix == 6){
+            if(option()==1){
+                System.out.print("nouveau poids : ");
+                Scanner scann = new Scanner(System.in);
+                int newPoids  = scann.nextInt();
+                AffectationUtil.setWeightGender(newPoids);
+            }else{AffectationUtil.resetWeightGender();}
+        }
+        if(choix == 7)return false;
         return true;
     }
            

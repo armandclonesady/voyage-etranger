@@ -92,11 +92,7 @@ public class AffectationUtil {
         if (!host.countryCompatibility(visitor)) {
             weight += AffectationUtil.weightCountry;
         }
-        /*if (host.criterionIsProperlyDefine(CriterionName.GENDER) && visitor.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)) {
-            if (host.getValue(CriterionName.GENDER).equals(visitor.getValue(CriterionName.PAIR_GENDER))) weight -= AffectationUtil.weightGender;
-            
-            else weight += AffectationUtil.weightGender /2;
-        }*/
+       
         if(host.genderPref(visitor)== -1){
             weight += AffectationUtil.weightGender;
         }
@@ -221,6 +217,16 @@ public class AffectationUtil {
     // reset le poids des hobbies
     public static void resetWeightHobbies() {
         AffectationUtil.weightHobbies = 1;
+    }
+
+    // reset tout
+    public static void allReset(){
+        resetWeightAlergi();
+        resetWeightCountry();
+        resetWeightFood();
+        resetWeightGender();
+        resetWeightHistori();
+        resetWeightHobbies();
     }
 
     
