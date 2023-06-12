@@ -8,6 +8,7 @@ import java.util.Map;
 
 import devoo.Country;
 import devoo.IdComparator;
+import devoo.Platform;
 import devoo.Teenager;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -181,13 +182,12 @@ public class AppController implements EventHandler<ActionEvent> {
     public void onImportAction() {
         FileChooser fc = new FileChooser();
         fc.setSelectedExtensionFilter(new ExtensionFilter("csv", "CSV File"));
+        fc.setInitialDirectory(Platform.ressourcesPath);
         selectedFile = fc.showOpenDialog(null);
         while (!(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
             Alert alertImport = new Alert(AlertType.ERROR, "Vous n'avez pas importer de fichier CSV");
-            alertImport.show();
-            if (!alertImport.isShowing()) {
-                selectedFile = fc.showOpenDialog(null);
-            }
+            alertImport.showAndWait();
+            selectedFile = fc.showOpenDialog(null);
         }
         selectedLabel.setText(selectedFile.getName().substring(0, selectedFile.getName().lastIndexOf(".")));
         hostComboBox.setDisable(false);
