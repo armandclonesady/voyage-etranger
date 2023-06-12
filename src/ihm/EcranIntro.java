@@ -1,7 +1,9 @@
 package ihm;
+
 import java.io.IOException;
 import java.net.URL;
 
+import devoo.Platform;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +12,17 @@ import javafx.stage.Stage;
 
 public class EcranIntro extends Application {
 
+        public static Platform platform;
+        public static Stage ecranIntroStage;
+        public static Stage mainStage;
+        public static Stage paramModalStage;
+        public static Stage pairModalStage;
+
         public void start(Stage stage) throws IOException {
+                platform = new Platform();
+                EcranIntro.ecranIntroStage = stage;
+                EcranIntro.ecranIntroStage.setResizable(false);
+
                 FXMLLoader loader = new FXMLLoader();
                 URL fxmlFileUrl = getClass().getResource("EcranIntro.fxml");
                 if (fxmlFileUrl == null) {
@@ -21,12 +33,11 @@ public class EcranIntro extends Application {
                 Parent root = loader.load();
 
                 Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.setTitle("FXML demo");
-                stage.show();
+                ecranIntroStage.setScene(scene);
+                ecranIntroStage.setTitle("Application SAE");
+                ecranIntroStage.show();
         }
-
         public static void main(String[] args) {
-                Application.launch(args);
+                EcranIntro.launch(args);
         }
 }

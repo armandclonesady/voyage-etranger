@@ -268,8 +268,8 @@ public class Teenager implements Serializable {
             ) {
             return 1;
         }
-        if( this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER))) || (t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER)))
-            || this.getValue(CriterionName.PAIR_GENDER).equals("") || t2.getValue(CriterionName.PAIR_GENDER).equals("") {
+        if( this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER)) || (t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER)))
+            || this.getValue(CriterionName.PAIR_GENDER).equals("") || t2.getValue(CriterionName.PAIR_GENDER).equals("")) {
 
         return 0;
     }
