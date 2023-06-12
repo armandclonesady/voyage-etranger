@@ -24,6 +24,14 @@ public class AffectationUtil {
     static int weightHobbies = 1;
 
 
+
+    final double DEFAULT_HISTORY_VALUE = 100;
+    final double DEFAULT_ALLERGY_VALUE = 100;
+    final double DEFAULT_FOOD_VALUE = 100;
+    final double DEFAULT_GENDER_VALUE = 1;
+    final double DEFAULT_HOBBIES_VALUE = 1;
+
+
     /** Calcule le poids de l’arête entre host et visitor dans le graphe modèle.
     * Doit faire appel à la méthode compatibleWithGuest(Teenager) de Teenager.
     * Peut avoir d’autres paramètres si nécessaire.
