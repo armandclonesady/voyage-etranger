@@ -23,7 +23,7 @@ public class App extends Application {
                 App.stage.setResizable(false);
 
                 FXMLLoader loader = new FXMLLoader();
-                URL fxmlFileUrl = getClass().getResource("PageTwo.fxml");
+                URL fxmlFileUrl = getClass().getResource("EcranIntro.fxml");
                 if (fxmlFileUrl == null) {
                         System.out.println("Impossible de charger le fichier fxml");
                         System.exit(-1);

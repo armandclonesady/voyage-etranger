@@ -18,18 +18,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class AppController implements EventHandler<ActionEvent> {
+    File selectedFile;
     /**
      * PageTwo ids
      */
@@ -60,10 +63,6 @@ public class AppController implements EventHandler<ActionEvent> {
     ComboBox<Country> hostComboBoxMenu;
     @FXML
     ComboBox<Country> guestComboBoxMenu;
-
-    static Country currentHost;
-    static Country currentGuest;
-
     static Country currentHost;
     static Country currentGuest;
 
@@ -103,8 +102,8 @@ public class AppController implements EventHandler<ActionEvent> {
 
         list.setCellFactory(new AffectListFactory());
 
-        pairList.setCellFactory(new AffectListFactory());
-        pairList.getItems().setAll(App.platform.getAffectation().entrySet());
+        //pairList.setCellFactory(new AffectListFactory());
+        //pairList.getItems().setAll(App.platform.getAffectation().entrySet());
     }
 
     public void handle(ActionEvent event) {
@@ -179,12 +178,16 @@ public class AppController implements EventHandler<ActionEvent> {
         list.setItems(items);
     }
 
-    public void onStartAction() {
+    public void onImportAction() {
         FileChooser fc = new FileChooser();
         fc.setSelectedExtensionFilter(new ExtensionFilter("csv", "CSV File"));
-        File selectedFile = fc.showOpenDialog(null);
+        selectedFile = fc.showOpenDialog(null);
         while (!(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
-            selectedFile = fc.showOpenDialog(null);
+            Alert alertImport = new Alert(AlertType.ERROR, "Vous n'avez pas importer de fichier CSV");
+            alertImport.show();
+            if (!alertImport.isShowing()) {
+                selectedFile = fc.showOpenDialog(null);
+            }
         }
         selectedLabel.setText(selectedFile.getName().substring(0, selectedFile.getName().lastIndexOf(".")));
         hostComboBox.setDisable(false);
@@ -193,6 +196,8 @@ public class AppController implements EventHandler<ActionEvent> {
     }
 
     public void onSettingsAction() throws IOException {
+        Stage paramStage = new Stage();
+
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("Param.fxml");
         if (fxmlFileUrl == null) {
@@ -203,11 +208,11 @@ public class AppController implements EventHandler<ActionEvent> {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
-        Stage paramStage = new Stage();
-        paramStage.initOwner(stage);
+
+        paramStage.initOwner(App.stage);
         paramStage.initModality(Modality.WINDOW_MODAL);
         paramStage.setScene(scene);
-        paramStage.setTitle("FXML demo");
+        paramStage.setTitle("Settings");
         paramStage.show();
     }
 
@@ -230,5 +235,19 @@ public class AppController implements EventHandler<ActionEvent> {
         stage2.setScene(scene);
         stage2.setTitle("Fixation Modal");
         stage2.show();
+    }
+
+    public void onStartAction() {
+        if (selectedFile != null) {
+            if (hostComboBox.getSelectionModel().getSelectedItem() != null && guestComboBox.getSelectionModel().getSelectedItem() != null) {
+                App.stage.hide();
+            } else {
+                Alert alertCountry = new Alert(javafx.scene.control.Alert.AlertType.ERROR, "Vous n'avez pas choisis les pays nécessaires !");
+                alertCountry.show();
+            }
+        } else {
+            Alert alertImport = new Alert(AlertType.ERROR, "Vous n'avez pas importer de fichier CSV");
+            alertImport.show();
+        }
     }
 }
