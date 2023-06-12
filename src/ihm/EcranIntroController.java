@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import devoo.Country;
+import devoo.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +40,7 @@ public class EcranIntroController {
 
     public void onImportAction() {
         FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(Platform.ressourcesPath);
         fc.setSelectedExtensionFilter(new ExtensionFilter("csv", "CSV File"));
         selectedFile = fc.showOpenDialog(null);
         while (!(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
