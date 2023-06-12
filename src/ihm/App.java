@@ -15,9 +15,11 @@ public class App extends Application {
 
         
         public static Platform platform;
+        public static Stage stage;
 
         public void start(Stage stage) throws IOException {
                 platform = new Platform();
+                App.stage = stage;
 
                 FXMLLoader loader = new FXMLLoader();
                 URL fxmlFileUrl = getClass().getResource("PageTwo.fxml");

@@ -100,6 +100,9 @@ public class AppController implements EventHandler<ActionEvent> {
         teenagerList.getItems().sort(new IdComparator());
 
         list.setCellFactory(new AffectListFactory());
+
+        pairList.setCellFactory(new AffectListFactory());
+        pairList.getItems().setAll(App.platform.getAffectation().entrySet());
     }
 
     public void handle(ActionEvent event) {
@@ -202,5 +205,26 @@ public class AppController implements EventHandler<ActionEvent> {
         paramStage.setScene(scene);
         paramStage.setTitle("FXML demo");
         paramStage.show();
+    }
+
+    public void addNewPair() throws IOException {
+        Stage stage2 = new Stage();
+
+        FXMLLoader loader = new FXMLLoader();
+        URL fxmlFileUrl = getClass().getResource("FixationModal.fxml");
+        if (fxmlFileUrl == null) {
+                System.out.println("Impossible de charger le fichier fxml");
+                System.exit(-1);
+        }
+        loader.setLocation(fxmlFileUrl);
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+
+        stage2.initModality(Modality.WINDOW_MODAL);
+        stage2.initOwner(App.stage);
+        stage2.setScene(scene);
+        stage2.setTitle("Fixation Modal");
+        stage2.show();
     }
 }
