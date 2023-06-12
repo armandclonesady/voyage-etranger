@@ -1,5 +1,7 @@
 package ihm;
 
+import java.util.Map;
+
 import devoo.IdComparator;
 import devoo.Teenager;
 import javafx.fxml.FXML;
@@ -18,26 +20,36 @@ public class PairModalController extends MainController {
     @FXML Button addButton;
 
     public void initialize() {
-        hostLabel.setText(MainController.selectedHost.name());
-        guestLabel.setText(MainController.selectedGuest.name());
+        hostLabel.setText(EcranIntroController.selectedHost.name());
+        guestLabel.setText(EcranIntroController.selectedGuest.name());
         System.out.println(hostLabel.getText());
         System.out.println(guestLabel.getText());
         for (Teenager t : EcranIntro.platform.getStudents()) {
-            if (t.getCountry().equals(MainController.selectedHost)) {
+            if (t.getCountry().equals(EcranIntroController.selectedHost)) {
                 hostList.getItems().add(t);
             }
-            if (t.getCountry().equals(MainController.selectedGuest)) {
+            if (t.getCountry().equals(EcranIntroController.selectedGuest)) {
                 guestList.getItems().add(t);
+            }
+        }
+        for (Map.Entry<Teenager,Teenager> e : EcranIntro.platform.getPairFixed().entrySet()) {
+            if (e.getKey().getCountry().equals(EcranIntroController.selectedHost)) {
+                hostList.getItems().remove(e.getKey());
+            }
+            if (e.getValue().getCountry().equals(EcranIntroController.selectedGuest)) {
+                guestList.getItems().remove(e.getValue());
             }
         }
         hostList.getItems().sort(new IdComparator());
         guestList.getItems().sort(new IdComparator());
 
         hostList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                addButton.setDisable(false);
-            }
+            onListChange();
         });
+        guestList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            onListChange();
+        });
+
     }
 
     public void onAddButtonClicked() {
@@ -48,6 +60,9 @@ public class PairModalController extends MainController {
             hostList.getItems().remove(host);
             guestList.getItems().remove(guest);
         }
-        updatePair();
+    }
+
+    public void onListChange() {
+        addButton.setDisable(hostList.getSelectionModel().getSelectedItem() == null || guestList.getSelectionModel().getSelectedItem() == null);
     }
 }

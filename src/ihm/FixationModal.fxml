@@ -55,7 +55,7 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="31.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAddButtonClicked" text="Ajouter" />
+            <Button fx:id="addButton" disable="true" mnemonicParsing="false" onAction="#onAddButtonClicked" text="Ajouter" />
          </children>
       </HBox>
    </bottom>

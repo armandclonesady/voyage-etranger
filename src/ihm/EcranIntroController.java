@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import devoo.Country;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,8 +33,8 @@ public class EcranIntroController {
         System.out.println("Initialisation...");
         hostComboBox.getItems().setAll(Country.values());
         guestComboBox.getItems().setAll(Country.values());
-        /*hostComboBox.getSelectionModel().selectedItemProperty().addListener(this::onHostComboBoxChange);
-        guestComboBox.getSelectionModel().selectedItemProperty().addListener(this::onGuestComboBoxChange);*/
+        hostComboBox.getSelectionModel().selectedItemProperty().addListener(this::onHostComboBoxChange);
+        guestComboBox.getSelectionModel().selectedItemProperty().addListener(this::onGuestComboBoxChange);
     }
 
     public void onImportAction() {
@@ -79,7 +80,6 @@ public class EcranIntroController {
                 EcranIntro.ecranIntroStage.hide();
                 try {
                     initMainStage();
-                    EcranIntro.mainStage.show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -109,8 +109,22 @@ public class EcranIntroController {
 
         EcranIntro.mainStage.setScene(scene);
         EcranIntro.mainStage.setTitle("Main");
-        EcranIntro.mainStage.hide();
+        EcranIntro.mainStage.show();
+    }
 
-        EcranIntro.platform.affectation(hostComboBox.getSelectionModel().getSelectedItem(), guestComboBox.getSelectionModel().getSelectedItem());
+    public void onHostComboBoxChange(ObservableValue<? extends Country> observable, Country oldCountry, Country newCountry) {
+        if (oldCountry != null) {
+            guestComboBox.getItems().add(oldCountry);
+        }
+        guestComboBox.getItems().remove(newCountry);
+        EcranIntroController.selectedHost = hostComboBox.getSelectionModel().getSelectedItem();
+    }
+
+    public void onGuestComboBoxChange(ObservableValue<? extends Country> observable, Country oldCountry, Country newCountry) {
+        if (oldCountry != null) {
+            hostComboBox.getItems().add(oldCountry);
+        }
+        hostComboBox.getItems().remove(newCountry);
+        EcranIntroController.selectedGuest = guestComboBox.getSelectionModel().getSelectedItem();;
     }
 }
