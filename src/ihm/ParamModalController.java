@@ -5,7 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class ParamController implements EventHandler<ActionEvent> {
+public class ParamModalController implements EventHandler<ActionEvent> {
     @FXML
     Label histWeight;
     @FXML

@@ -1,6 +1,7 @@
 package ihm;
 
-import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -13,14 +14,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MainController implements EventHandler<ActionEvent>{
 
@@ -58,15 +62,15 @@ public class MainController implements EventHandler<ActionEvent>{
         hostComboBox.getSelectionModel().selectFirst();
         guestComboBox.getSelectionModel().selectFirst();
 
-        App.platform.importCSV("adosAléatoires.csv");
+        EcranIntro.platform.importCSV("adosAléatoires.csv");
 
-        teenagerList.getItems().setAll(App.platform.getStudents());
+        teenagerList.getItems().setAll(EcranIntro.platform.getStudents());
         teenagerList.getItems().sort(new IdComparator());
 
         list.setCellFactory(new AffectListFactory());
+        list.getItems().setAll(EcranIntro.platform.getAffectation().entrySet());
 
         pairList.setCellFactory(new AffectListFactory());
-        pairList.getItems().setAll(App.platform.getAffectation().entrySet());
     }
 
     public void handle(ActionEvent event) {
@@ -81,9 +85,9 @@ public class MainController implements EventHandler<ActionEvent>{
     public void onCountryComboBoxChange() {
         teenagerList.getItems().clear();
         if (countryComboBox.getSelectionModel().getSelectedItem() == null) {
-            teenagerList.getItems().setAll(App.platform.getStudents());
+            teenagerList.getItems().setAll(EcranIntro.platform.getStudents());
         }
-        for (Teenager student : App.platform.getStudents()) {
+        for (Teenager student : EcranIntro.platform.getStudents()) {
             if (student.getCountry() == countryComboBox.getSelectionModel().getSelectedItem()) {
                 teenagerList.getItems().add(student);
             }
@@ -133,12 +137,38 @@ public class MainController implements EventHandler<ActionEvent>{
 
     public void onReaffect() {
         list.getItems().clear();
-        App.platform.affectation(hostComboBox.getSelectionModel().getSelectedItem(), guestComboBox.getSelectionModel().getSelectedItem());
+        EcranIntro.platform.affectation(hostComboBox.getSelectionModel().getSelectedItem(), guestComboBox.getSelectionModel().getSelectedItem());
         ObservableList<Map.Entry<Teenager, Teenager>> items = FXCollections.observableArrayList();
-        for (Map.Entry<Teenager, Teenager> entry : App.platform.getAffectation().entrySet()) {
+        for (Map.Entry<Teenager, Teenager> entry : EcranIntro.platform.getAffectation().entrySet()) {
             items.add(entry);
         }
         list.setItems(items);
+    }
+
+    public void addNewPair() throws IOException {
+        EcranIntro.pairModalStage = new Stage();
+
+        FXMLLoader loader = new FXMLLoader();
+        URL fxmlFileUrl = getClass().getResource("FixationModal.fxml");
+        if (fxmlFileUrl == null) {
+                System.out.println("Impossible de charger le fichier fxml");
+                System.exit(-1);
+        }
+        loader.setLocation(fxmlFileUrl);
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+
+        EcranIntro.pairModalStage.initModality(Modality.WINDOW_MODAL);
+        EcranIntro.pairModalStage.initOwner(EcranIntro.mainStage);
+        EcranIntro.pairModalStage.setScene(scene);
+        EcranIntro.pairModalStage.setTitle("Fixation Modal");
+        EcranIntro.pairModalStage.show();
+    }
+
+    public void updatePair() {
+        pairList.getItems().clear();
+        pairList.getItems().setAll(EcranIntro.platform.getAffectation().entrySet());
     }
     
 }
