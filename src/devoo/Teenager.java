@@ -261,11 +261,18 @@ public class Teenager implements Serializable {
      * Méthode qui renvoie vérifie si la préférence du genre est respectée.
      */
 
-    public boolean genderPref(Teenager t2){
-        if (this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER))){
-            return true;
+    public int genderPref(Teenager t2){
+        if (this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER)) &&  (t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER)))
+            || this.getValue(CriterionName.PAIR_GENDER).equals("") && t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER ))
+            || t2.getValue(CriterionName.PAIR_GENDER).equals("") && this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER ))
+            ) {
+            return 1;
         }
-        if(this.getValue(CriterionName.PAIR_GENDER).equals("")) return true;
-        return false;
+        if( this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER))) || (t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER)))
+            || this.getValue(CriterionName.PAIR_GENDER).equals("") || t2.getValue(CriterionName.PAIR_GENDER).equals("") {
+
+        return 0;
+    }
+    return -1;
     }
 }
