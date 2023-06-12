@@ -1,6 +1,7 @@
 package ihm;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import devoo.Country;
@@ -86,13 +87,13 @@ public class AppController implements EventHandler<ActionEvent> {
 
     public void onSearch() {
         onCountryComboBoxChange();
-        List<Teenager> students = new ArrayList<Teenager>();
-        for (Teenager student : teenagerList.getItems()) {
-            if (student.toString().toLowerCase().contains(search.getText().toLowerCase()) || student.getForename().toLowerCase().contains(search.getText().toLowerCase())) {
-                students.add(student);
+        Iterator<Teenager> it = teenagerList.getItems().iterator();
+        while (it.hasNext()) {
+            Teenager student = it.next();
+            if (!student.toString().toLowerCase().contains(search.getText().toLowerCase())) {
+                it.remove();
             }
         }
-        teenagerList.getItems().setAll(students);
         teenagerList.getItems().sort(new IdComparator());
         teenagerList.getSelectionModel().selectFirst();
     }
