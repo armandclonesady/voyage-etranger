@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import devoo.CriterionName;
-import devoo.Platform;
 import devoo.Teenager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

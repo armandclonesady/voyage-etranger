@@ -9,10 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -204,7 +202,7 @@ public class Platform {
         if (this.host.size() > this.guest.size()) {
             this.unregisterTeenager(this.host.size() - this.guest.size(), hostCountry);
         }
-        else if (this.host.size() < this.guest.size()) {
+        else if (this.guest.size() > this.host.size()) {
             this.unregisterTeenager(this.guest.size() - this.host.size(), guestCountry);
         }
         for (Teenager t : this.students) {
@@ -249,7 +247,7 @@ public class Platform {
         list.sort(new IncoherenceSort());
         List<Teenager> list2 = list.subList(list.size() - num, list.size());
         for (Teenager t : list2) {
-            t.changeRegister();
+            t.unregister();
         }
     }
 
@@ -263,7 +261,7 @@ public class Platform {
         list.sort(new IncoherenceSort());
         List<Teenager> list2 = list.subList(list.size() - num, list.size());
         for (Teenager t : list2) {
-            t.changeRegister();
+            t.unregister();
         }
     }
 

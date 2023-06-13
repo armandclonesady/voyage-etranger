@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import devoo.*;
 import fr.ulille.but.sae2_02.graphes.*;
-import javafx.util.Pair;
 
 /*
  *  Régle de calcul V1 :

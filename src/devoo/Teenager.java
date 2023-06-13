@@ -304,8 +304,10 @@ public class Teenager implements Serializable {
         return incoherence;
     }
 
-    public void changeRegister() {
-        this.isRegistered = !this.isRegistered;
+    public void unregister() {
+        if (this.isRegistered) {
+            this.isRegistered = false;
+        }
     }
 
     public boolean getRegistered() {
