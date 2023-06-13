@@ -372,7 +372,7 @@ public class MainController implements EventHandler<ActionEvent>{
 
     public void loadHistory() {
         FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(Platform.historyPath);
+        fc.setInitialDirectory(new File(System.getProperty("user.dir")));
         fc.setSelectedExtensionFilter(new ExtensionFilter("bin", "*.bin"));
         MainController.selectedHistory = fc.showOpenDialog(null);
         if (selectedHistory == null) {

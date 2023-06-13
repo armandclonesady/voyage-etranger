@@ -39,7 +39,7 @@ public class EcranIntroController {
 
     public void onImportAction() {
         FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(Platform.ressourcesPath);
+        fc.setInitialDirectory(new File(System.getProperty("user.dir")));
         fc.setSelectedExtensionFilter(new ExtensionFilter("csv", "CSV File"));
         selectedFile = fc.showOpenDialog(null);
         while (selectedFile == null || !(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
