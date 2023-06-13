@@ -64,8 +64,8 @@ public class Teenager implements Serializable {
     /* Vérifie si le Teenager est compatible avec un autre Teenager. */
     public boolean compatibleWithGuest(Teenager t) {
         if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY)) && this.hasLastGuest(t)) {
-            if (!(this.getValue(CriterionName.HISTORY).isBlank() && t.getValue(CriterionName.HISTORY).isBlank())) {
-                return historyCompatibility(t);
+            if (historyCompatibility(t) != -1) {
+                return historyCompatibility(t) == 1 ? true : false;
             }
         }
         if(this.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && t.criterionIsProperlyDefine(CriterionName.GUEST_ANIMAL_ALLERGY)) {
@@ -91,14 +91,15 @@ public class Teenager implements Serializable {
     }
 
     /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère de l'historique). */
-    public boolean historyCompatibility(Teenager t) {
+    public int historyCompatibility(Teenager t) {
         String historyHost = this.getValue(CriterionName.HISTORY);
         String historyGuest = t.getValue(CriterionName.HISTORY);
         if(historyHost.equals(Criterion.PREF_SAME) && historyGuest.equals(Criterion.PREF_SAME)) {
-            return true;
-        } else {
-            return false;
+            return 1;
+        } else if (historyHost.equals(Criterion.OTH) || historyGuest.equals(Criterion.OTH)) {
+            return 0;
         }
+        return -1;
     }
 
     /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère des animaux). */

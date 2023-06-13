@@ -250,6 +250,7 @@ public class MainController implements EventHandler<ActionEvent>{
 
     public void openFixedPairModal() throws IOException {
         EcranIntro.pairModalStage = new Stage();
+        EcranIntro.pairModalStage.setResizable(false);
 
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("fxml/FixedPairModal.fxml");
@@ -272,6 +273,7 @@ public class MainController implements EventHandler<ActionEvent>{
 
     public void openAvoidedPairModal() throws IOException {
         EcranIntro.pairModalStage = new Stage();
+        EcranIntro.pairModalStage.setResizable(false);
 
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("fxml/AvoidedPairModal.fxml");
@@ -348,6 +350,7 @@ public class MainController implements EventHandler<ActionEvent>{
             return;
         }
         EcranIntro.affectationShowModalStage = new Stage();
+        EcranIntro.affectationShowModalStage.setResizable(false);
 
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("fxml/SeeAffectation.fxml");
@@ -372,6 +375,9 @@ public class MainController implements EventHandler<ActionEvent>{
         fc.setInitialDirectory(Platform.historyPath);
         fc.setSelectedExtensionFilter(new ExtensionFilter("bin", "*.bin"));
         MainController.selectedHistory = fc.showOpenDialog(null);
+        if (selectedHistory == null) {
+            return;
+        }
         while (!(selectedHistory.getName().startsWith(EcranIntroController.selectedHost + "-" + EcranIntroController.selectedGuest))) {
             Alert alertImport = new Alert(AlertType.ERROR, "Cette historique ne correspond pas à l'échange sélectionné");
             alertImport.showAndWait();

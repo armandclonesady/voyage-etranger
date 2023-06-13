@@ -52,8 +52,8 @@ public class AffectationUtil {
         }
         if (host.criterionIsProperlyDefine(CriterionName.HISTORY) && visitor.criterionIsProperlyDefine(CriterionName.HISTORY)) {
             if (host.hasLastGuest(visitor)) {
-                if (!(host.getValue(CriterionName.HISTORY).isBlank() && visitor.getValue(CriterionName.HISTORY).isBlank())) {
-                    return host.historyCompatibility(visitor) ? -AffectationUtil.weightHistory : AffectationUtil.weightHistory;
+                if (host.historyCompatibility(visitor) != -1) {
+                    return host.historyCompatibility(visitor) == 1 ? -AffectationUtil.weightHistory : AffectationUtil.weightHistory;
                 }
             }
         }
@@ -102,10 +102,10 @@ public class AffectationUtil {
                 weight += AffectationUtil.PAIR_AVOIDED_VALUE;
             }
         }
-        if (host.criterionIsProperlyDefine(CriterionName.HISTORY) && visitor.criterionIsProperlyDefine(CriterionName.HISTORY)) {
+        if (host.criterionIsProperlyDefine(CriterionName.HISTORY)) {
             if (host.hasLastGuest(visitor)) {
-                if (!(host.getValue(CriterionName.HISTORY).isBlank() && visitor.getValue(CriterionName.HISTORY).isBlank())) {
-                    weight += host.historyCompatibility(visitor) ? -AffectationUtil.weightHistory : AffectationUtil.weightHistory;
+                if (host.historyCompatibility(visitor) != -1) {
+                    weight += host.historyCompatibility(visitor) == 1 ? -AffectationUtil.weightHistory : AffectationUtil.weightHistory;
                 }
             }
         }

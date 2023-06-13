@@ -42,7 +42,7 @@ public class EcranIntroController {
         fc.setInitialDirectory(Platform.ressourcesPath);
         fc.setSelectedExtensionFilter(new ExtensionFilter("csv", "CSV File"));
         selectedFile = fc.showOpenDialog(null);
-        while (!(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
+        while (selectedFile == null || !(selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".")).equals(".csv"))) {
             Alert alertImport = new Alert(AlertType.ERROR, "Vous n'avez pas importer de fichier CSV");
             alertImport.showAndWait();
             if (!alertImport.isShowing()) {
@@ -57,6 +57,7 @@ public class EcranIntroController {
 
     public void onSettingsAction() throws IOException {
         EcranIntro.paramModalStage = new Stage();
+        EcranIntro.paramModalStage.setResizable(false);
 
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("fxml/ParamModal.fxml");
@@ -96,6 +97,7 @@ public class EcranIntroController {
 
     public void initMainStage() throws IOException {
         EcranIntro.mainStage = new Stage();
+        EcranIntro.mainStage.setResizable(false);
 
         FXMLLoader loader = new FXMLLoader();
         URL fxmlFileUrl = getClass().getResource("fxml/Main.fxml");
