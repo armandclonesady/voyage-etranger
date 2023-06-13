@@ -37,15 +37,14 @@ public class ParamModalController implements EventHandler<ActionEvent> {
     }
     
     public void initialize() {
-        System.out.println("Initialisation.aaaa..");
-        allergyWeight.setValue(AffectationUtil.getWeightAlergi());
-        histWeight.setValue(AffectationUtil.getWeightHistori());
+        allergyWeight.setValue(AffectationUtil.getWeightAllergy());
+        histWeight.setValue(AffectationUtil.getWeightHistory());
         dietWeight.setValue(AffectationUtil.getWeightFood());
         genderWeight.setValue(AffectationUtil.getWeightGender());
         hobbyWeight.setValue(AffectationUtil.getWeightHobbies());
 
-        currentAllergyValue.setText(String.valueOf(AffectationUtil.getWeightAlergi()));
-        currentHistValue.setText(String.valueOf(AffectationUtil.getWeightHistori()));
+        currentAllergyValue.setText(String.valueOf(AffectationUtil.getWeightAllergy()));
+        currentHistValue.setText(String.valueOf(AffectationUtil.getWeightHistory()));
         currentDietValue.setText(String.valueOf(AffectationUtil.getWeightFood()));
         currentGenderValue.setText(String.valueOf(AffectationUtil.getWeightGender()));
         currentHobbyValue.setText(String.valueOf(AffectationUtil.getWeightHobbies()));
@@ -73,8 +72,8 @@ public class ParamModalController implements EventHandler<ActionEvent> {
     }
 
     public void allergyResetOnAction() {
-        AffectationUtil.resetWeightAlergi();
-        allergyWeight.setValue((AffectationUtil.getWeightAlergi()));
+        AffectationUtil.resetWeightAllergy();
+        allergyWeight.setValue((AffectationUtil.getWeightAllergy()));
         currentAllergyValue.setText(""+allergyWeight.getValue());
     }
 
@@ -100,14 +99,14 @@ public class ParamModalController implements EventHandler<ActionEvent> {
 
 
     public void histResetOnAction() {
-        AffectationUtil.resetWeightHistori();
-        histWeight.setValue((AffectationUtil.getWeightHistori()));
+        AffectationUtil.resetWeightHistory();
+        histWeight.setValue((AffectationUtil.getWeightHistory()));
         currentHistValue.setText(""+histWeight.getValue());
     }
 
 
     public void onAllergyChange() {
-        AffectationUtil.setWeightAlergi((int) allergyWeight.getValue());
+        AffectationUtil.setWeightAllergy((int) allergyWeight.getValue());
         currentAllergyValue.setText(""+(int) allergyWeight.getValue());
     }
     public void onDietChange() {
@@ -119,7 +118,7 @@ public class ParamModalController implements EventHandler<ActionEvent> {
         currentGenderValue.setText(""+(int) genderWeight.getValue());
     }
     public void onHistChange() {
-        AffectationUtil.setWeightHistori((int) histWeight.getValue());
+        AffectationUtil.setWeightHistory((int) histWeight.getValue());
         currentHistValue.setText(""+(int) histWeight.getValue());
     }
     public void onHobbyChange() {

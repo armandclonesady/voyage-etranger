@@ -35,13 +35,13 @@ public class Criterion implements Serializable {
 
     /* Dictionnaire des valeurs possibles pour chaque critéres (Critére, Valeurs possibles) */
     final static private Map<CriterionName, ArrayList<String>> possibleValues = Map.of(
-        CriterionName.GUEST_ANIMAL_ALLERGY, new ArrayList<String>(Arrays.asList(POS, NEG)),
-        CriterionName.HOST_HAS_ANIMAL, new ArrayList<String>(Arrays.asList(POS, NEG)),
-        CriterionName.GENDER, new ArrayList<String>(Arrays.asList(F, M, OTH)),
-        CriterionName.PAIR_GENDER, new ArrayList<String>(Arrays.asList(F, M, OTH, BLANK)),
-        CriterionName.HISTORY, new ArrayList<String>(Arrays.asList(PREF_SAME, PREF_OTH)),
-        CriterionName.GUEST_FOOD, new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V, FOOD_BLANK)),
-        CriterionName.HOST_FOOD, new ArrayList<String>(Arrays.asList(FOOD_N, FOOD_V, FOOD_BLANK)));
+        CriterionName.GUEST_ANIMAL_ALLERGY, new ArrayList<String>(Arrays.asList(POS,NEG)),
+        CriterionName.HOST_HAS_ANIMAL, new ArrayList<String>(Arrays.asList(POS,NEG)),
+        CriterionName.GENDER, new ArrayList<String>(Arrays.asList(F,M,OTH)),
+        CriterionName.PAIR_GENDER, new ArrayList<String>(Arrays.asList(F,M,OTH,BLANK)),
+        CriterionName.HISTORY, new ArrayList<String>(Arrays.asList(PREF_SAME,PREF_OTH)),
+        CriterionName.GUEST_FOOD, new ArrayList<String>(Arrays.asList(FOOD_N,FOOD_V,FOOD_BLANK)),
+        CriterionName.HOST_FOOD, new ArrayList<String>(Arrays.asList(FOOD_N,FOOD_V,FOOD_BLANK)));
 
     /* Constructeur de Criterion (avec un CriterionName en paramètre). */
     public Criterion(CriterionName label, String value) {
@@ -72,10 +72,15 @@ public class Criterion implements Serializable {
                     throw new CriterionException(errorMsg());
                 }
             case 'T':
-                if(!getRightValues().contains(this.value)) {
-                    throw new CriterionException(errorMsg());
+                if ((this.label == CriterionName.HOBBIES)) {
+                    return;
                 }
-                else if((this.label.equals(CriterionName.HOST_FOOD) || this.label.equals(CriterionName.GUEST_FOOD)) && !getRightValues().containsAll(Arrays.asList(this.value.split(",")))) {  
+                if((this.label == CriterionName.HOST_FOOD) || this.label == CriterionName.GUEST_FOOD) {
+                    if (!getRightValues().containsAll(Arrays.asList(this.value.split(",")))) {
+                        throw new CriterionException(errorMsg());
+                    }
+                }
+                else if (!getRightValues().contains(this.value)) {
                     throw new CriterionException(errorMsg());
                 }
         }

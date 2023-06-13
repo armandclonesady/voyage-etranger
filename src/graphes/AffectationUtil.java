@@ -17,46 +17,50 @@ import javafx.util.Pair;
  */
 
 public class AffectationUtil {
-    static int weightHistori = 100;
-    static int weightAlergi = 100;
+    static int weightHistory = 100;
+    static int weightAllergy = 100;
     static int weightFood = 100;
     static int weightCountry = 100;
     static int weightGender = 1;
     static int weightHobbies = 1;
 
+    final static int PAIR_FIXED_VALUE = -50000;
+    final static int PAIR_AVOIDED_VALUE = 50000;
 
-
-    final double DEFAULT_HISTORY_VALUE = 100;
-    final double DEFAULT_ALLERGY_VALUE = 100;
-    final double DEFAULT_FOOD_VALUE = 100;
-    final double DEFAULT_GENDER_VALUE = 1;
-    final double DEFAULT_HOBBIES_VALUE = 1;
+    final static int DEFAULT_HISTORY_VALUE = 100;
+    final static int DEFAULT_ALLERGY_VALUE = 100;
+    final static int DEFAULT_FOOD_VALUE = 100;
+    final static int DEFAULT_COUNTRY_VALUE = 100;
+    final static int DEFAULT_GENDER_VALUE = 1;
+    final static int DEFAULT_HOBBIES_VALUE = 1;
 
 
     /** Calcule le poids de l’arête entre host et visitor dans le graphe modèle.
     * Doit faire appel à la méthode compatibleWithGuest(Teenager) de Teenager.
     * Peut avoir d’autres paramètres si nécessaire.
     */
-    public static double weight (Teenager host, Teenager visitor, Map<Teenager,Teenager> pairFixed) {
+    public static double weight (Teenager host, Teenager visitor, Map<Teenager,Teenager> pairFixed, Map<Teenager,Teenager> pairAvoided) {
         double weight = 0;
-        if(!pairFixed.isEmpty()){
-            for( Map.Entry<Teenager, Teenager> e : pairFixed.entrySet()){
-                if( host.equals(e.getKey()) && visitor.equals(e.getValue())){
-                    return -10000;
-                }
+        if (!pairFixed.isEmpty()){
+            if (pairFixed.containsKey(host) && pairFixed.get(host).equals(visitor)){
+                return AffectationUtil.PAIR_FIXED_VALUE;
             }
         }
-        
+        if (!pairAvoided.isEmpty()){
+            if (pairAvoided.containsKey(host) && pairAvoided.get(host).equals(visitor)){
+                return AffectationUtil.PAIR_AVOIDED_VALUE;
+            }
+        }
         if (host.criterionIsProperlyDefine(CriterionName.HISTORY) && visitor.criterionIsProperlyDefine(CriterionName.HISTORY)) {
             if (host.hasLastGuest(visitor)) {
                 if (!(host.getValue(CriterionName.HISTORY).isBlank() && visitor.getValue(CriterionName.HISTORY).isBlank())) {
-                    return host.historyCompatibility(visitor) ? -AffectationUtil.weightHistori : AffectationUtil.weightHistori;
+                    return host.historyCompatibility(visitor) ? -AffectationUtil.weightHistory : AffectationUtil.weightHistory;
                 }
             }
         }
         if (host.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && visitor.criterionIsProperlyDefine(CriterionName.GUEST_ANIMAL_ALLERGY)) {
             if (!host.animalCompatibility(visitor)) {
-                return AffectationUtil.weightAlergi;
+                return AffectationUtil.weightAllergy;
             }
         }
         if (host.criterionIsProperlyDefine(CriterionName.HOST_FOOD) && visitor.criterionIsProperlyDefine(CriterionName.GUEST_FOOD)) {
@@ -64,16 +68,16 @@ public class AffectationUtil {
                 return AffectationUtil.weightFood;
             }
         }
-        if (!host.countryCompatibility(visitor)) {
-            return AffectationUtil.weightCountry;
+        if (host instanceof FrenchTeenager) {
+            if (!((FrenchTeenager) host).countryCompatibility(visitor)) {
+                weight += AffectationUtil.weightCountry;
+            }
         }
         if (host.criterionIsProperlyDefine(CriterionName.GENDER) && visitor.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)) {
             if (host.getValue(CriterionName.GENDER).equals(visitor.getValue(CriterionName.PAIR_GENDER))) weight -= AffectationUtil.weightGender;
-            
             else weight += AffectationUtil.weightGender;
         }
         if (host.criterionIsProperlyDefine(CriterionName.HOBBIES) && visitor.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
-            
             weight -= (AffectationUtil.weightHobbies * Teenager.containsAllValuesCriterionName (
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
             visitor.splitValues(visitor.getCriterion(CriterionName.HOBBIES))));
@@ -87,18 +91,28 @@ public class AffectationUtil {
     * Peut avoir d’autres paramètres si nécessaire.
     */
 
-    public static double advencedWeight (Teenager host, Teenager visitor) {
+    public static double advanceWeight (Teenager host, Teenager visitor, Map<Teenager,Teenager> pairFixed, Map<Teenager,Teenager> pairAvoided) {
         double weight = 0;
+        if(!pairFixed.isEmpty()){
+            if (pairFixed.containsKey(host) && pairFixed.get(host).equals(visitor)){
+                weight += AffectationUtil.PAIR_FIXED_VALUE;
+            }
+        }
+        if (!pairAvoided.isEmpty()){
+            if (pairAvoided.containsKey(host) && pairAvoided.get(host).equals(visitor)){
+                weight += AffectationUtil.PAIR_AVOIDED_VALUE;
+            }
+        }
         if (host.criterionIsProperlyDefine(CriterionName.HISTORY) && visitor.criterionIsProperlyDefine(CriterionName.HISTORY)) {
             if (host.hasLastGuest(visitor)) {
                 if (!(host.getValue(CriterionName.HISTORY).isBlank() && visitor.getValue(CriterionName.HISTORY).isBlank())) {
-                    weight += host.historyCompatibility(visitor) ? -AffectationUtil.weightHistori : AffectationUtil.weightHistori;
+                    weight += host.historyCompatibility(visitor) ? -AffectationUtil.weightHistory : AffectationUtil.weightHistory;
                 }
             }
         }
         if (host.criterionIsProperlyDefine(CriterionName.HOST_HAS_ANIMAL) && visitor.criterionIsProperlyDefine(CriterionName.GUEST_ANIMAL_ALLERGY)) {
             if (!host.animalCompatibility(visitor)) {
-                weight += AffectationUtil.weightAlergi;
+                weight += AffectationUtil.weightAllergy;
             }
         }
         if (host.criterionIsProperlyDefine(CriterionName.HOST_FOOD) && visitor.criterionIsProperlyDefine(CriterionName.GUEST_FOOD)) {
@@ -106,10 +120,11 @@ public class AffectationUtil {
                 weight += AffectationUtil.weightFood;
             }
         }
-        if (!host.countryCompatibility(visitor)) {
-            weight += AffectationUtil.weightCountry;
+        if (host instanceof FrenchTeenager) {
+            if (!((FrenchTeenager) host).countryCompatibility(visitor)) {
+                weight += AffectationUtil.weightCountry;
+            }
         }
-       
         if(host.genderPref(visitor)== -1){
             weight += AffectationUtil.weightGender;
         }
@@ -119,25 +134,23 @@ public class AffectationUtil {
         if( host.genderPref(visitor)== 0){
             weight -= AffectationUtil.weightGender;
         }
-
         if (host.criterionIsProperlyDefine(CriterionName.HOBBIES) && visitor.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
             weight -= (AffectationUtil.weightHobbies * Teenager.containsAllValuesCriterionName (
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
             visitor.splitValues(visitor.getCriterion(CriterionName.HOBBIES))));
         }
-
         return weight;
     }
 
     // Création du graphe
-    public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest, Map<Teenager,Teenager> pairFixed) {
-        GrapheNonOrienteValue<Teenager> g = new GrapheNonOrienteValue<Teenager>();
+    public static GrapheNonOrienteValue<Teenager> init(List<Teenager> host, List<Teenager> guest, Map<Teenager,Teenager> pairFixed, Map<Teenager,Teenager> pairAvoided) {
+        GrapheNonOrienteValue<Teenager> g = new GrapheNonOrienteValue<Teenager>();      
         for (Teenager t1 : host) {
             g.ajouterSommet(t1);
             for (Teenager t2 : guest) {
                 g.ajouterSommet(t2);
                 if (t1 != t2 && !g.contientArete(t2, t1)) {
-                    g.ajouterArete(t1, t2, weight(t1, t2, pairFixed));
+                    g.ajouterArete(t1, t2, advanceWeight(t1, t2, pairFixed, pairAvoided));
                 }
             }
         }
@@ -145,46 +158,56 @@ public class AffectationUtil {
     }
 
     // Retourne une map du cour chemin entre deux sommet
-    public static Map<Teenager, Teenager> affectation(List<Teenager> host, List<Teenager> guest, Map<Teenager,Teenager> pairFixed) {
-        CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest, pairFixed), host, guest);
+    public static Map<Teenager, Teenager> affectation(List<Teenager> host, List<Teenager> guest, Map<Teenager,Teenager> pairFixed, Map<Teenager,Teenager> pairAvoided) {
+        CalculAffectation<Teenager> calcul = new CalculAffectation<Teenager>(init(host, guest, pairFixed, pairAvoided), host, guest);
         Map<Teenager, Teenager> dico = new HashMap<Teenager, Teenager>();
         for (Arete<Teenager> a : calcul.calculerAffectation()) {
             dico.put(a.getExtremite1(), a.getExtremite2());
-            a.getExtremite1().setLastguest(a.getExtremite2());
         }
         return dico;
     }
-
-
 
     /*
      * Setters/Getters/resetter pour les poids
      */
 
     // retourne le poids de l'historique
-    public static int getWeightHistori() {
-        return AffectationUtil.weightHistori;
+    public static int getWeightHistory() {
+        return AffectationUtil.weightHistory;
     }
     // modifie le poids de l'historique
-    public static void setWeightHistori(int weightHistori) {
-        AffectationUtil.weightHistori = weightHistori;
+    public static void setWeightHistory(int weightHistory) {
+        AffectationUtil.weightHistory = weightHistory;
     }
     // reset le poids de l'historique
-    public static void resetWeightHistori() {
-        AffectationUtil.weightHistori = 100;
+    public static void resetWeightHistory() {
+        AffectationUtil.weightHistory = AffectationUtil.DEFAULT_HISTORY_VALUE;
     }
 
     // retourne le poids des animaux
-    public static int getWeightAlergi() {
-        return weightAlergi;
+    public static int getWeightAllergy() {
+        return weightAllergy;
     }
     // modifie le poids des allérgies
-    public static void setWeightAlergi(int weightAlergi) {
-        AffectationUtil.weightAlergi = weightAlergi;
+    public static void setWeightAllergy(int weightAllergy) {
+        AffectationUtil.weightAllergy = weightAllergy;
     }
     // reset le poids des allérgies
-    public static void resetWeightAlergi() {
-        AffectationUtil.weightAlergi = 100;
+    public static void resetWeightAllergy() {
+        AffectationUtil.weightAllergy = AffectationUtil.DEFAULT_ALLERGY_VALUE;
+    }
+
+    // retourne le poids du pays
+    public static int getWeightCountry() {
+        return weightCountry;
+    }
+    // modifie le poids du pays
+    public static void setWeightCountry(int weightCountry) {
+        AffectationUtil.weightCountry = weightCountry;
+    }
+    // reset le poids du pays
+    public static void resetWeightCountry() {
+        AffectationUtil.weightCountry = AffectationUtil.DEFAULT_COUNTRY_VALUE;
     }
 
     // retourne le poids du regime alimentaire
@@ -197,19 +220,7 @@ public class AffectationUtil {
     }
     // reset le poids du regime alimentaire
     public static void resetWeightFood() {
-        AffectationUtil.weightFood = 100;
-    }
-    // retourne le poids du pays
-    public static int getWeightCountry() {
-        return weightCountry;
-    }
-    // modifie le poids du pays
-    public static void setWeightCountry(int weightCountry) {
-        AffectationUtil.weightCountry = weightCountry;
-    }
-    // reset le poids du pays
-    public static void resetWeightCountry() {
-        AffectationUtil.weightCountry = 100;
+        AffectationUtil.weightFood = AffectationUtil.DEFAULT_FOOD_VALUE;
     }
     // retourne le poids du genre
     public static int getWeightGender() {
@@ -221,7 +232,7 @@ public class AffectationUtil {
     }
     // reset le poids du genre
     public static void resetWeightGender() {
-        AffectationUtil.weightGender = 1;
+        AffectationUtil.weightGender = AffectationUtil.DEFAULT_GENDER_VALUE;
     }
     // retourne le poids des hobbies
     public static int getWeightHobbies() {
@@ -233,16 +244,16 @@ public class AffectationUtil {
     }
     // reset le poids des hobbies
     public static void resetWeightHobbies() {
-        AffectationUtil.weightHobbies = 1;
+        AffectationUtil.weightHobbies = AffectationUtil.DEFAULT_HOBBIES_VALUE;
     }
 
     // reset tout
     public static void allReset(){
-        resetWeightAlergi();
+        resetWeightHistory();
+        resetWeightAllergy();
         resetWeightCountry();
         resetWeightFood();
         resetWeightGender();
-        resetWeightHistori();
         resetWeightHobbies();
     }
 

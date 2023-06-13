@@ -23,6 +23,8 @@ public class Teenager implements Serializable {
     private Country pays;
     private Teenager lastGuest;
 
+    private boolean isRegistered = true; 
+
     private Map<CriterionName, Criterion> requirements;
 
     /* Constructeur de Teenager (forename, name, pays, birth, lastGuest). */
@@ -117,19 +119,6 @@ public class Teenager implements Serializable {
         return (containsAllValuesCriterionName(hostRegime, guestRegime)) == guestRegime.size();
     }
 
-    /* Vérifie si le Teenager est compatible avec un autre Teenager sur le critère des pays (Uniquement pour la France). */
-    public boolean countryCompatibility(Teenager t) {
-        if (this.pays.equals(Country.FRANCE)) {
-            ArrayList<String> hostHobbies = new ArrayList<String>(splitValues(this.getCriterion(CriterionName.HOBBIES)));
-            ArrayList<String> guestHobbies = new ArrayList<String>(splitValues(t.getCriterion(CriterionName.HOBBIES)));
-            
-            Collections.sort(hostHobbies); Collections.sort(guestHobbies);
-
-            return (containsAllValuesCriterionName(hostHobbies, guestHobbies)) >= 1;
-        }
-        return true;
-    }
-
     public List<String> splitValues(Criterion criterion) {
         String criterionString = criterion.getValue();
         criterionString = criterionString.replace(" ","");
@@ -147,7 +136,10 @@ public class Teenager implements Serializable {
     }
 
     public boolean hasLastGuest(Teenager t) {
-        return this.lastGuest == t;
+        if (this.lastGuest != null) {
+            return this.lastGuest.equals(t);
+        }
+        return false;
     }
 
     /* Permet de mettre ajour un critère dans la map requirements en fonction de son label. */
@@ -191,7 +183,7 @@ public class Teenager implements Serializable {
     public void purgeCriterion() {
         for (Map.Entry<CriterionName, Criterion> criterion : this.requirements.entrySet()) {
             try {
-                criterion.getValue().isValid();
+                if (criterion.getValue() != null) criterion.getValue().isValid();
             }
             catch (CriterionException e) {
                 System.out.println(e.getMessage());
@@ -242,24 +234,52 @@ public class Teenager implements Serializable {
         getValue(CriterionName.PAIR_GENDER);
     }
 
-    /*Méthodes equals. */
-    public boolean equals(Teenager t) {
-        return this.getId() == t.getId();
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((forename == null) ? 0 : forename.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((birth == null) ? 0 : birth.hashCode());
+        result = prime * result + ((pays == null) ? 0 : pays.hashCode());
+        return result;
     }
 
-    /*
-    *Méthodes qui revoie la différence d'age entre deux Teenager.     
-    */
-    public  int diffAge(Teenager t2) {
-        if (this.birth.isBefore(t2.birth)) {
-            return this.birth.getYear() - t2.birth.getYear();
-        }
-        return t2.birth.getYear() - this.birth.getYear();
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Teenager other = (Teenager) obj;
+        if (forename == null) {
+            if (other.forename != null)
+                return false;
+        } else if (!forename.equals(other.forename))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (birth == null) {
+            if (other.birth != null)
+                return false;
+        } else if (!birth.equals(other.birth))
+            return false;
+        if (pays != other.pays)
+            return false;
+        return true;
     }
-    /* 
-     * Méthode qui renvoie vérifie si la préférence du genre est respectée.
-     */
 
+    /* Méthodes qui revoie la différence d'age entre deux Teenager. */
+    public int diffAge(Teenager t2) {
+        return Math.abs(this.birth.getYear() - t2.birth.getYear());
+    }
+
+    /* Méthode qui renvoie vérifie si la préférence du genre est respectée. */
     public int genderPref(Teenager t2){
         if (this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER)) &&  (t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER)))
             || this.getValue(CriterionName.PAIR_GENDER).equals("") && t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER ))
@@ -273,5 +293,22 @@ public class Teenager implements Serializable {
         return 0;
     }
     return -1;
+    }
+
+    public int numIncoherence() {
+        int incoherence = 0;
+        if (this.getCriterion(CriterionName.HOST_HAS_ANIMAL).getValue().equals("yes") 
+            && this.getCriterion(CriterionName.GUEST_ANIMAL_ALLERGY).getValue().equals("yes")) {
+            incoherence++;
+        }
+        return incoherence;
+    }
+
+    public void changeRegister() {
+        this.isRegistered = !this.isRegistered;
+    }
+
+    public boolean getRegistered() {
+        return this.isRegistered;
     }
 }

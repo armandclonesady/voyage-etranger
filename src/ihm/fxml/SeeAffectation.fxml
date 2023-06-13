@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ihm.AffectationShowModalController">
+   <center>
+      <SplitPane dividerPositions="0.5" prefHeight="189.0" prefWidth="418.0" BorderPane.alignment="CENTER">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox layoutX="65.0" layoutY="14.0" prefHeight="186.0" prefWidth="195.33333333333334" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="Possède animal : ">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="hostAnimal" text="Label" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="114.0" text="Régimes proposés : " wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="hostFood" text="Label" wrapText="true" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Passions : ">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="hostHobbies" text="Label" wrapText="true" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Préférences de genre : ">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="hostGender" text="Label" wrapText="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="5.0" top="15.0" />
+                     </padding></VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="186.0" prefWidth="196.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="Allergie animaux : ">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="guestAnimal" text="Label" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="99.0" text="Régimes voulus : " wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="guestFood" text="Label" wrapText="true" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Passions : ">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="guestHobbies" text="Label" wrapText="true" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Genre : ">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="guestGender" text="Label" wrapText="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="5.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </center>
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="500.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <Label fx:id="hostLabel" text="Label">
+               <HBox.margin>
+                  <Insets left="25.0" />
+               </HBox.margin></Label>
+            <Label fx:id="guestLabel" text="Label">
+               <HBox.margin>
+                  <Insets left="190.0" />
+               </HBox.margin></Label>
+         </children>
+      </HBox>
+   </top>
+   <bottom>
+      <VBox prefHeight="76.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox>
+               <children>
+                  <Label text="Ensemble lors du dernier échange : ">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="historyValue" text="Label" wrapText="true" />
+               </children>
+               <VBox.margin>
+                  <Insets left="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="500.0" />
+         </children>
+         <padding>
+            <Insets top="5.0" />
+         </padding>
+      </VBox>
+   </bottom>
+   <right>
+      <VBox prefHeight="189.0" prefWidth="95.0" spacing="25.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox>
+               <children>
+                  <Label fx:id="resultAnimal" text="Label" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label fx:id="resultFood" text="Label" wrapText="true" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label fx:id="resultHobbies" text="Label" wrapText="true" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label fx:id="resultGender" text="Label" wrapText="true" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="5.0" top="15.0" />
+         </padding>
+      </VBox>
+   </right>
+</BorderPane>

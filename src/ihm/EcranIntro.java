@@ -17,6 +17,8 @@ public class EcranIntro extends Application {
         public static Stage mainStage;
         public static Stage paramModalStage;
         public static Stage pairModalStage;
+        public static Stage affectationShowModalStage;
+        public static Stage historyStage;
 
         public void start(Stage stage) throws IOException {
                 platform = new Platform();
@@ -24,7 +26,7 @@ public class EcranIntro extends Application {
                 EcranIntro.ecranIntroStage.setResizable(false);
 
                 FXMLLoader loader = new FXMLLoader();
-                URL fxmlFileUrl = getClass().getResource("EcranIntro.fxml");
+                URL fxmlFileUrl = getClass().getResource("fxml/EcranIntro.fxml");
                 if (fxmlFileUrl == null) {
                         System.out.println("Impossible de charger le fichier fxml");
                         System.exit(-1);

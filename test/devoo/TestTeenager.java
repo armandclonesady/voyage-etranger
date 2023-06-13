@@ -118,48 +118,6 @@ public class TestTeenager {
 
     @Test
     public void countryCompatibilityTest() {
-        
-        t1 = new Teenager("t", "one", Country.SPAIN, LocalDate.of(2000, 1, 1));
-        t1.updateCriterion(new Criterion("HOBBIES", "1, 2, 3, 4"));
-
-        t2 = new Teenager("t", "two", Country.SPAIN, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", "1, 2, 3, 4"));
-        assertTrue(t1.countryCompatibility(t2));
-
-        t2 = new Teenager("t", "two", Country.GERMANY, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
-        assertTrue(t1.countryCompatibility(t2));
-
-        t2 = new Teenager("t", "two", Country.GERMANY, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", ""));
-        assertTrue(t1.countryCompatibility(t2));
-
-        t2 = new Teenager("t", "two", Country.FRANCE, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
-        assertTrue(t1.countryCompatibility(t2));
-        
-        
-        t1 = new Teenager("t", "one", Country.FRANCE, LocalDate.of(2000, 1, 1));
-        t1.updateCriterion(new Criterion("HOBBIES", "1,2,3,4"));
-        
-        t2 = new Teenager("t", "two", Country.SPAIN, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", " 1, 2, 3, 4"));
-        assertTrue(t1.countryCompatibility(t2));
-
-        t2 = new Teenager("t", "two", Country.ITALY, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
-        assertFalse(t1.countryCompatibility(t2));
-
-        t2 = new Teenager("t", "two", Country.GERMANY, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", ""));
-        assertFalse(t1.countryCompatibility(t2));
-
-        t2 = new Teenager("t", "two", Country.FRANCE, LocalDate.of(2000, 1, 1));
-        t2.updateCriterion(new Criterion("HOBBIES", "5, 6, 7, 8"));
-        assertFalse(t1.countryCompatibility(t2));
-        
-        t2.updateCriterion(new Criterion("HOBBIES", "1,5,2,5"));
-        assertTrue(t1.countryCompatibility(t2));
 
     }
 

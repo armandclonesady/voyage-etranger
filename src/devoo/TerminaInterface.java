@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 public class TerminaInterface {
 
+    static private Platform platform;
+
 
     /*
      * Permet de choisir le fichier CSV à utiliser dans le dissier rsc
@@ -76,16 +78,16 @@ public class TerminaInterface {
         return countries;
     }
 
-    public static boolean menuInterface(Platform plat,Country[] hostAndGuest){
+    public static boolean menuInterface(Country[] hostAndGuest){
         System.out.println("1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 : paraméère \n4 : Créer des binôme \n5 : Changer les pays hote et inviter  \n6 : Quitter");
         Scanner sc = new Scanner(System.in);
         int choix = sc.nextInt();
         if(choix == 1){
-            plat.importCSV(chooseCSV());
+            TerminaInterface.platform.importCSV(chooseCSV());
         }else if(choix == 2){
-            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
+            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
             System.out.println("Voici les binomes : ");
-            for( Map.Entry< Teenager, Teenager> e : plat.getAffectation().entrySet()){
+            for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getAffectation().entrySet()){
                 System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
             }
             try{
@@ -96,13 +98,13 @@ public class TerminaInterface {
 
         }else if(choix == 3){
             while(parametreMenu()){}
-            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
+            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
         }else if(choix == 4){
-            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
-            addBinome(plat, hostAndGuest);
+            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
+            addBinome(hostAndGuest);
         }else if(choix == 5){
             hostAndGuest =chooseCountry();
-            plat.affectation(hostAndGuest[0], hostAndGuest[1]);
+            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
         }else if(choix == 6){
             return false;
         }
@@ -119,8 +121,8 @@ public class TerminaInterface {
 
     // menu des parametre
     public static boolean  parametreMenu(){
-        System.out.print("1 : rétablir tout les poids\n2 : poids de l'historique : " + AffectationUtil.getWeightHistori()+
-            "\n3 : poids des allergie : "+AffectationUtil.getWeightAlergi() +
+        System.out.print("1 : rétablir tout les poids\n2 : poids de l'historique : " + AffectationUtil.getWeightHistory()+
+            "\n3 : poids des allergie : "+AffectationUtil.getWeightAllergy() +
             "\n4 : poids de l'alimentation : "+AffectationUtil.getWeightFood() +
             "\n5 : poids des hobbies :" +AffectationUtil.getWeightHobbies()+
             "\n6 : poids de sur la préfèrence des genres :" +AffectationUtil.getWeightGender() + 
@@ -134,16 +136,16 @@ public class TerminaInterface {
                 System.out.print("nouveau poids : ");
                 Scanner scann = new Scanner(System.in);
                 int newPoids  = scann.nextInt();
-                AffectationUtil.setWeightHistori(newPoids);
-            }else{AffectationUtil.resetWeightHistori();}
+                AffectationUtil.setWeightHistory(newPoids);
+            }else{AffectationUtil.resetWeightHistory();}
         }
         if(choix == 3){
             if(option()==1){
                 System.out.print("nouveau poids : ");
                 Scanner scann = new Scanner(System.in);
                 int newPoids  = scann.nextInt();
-                AffectationUtil.setWeightAlergi(newPoids);
-            }else{AffectationUtil.resetWeightAlergi();}
+                AffectationUtil.setWeightAllergy(newPoids);
+            }else{AffectationUtil.resetWeightAllergy();}
         }
         if(choix == 4){
             if(option()==1){
@@ -173,39 +175,47 @@ public class TerminaInterface {
         return true;
     }
 
-    public static void addBinome(Platform plat,Country[] hostAndGuest){
-        plat.guest.clear();
-        plat.host.clear();
-        plat.listGuestAndHost(hostAndGuest[0],hostAndGuest[1]);
-        for( int i = 0 ; i< plat.host.size() ; i++){
-                System.out.println( (i+1) +" : "+ plat.host.get(i).toString());
-            }
-        System.out.print("Host choisie : ");
+    public static void addBinome(Country[] hostAndGuest){
+        TerminaInterface.platform.clearHost();
+        TerminaInterface.platform.clearGuest();
+        TerminaInterface.platform.makeHostAndGuest(hostAndGuest[0], hostAndGuest[1]);
+
+        int choice[] = new int[2];
+
+        for (Teenager t : TerminaInterface.platform.getHost()) {
+            System.out.println((TerminaInterface.platform.getHost().lastIndexOf(t)+1) + " : " + t.toString());
+        }
+        System.out.print("Etudiant host choisi : ");
         Scanner sc = new Scanner(System.in);
-        int choix1 = sc.nextInt() -1;
+        choice[0] = sc.nextInt();
+
         System.out.println("");
 
-           
-        for( int i = 0 ; i< plat.guest.size() ; i++){
-            System.out.println( (i+1) +" : "+ plat.guest.get(i).toString());
+        for (Teenager t : TerminaInterface.platform.getGuest()) {
+            System.out.println((TerminaInterface.platform.getGuest().lastIndexOf(t)+1) + " : " + t.toString());
         }
-        System.out.print("Guest choisie : ");
-        int choix2 = sc.nextInt()-1;
-        System.out.println(plat.guest.get(choix1).toString()+ "\n " +plat.host.get(choix2).toString());
-        plat.addPair(plat.host.get(choix1), plat.guest.get(choix2));
+        System.out.print("Etudiant guest choisi : ");
+        choice[1] = sc.nextInt();
 
+        System.out.println("");
+
+        Teenager host = TerminaInterface.platform.getHost().get(choice[0]-1);
+        Teenager guest = TerminaInterface.platform.getGuest().get(choice[1]-1);
+
+        System.out.println(host.toString() + " -> " + guest.toString());
+        TerminaInterface.platform.addPairFixed(host, guest);
+        TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
     }
-    /*
-     * Permet l'utilisation de l'applications pour créer les binome des échange l'inguistique
-     */
+
+    // Permet l'utilisation de l'applications pour créer les binome des échange l'inguistique.
     public static void main(String[] args) {
         System.out.println("Bienvenue dans l'application de création de binome pour les échanges linguistiques");
-        Platform plat = new Platform();
-        plat.importCSV(chooseCSV());
+        TerminaInterface.platform = new Platform();
+        TerminaInterface.platform.importCSV(chooseCSV());
         System.out.println("choisiser le pays Hôte : ");
-        Country[] hostAndGuest =chooseCountry();
+        Country[] hostAndGuest = chooseCountry();
     
-        while(menuInterface(plat, hostAndGuest)){}
+        while(menuInterface(hostAndGuest)){}
         System.exit(0);
     }
 }

@@ -50,5 +50,4 @@ public enum CriterionName {
     public String toExtendString() {
         return this.getName() + " (" + this.getType() + ")";
     }
-
 }

@@ -31,7 +31,6 @@ public class EcranIntroController {
     static Country selectedGuest;
 
     public void initialize() {
-        System.out.println("Initialisation...");
         hostComboBox.getItems().setAll(Country.values());
         guestComboBox.getItems().setAll(Country.values());
         hostComboBox.getSelectionModel().selectedItemProperty().addListener(this::onHostComboBoxChange);
@@ -60,7 +59,7 @@ public class EcranIntroController {
         EcranIntro.paramModalStage = new Stage();
 
         FXMLLoader loader = new FXMLLoader();
-        URL fxmlFileUrl = getClass().getResource("ParamModal.fxml");
+        URL fxmlFileUrl = getClass().getResource("fxml/ParamModal.fxml");
         if (fxmlFileUrl == null) {
             System.out.println("Impossible de charger le fichier fxml");
             System.exit(-1);
@@ -72,7 +71,7 @@ public class EcranIntroController {
         EcranIntro.paramModalStage.initOwner(EcranIntro.mainStage);
         EcranIntro.paramModalStage.initModality(Modality.WINDOW_MODAL);
         EcranIntro.paramModalStage.setScene(scene);
-        EcranIntro.paramModalStage.setTitle("FXML demo");
+        EcranIntro.paramModalStage.setTitle("Paramètres");
         EcranIntro.paramModalStage.show();
     }
 
@@ -99,7 +98,7 @@ public class EcranIntroController {
         EcranIntro.mainStage = new Stage();
 
         FXMLLoader loader = new FXMLLoader();
-        URL fxmlFileUrl = getClass().getResource("Main.fxml");
+        URL fxmlFileUrl = getClass().getResource("fxml/Main.fxml");
         if (fxmlFileUrl == null) {
             System.out.println("Impossible de charger le fichier fxml");
             System.exit(-1);
@@ -110,7 +109,7 @@ public class EcranIntroController {
         Scene scene = new Scene(root);
 
         EcranIntro.mainStage.setScene(scene);
-        EcranIntro.mainStage.setTitle("Main");
+        EcranIntro.mainStage.setTitle("Programme Principal");
         EcranIntro.mainStage.show();
     }
 
