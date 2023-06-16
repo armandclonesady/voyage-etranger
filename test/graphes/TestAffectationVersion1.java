@@ -71,6 +71,6 @@ public class TestAffectationVersion1 {
 
     @Test
     public void affectationExempleTest(){
-        assertEquals(trueValuep1, p1.getAffectation());
+        assertEquals(trueValuep1, p1.getCurrentAffectation());
     }
 }

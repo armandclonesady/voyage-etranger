@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,39 +23,66 @@ import graphes.AffectationUtil;
 
 /**
  * Classe Platform.
- * @autor : Raphael Kiecken, Armand Sady, Antoine Gaienier
+ * @author : Raphael Kiecken, Armand Sady, Antoine Gaienier
  */
 public class Platform {
 
-    /* Constantes pour le chemin d'accès au fichier */
+    /**
+     * Constantes pour le chemin d'accès jusqu'au dossier courant.
+     */
     public static final String DIRECTORY = System.getProperty("user.dir");
+    /**
+     * Constantes pour le séparateur de fichier.
+     */
     public static final String SEPARATOR = System.getProperty("file.separator");
 
-    /* Constantes pour le nom des fichiers. */
-    public static final String OUTPUT = "Output.txt";
+    /**
+     * Constante pour le nom du fichier de sortie.
+     */
+    public static final String OUTPUT = "Output.csv";
 
-    /* Constante pour le chemin d'accès au fichier. */
+    /**
+     * Constante pour le chemin d'accès jusqu'au dossier des ressources.
+     */
     public static File ressourcesPath = new File(DIRECTORY + SEPARATOR + "rsc" + SEPARATOR);
+    /**
+     * Constante pour le chemin d'accès jusqu'au dossier des historiques.
+     */
     public static File historyPath = new File(DIRECTORY + SEPARATOR + "hist" + SEPARATOR);
 
-    /* Ensemble des étudiants. */
+    /**
+     * Ensemble des étudiants.
+     */
     private Set<Teenager> students;
 
-    /* Liste des étudiants hôtes et invités. */
+    /**
+     * Liste des étudiants hôtes et invités.
+     */
     private List<Teenager> host;
     private List<Teenager> guest;
 
-    /* Map des couples d'étudiants après l'affection. */
+    /**
+     * Map des couples d'étudiants actuels.
+     */
     private Map<Teenager, Teenager> currentAffectation;
 
-    /* Map des couples d'étudiants sauvegardé. */
+    /**
+     * Map des couples d'étudiants précédents.
+     */
     private Map<Teenager, Teenager> previousAffectation;
     
-    /* Map des couples d'étudiants fixés et à éviter. */
+    /**
+     * Map des couples d'étudiants fixé.
+     */
     private Map<Teenager, Teenager> pairFixed;
+    /**
+     * Map des couples d'étudiants évités.
+     */
     private Map<Teenager, Teenager> pairAvoided;
 
-    /* Constructeur de Platform. */
+    /**
+     * Constructeur de la classe Platform.
+     */
     public Platform() {
         this.students = new HashSet<Teenager>();
         this.currentAffectation = new HashMap<Teenager, Teenager>();
@@ -63,18 +91,25 @@ public class Platform {
         this.pairAvoided = new HashMap<Teenager, Teenager>();
     }
 
-    /* Ajoute un étudiant à l'ensemble. */
+    /**
+     * Méthode pour ajouter un étudiant dans l'ensemble des étudiants.
+     */
     public void addStudents(Teenager teen) {
         this.students.add(teen);
     }
 
-    // Méthode pour affecter les étudiants dans arrayList Host and Guest.
+    /**
+     * Méthode qui créé les couples d'étudiants les plus compatibles.
+     */
     public void affectation(Country hostCountry, Country guestCountry) {
         this.makeHostAndGuest(hostCountry, guestCountry);
         this.currentAffectation = AffectationUtil.affectation(this.host, this.guest, this.pairFixed, this.pairAvoided);
     }
     
-    /* Importe les étudiants depuis un fichier CSV. */
+    /**
+     * Importe les étudiants depuis un fichier CSV.
+     * @param file : fichier CSV
+     */
     public void importCSV(File file) {
         String[] header;
         Teenager students;
@@ -86,25 +121,43 @@ public class Platform {
                 fieldScanner.useDelimiter(";");
                 String forename = "";
                 String name = "";
-                Country country = null;
-                LocalDate birthdate = null;
+                String country = null;
+                String birthdate = null;
                 List<Criterion> criterion = new ArrayList<Criterion>();
                 int i = 0;
                 while (fieldScanner.hasNext()) {
                     if (header[i].equals("FORENAME")) {forename = fieldScanner.next();}
                     else if (header[i].equals("NAME")) {name = fieldScanner.next();}
-                    else if (header[i].equals("COUNTRY")) {country = Country.valueOf(fieldScanner.next());}
-                    else if (header[i].equals("BIRTH_DATE")) {birthdate = LocalDate.parse(fieldScanner.next());}
+                    else if (header[i].equals("COUNTRY")) {country = fieldScanner.next();}
+                    else if (header[i].equals("BIRTH_DATE")) {birthdate = fieldScanner.next();}
                     else {
                         String value = fieldScanner.next();
-                        if (i == header.length - 1 && value.equals("null")) {value = "";}
-                        criterion.add(new Criterion(header[i], value));}
+                        if (i == header.length - 1 && value.equals(null)) {value = "";}
+                        criterion.add(new Criterion(header[i], value));
+                    }
                     i++;
                 }
-                if (country == Country.FRANCE) {
-                    students = new FrenchTeenager(forename, name, country, birthdate);
-                } else {
-                    students = new Teenager(forename, name, country, birthdate);
+                if (forename.isEmpty() || forename.isBlank()) {
+                    System.out.println("Prénom vide, Etudiant ignoré.");
+                    break;
+                }
+                if (name.isEmpty() || name.isBlank()) {
+                    System.out.println("Nom vide, Etudiant ignoré.");
+                    break;
+                }
+                try {
+                    if (country.equals("FRANCE")) {
+                        students = new FrenchTeenager(forename, name, Country.valueOf(country), LocalDate.parse(birthdate));
+                    } else {
+                        students = new Teenager(forename, name, Country.valueOf(country), LocalDate.parse(birthdate));
+                    }
+                } catch (DateTimeParseException e) {
+                    System.out.println("Date de naissance invalide, Etudiant ignoré.");
+                    break;
+                }
+                catch (IllegalArgumentException e) {
+                    System.out.println("Pays invalide, Etudiant ignoré.");
+                    break;
                 }
                 for (Criterion c : criterion) {
                     students.updateCriterion(c);
@@ -116,12 +169,10 @@ public class Platform {
             System.out.println(e.getMessage());
         }
     }
-    // Surcharge de la méthode importCSV pour importer le fichier par défaut.
-    public void importCSV(String filename) {
-        this.importCSV(new File(ressourcesPath + SEPARATOR + filename));
-    } 
 
-    /* Exporte les couples d'étudiants dans un fichier CSV. */
+    /**
+     * Exporte les couples d'étudiants dans un fichier CSV.
+     */
     public void exportCSV() {
         try (BufferedWriter br = new BufferedWriter(new FileWriter(ressourcesPath + SEPARATOR + OUTPUT))) {
             br.write("hostId, hostForename, hostName, hostGender, hostDiet, hostAnimal, hostHobbies, hostHistory, hostPairGender, guestId, guestForename, guestName, guestGender, guestDiet, guestAllergy, guestHistory, guestPairGender");
@@ -136,7 +187,10 @@ public class Platform {
             System.out.println("Exception\n" + e.getMessage());
         }
     }
-    // Surcharge de la méthode exportCSV pour exporter le fichier par défaut.
+
+    /**
+     * Exporte les couples d'étudiants dans un fichier binaire.
+     */
     public void exportBin() {
         Country hostCountry = this.currentAffectation.keySet().iterator().next().getCountry();
         Country guestCountry = this.currentAffectation.values().iterator().next().getCountry();
@@ -149,7 +203,11 @@ public class Platform {
             System.out.println("Exception\n" + e.getMessage());
         }
     }
-    // Méthode pour lire un fichier binaire.
+
+    /**
+     * Importe les couples d'étudiants depuis un fichier binaire.
+     * @param filename : nom du fichier binaire
+     */
     public void readBin(String filename) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(historyPath + SEPARATOR + filename))) {
             this.previousAffectation = (Map<Teenager,Teenager>) ois.readObject();
@@ -160,37 +218,31 @@ public class Platform {
         }
     }
 
-    public Map<Teenager, Teenager> getAffectation() {
-        return this.currentAffectation;
-    }
-
-    public Map<Teenager, Teenager> getPreviousAffectation() {
-        return this.previousAffectation;
-    }
-
-    public Set<Teenager> getStudents() {
-        return this.students;
-    }
-
-    public Map<Teenager, Teenager> getPairFixed() {
-        return this.pairFixed;
-    }
-
-    public Map<Teenager, Teenager> getPairAvoided() {
-        return this.pairAvoided;
-    }
-
+    /**
+     * Ajoute une nouvelle paire d'étudiants fixes.
+     * @param host : étudiant hôte
+     * @param guest : étudiant invité
+     */
     public void addPairFixed(Teenager host, Teenager guest) {
         this.pairFixed.put(host, guest);
     }
 
+    /**
+     * Ajoute une nouvelle paire d'étudiants évités.
+     * @param host : étudiant hôte
+     * @param guest : étudiant invité
+     */
     public void addPairAvoided(Teenager host, Teenager guest) {
         this.pairAvoided.put(host, guest);
     }
 
+    /**
+     * Génére la liste des hôtes et des invités.
+     * @param hostCountry : pays hôte
+     * @param guestCountry : pays invité
+     */
     public void makeHostAndGuest(Country hostCountry, Country guestCountry) {
-        this.host = new ArrayList<Teenager>();
-        this.guest = new ArrayList<Teenager>();
+        this.clearHost(); this.clearGuest();
         for (Teenager t : this.students) {
             if (t.getCountry().equals(hostCountry)) {
                 host.add(t);
@@ -215,22 +267,86 @@ public class Platform {
         }
     } 
 
+    /**
+     * Accesseur de l'ensemble des étudiants.
+     * @return Set de Teenager : ensemble des étudiants
+     */
+    public Set<Teenager> getStudents() {
+        return this.students;
+    }
+
+    /**
+     * Accesseur des couples d'étudiants courants.
+     * @return Map de Teenager : couples d'étudiants courants
+     */
+    public Map<Teenager, Teenager> getCurrentAffectation() {
+        return this.currentAffectation;
+    }
+
+    /**
+     * Accesseur des couples d'étudiants précédents.
+     * @return Map de Teenager : couples d'étudiants précédents
+     */
+    public Map<Teenager, Teenager> getPreviousAffectation() {
+        return this.previousAffectation;
+    }
+
+    /**
+     * Accesseur des couples d'étudiants fixes.
+     * @return Map de Teenager : couples d'étudiants fixes
+     */
+    public Map<Teenager, Teenager> getPairFixed() {
+        return this.pairFixed;
+    }
+
+    /**
+     * Accesseur des couples d'étudiants évités.
+     * @return Map de Teenager : couples d'étudiants évités
+     */
+    public Map<Teenager, Teenager> getPairAvoided() {
+        return this.pairAvoided;
+    }
+
+    /**
+     * Accesseur des étudiants hôtes.
+     * @return List de Teenager : étudiants hôtes
+     */
     public List<Teenager> getHost() {
         return this.host;
     } 
 
+    /**
+     * Accesseur des étudiants invités.
+     * @return List de Teenager : étudiants invités
+     */
     public List<Teenager> getGuest() {
         return this.guest;
     }
 
+    /**
+     * Nettoie la liste des étudiants hôtes.
+     */
     public void clearHost() {
-        this.host.clear();
+        if (this.host != null) {
+            this.host.clear();
+        }
+        this.host = new ArrayList<Teenager>();
     }
 
+    /**
+     * Nettoie la liste des étudiants invités.
+     */
     public void clearGuest() {
-        this.guest.clear();
+        if (this.guest != null) {
+            this.guest.clear();
+        }
+        this.guest = new ArrayList<Teenager>();
     }
 
+    /**
+     * Charge l'historique des couples d'étudiants depuis un fichier binaire et met à jour la variable lastguest de chaque étudiant hôte.
+     * @param file : fichier binaire
+     */
     public void loadHistory(File file) {
         this.readBin(file.getName());
         for (Map.Entry<Teenager, Teenager> couple : this.previousAffectation.entrySet()) {
@@ -242,6 +358,10 @@ public class Platform {
         }
     }
 
+    /**
+     * Désinscrit un nombre donné d'étudiants.
+     * @param num : nombre d'étudiants à désinscrire
+     */
     public void unregisterTeenager(int num) {
         List<Teenager> list = new ArrayList<Teenager>(this.students);
         list.sort(new IncoherenceSort());
@@ -251,6 +371,11 @@ public class Platform {
         }
     }
 
+    /**
+     * Désinscrit un nombre donné d'étudiants d'un pays donné.
+     * @param num : nombre d'étudiants à désinscrire
+     * @param country : pays des étudiants à désinscrire
+     */
     public void unregisterTeenager(int num, Country country) {
         List<Teenager> list = new ArrayList<Teenager>();
         for (Teenager t : this.students) {

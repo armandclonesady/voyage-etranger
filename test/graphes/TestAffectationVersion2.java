@@ -66,7 +66,7 @@ public class TestAffectationVersion2 {
         p1.affectation(Country.ITALY, Country.GERMANY);
 
         System.out.println("Exemple 1");
-        for (Map.Entry<Teenager, Teenager> entry : p1.getAffectation().entrySet()) {
+        for (Map.Entry<Teenager, Teenager> entry : p1.getCurrentAffectation().entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue());
             assertEquals(trueValuep1.get(entry.getKey()), entry.getValue());
         }
@@ -129,7 +129,7 @@ public class TestAffectationVersion2 {
         p1.affectation(Country.ITALY, Country.GERMANY);
 
         System.out.println("Exemple 2");
-        for (Map.Entry<Teenager, Teenager> entry : p1.getAffectation().entrySet()) {
+        for (Map.Entry<Teenager, Teenager> entry : p1.getCurrentAffectation().entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue());
             assertEquals(trueValuep1.get(entry.getKey()), entry.getValue());
         }

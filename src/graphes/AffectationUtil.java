@@ -73,15 +73,13 @@ public class AffectationUtil {
             }
         }
         if (host.criterionIsProperlyDefine(CriterionName.GENDER) && visitor.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)) {
-            if (host.getValue(CriterionName.GENDER).equals(visitor.getValue(CriterionName.PAIR_GENDER))) weight -= AffectationUtil.weightGender;
-            else weight += AffectationUtil.weightGender;
+            weight += (host.genderPref(visitor) * AffectationUtil.weightGender);
         }
         if (host.criterionIsProperlyDefine(CriterionName.HOBBIES) && visitor.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
             weight -= (AffectationUtil.weightHobbies * Teenager.containsAllValuesCriterionName (
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),
             visitor.splitValues(visitor.getCriterion(CriterionName.HOBBIES))));
         }
-
         return weight;
     }
 
@@ -124,15 +122,10 @@ public class AffectationUtil {
                 weight += AffectationUtil.weightCountry;
             }
         }
-        if(host.genderPref(visitor)== -1){
-            weight += AffectationUtil.weightGender;
-        }
-        if(host.genderPref(visitor)== 1){
-            weight -= AffectationUtil.weightGender *2;
-        }
-        if( host.genderPref(visitor)== 0){
-            weight -= AffectationUtil.weightGender;
-        }
+        if (host.criterionIsProperlyDefine(CriterionName.GENDER) && host.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)
+            && visitor.criterionIsProperlyDefine(CriterionName.GENDER) && visitor.criterionIsProperlyDefine(CriterionName.PAIR_GENDER)) {
+                weight += (host.genderPref(visitor) * AffectationUtil.weightGender);
+            }
         if (host.criterionIsProperlyDefine(CriterionName.HOBBIES) && visitor.criterionIsProperlyDefine(CriterionName.HOBBIES)) {
             weight -= (AffectationUtil.weightHobbies * Teenager.containsAllValuesCriterionName (
             host.splitValues(host.getCriterion(CriterionName.HOBBIES)),

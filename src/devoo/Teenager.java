@@ -14,20 +14,54 @@ import java.util.List;
  * @author Raphael Kiecken, Armand Sady, Antoine Gaienier
  */
 public class Teenager implements Serializable {
+    /**
+     * Compteur d'identifiant.
+     */
     private static int count = 1;
     
+    /**
+     * Identifiant du Teenager.
+     */
     private int id;
+    /**
+     * Prénom du Teenager.
+     */
     private String forename;
+    /**
+     * Nom du Teenager.
+     */
     private String name;
+    /**
+     * Date de naissance du Teenager.
+     */
     private LocalDate birth;
+    /**
+     * Pays du Teenager.
+     */
     private Country pays;
+    /**
+     * Dernier invité du Teenager.
+     */
     private Teenager lastGuest;
 
+    /**
+     * Booléen indiquant si le Teenager est inscrit ou non.
+     */
     private boolean isRegistered = true; 
 
+    /**
+     * Map contenant les Criterion du Teenager.
+     */
     private Map<CriterionName, Criterion> requirements;
 
-    /* Constructeur de Teenager (forename, name, pays, birth, lastGuest). */
+    /**
+     * Constructeur de Teenager avec un dernier invité.
+     * @param forename Prénom du Teenager.
+     * @param name Nom du Teenager.
+     * @param pays Pays du Teenager.
+     * @param birth Date de naissance du Teenager.
+     * @param lastGuest Dernier invité du Teenager.
+     */
     public Teenager(String forename, String name, Country pays, LocalDate birth, Teenager lastGuest) {
         this.id = Teenager.count;
         Teenager.count++;
@@ -39,21 +73,20 @@ public class Teenager implements Serializable {
         initRequirements();
     }
 
-    /* Constructeur de Teenager (forename, name, pays, birth). */
+    /**
+     * Constructeur de Teenager sans dernier invité.
+     * @param forename Prénom du Teenager.
+     * @param name Nom du Teenager.
+     * @param pays Pays du Teenager.
+     * @param birth Date de naissance du Teenager.
+     */
     public Teenager(String forename, String name, Country pays, LocalDate birth) {
         this(forename, name, pays, birth, null);
     }
 
-    /* Constructeur de Teenager (forename, name, pays, birth, lastGuest) avec une chaîne de caractères pour le pays. */
-    public Teenager(String forename, String name, String pays, LocalDate birth, Teenager lastGuest) {
-        this(forename, name, Country.valueOf(pays), birth, lastGuest);
-    }
-
-    /* Constructeur de Teenager (forename, name, pays, birth) avec une chaîne de caractères pour le pays. */
-    public Teenager(String forename, String name, String pays, LocalDate birth) {
-        this(forename, name, Country.valueOf(pays), birth, null);
-    }
-
+    /**
+     * Initialise les Criterion du Teenager en les mettant à null.
+     */
     public void initRequirements() {
         this.requirements = new HashMap<CriterionName, Criterion>();
         for(CriterionName c : CriterionName.values()) {
@@ -61,7 +94,11 @@ public class Teenager implements Serializable {
         }
     }
 
-    /* Vérifie si le Teenager est compatible avec un autre Teenager. */
+    /**
+     * Vérifie si le Teenager est compatible avec un autre Teenager.
+     * @param t Teenager avec lequel on veut vérifier la compatibilité.
+     * @return true si le Teenager est compatible avec le Teenager t, false sinon.
+     */
     public boolean compatibleWithGuest(Teenager t) {
         if((this.criterionIsProperlyDefine(CriterionName.HISTORY) && t.criterionIsProperlyDefine(CriterionName.HISTORY)) && this.hasLastGuest(t)) {
             if (historyCompatibility(t) != -1) {
@@ -83,14 +120,11 @@ public class Teenager implements Serializable {
         return true;
     }
 
-    public static int diffAge(Teenager t1, Teenager t2) {
-        if (t1.birth.isBefore(t2.birth)) {
-            return t1.birth.getYear() - t2.birth.getYear();
-        }
-        return t2.birth.getYear() - t1.birth.getYear();
-    }
-
-    /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère de l'historique). */
+    /**
+     * Vérifie la compatibilité des entre deux Teenager au niveau du Criterion HISTORY
+     * @param t Teenager avec lequel on veut vérifier la compatibilité.
+     * @return 1 si les deux Teenager doivent être ensemble, 0 si les deux Teenager ne doivent pas être ensemble et -1 si ce critères n'as pas d'influence.
+     */
     public int historyCompatibility(Teenager t) {
         String historyHost = this.getValue(CriterionName.HISTORY);
         String historyGuest = t.getValue(CriterionName.HISTORY);
@@ -102,14 +136,22 @@ public class Teenager implements Serializable {
         return -1;
     }
 
-    /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère des animaux). */
+    /**
+     * Vérifie la compatibilité des entre deux Teenager au niveau des Criterion HOST_HAS_ANIMAL et GUET_ANIMAL_ALLERGY
+     * @param t Teenager avec lequel on veut vérifier la compatibilité.
+     * @return true si les deux Teenager sont compatibles, false sinon.
+     */
     public boolean animalCompatibility(Teenager t) {
         String hostAnimal = this.getValue(CriterionName.HOST_HAS_ANIMAL);
         String guestAnimal = t.getValue(CriterionName.GUEST_ANIMAL_ALLERGY);
         return !(hostAnimal.equals("yes") && hostAnimal == guestAnimal);
     }
 
-    /* Vérifie si le Teenager est compatible avec un autre Teenager (Critère des régimes alimentaires). */
+    /**
+     * Vérifie la compatibilité des entre deux Teenager au niveau des Criterion HOST_FOOD et GUET_FOOD
+     * @param t Teenager avec lequel on veut vérifier la compatibilité.
+     * @return true si les deux Teenager sont compatibles, false sinon.
+     */
     public boolean foodCompatibility(Teenager t) {
         if(t.getValue(CriterionName.GUEST_FOOD).equals("")) return true;
         ArrayList<String> hostRegime = new ArrayList<String>(splitValues(this.getCriterion(CriterionName.HOST_FOOD)));
@@ -120,6 +162,11 @@ public class Teenager implements Serializable {
         return (containsAllValuesCriterionName(hostRegime, guestRegime)) == guestRegime.size();
     }
 
+    /**
+     * Transforme la valeur des 
+     * @param criterion
+     * @return
+     */
     public List<String> splitValues(Criterion criterion) {
         String criterionString = criterion.getValue();
         criterionString = criterionString.replace(" ","");
@@ -136,6 +183,11 @@ public class Teenager implements Serializable {
         return res;
     }
 
+    /**
+     * Vérifie si un Teenager possède un lastGuest et si ce lastGuest est le Teenager t.
+     * @param t Teenager avec lequel on veut vérifier la compatibilité.
+     * @return true si le Teenager possède un lastGuest et que ce lastGuest est le Teenager t, false sinon.
+     */
     public boolean hasLastGuest(Teenager t) {
         if (this.lastGuest != null) {
             return this.lastGuest.equals(t);
@@ -143,43 +195,65 @@ public class Teenager implements Serializable {
         return false;
     }
 
-    /* Permet de mettre ajour un critère dans la map requirements en fonction de son label. */
+    /**
+     * Met à jour le Criterion dans la map requirements.
+     * @param label Label du critère à mettre à jour.
+     * @param criterion Nouveau Criterion
+     */
     public void updateCriterion(CriterionName label, Criterion criterion) {
         this.requirements.put(label, criterion);
     }
 
-    /* Permet de mettre ajour un critère dans la map requirements. */
+    /**
+     * Met à jour le Criterion dans la map requirements.
+     * @param criterion Nouveau Criterion
+     */
     public void updateCriterion(Criterion criterion) {
         this.updateCriterion(criterion.getLabel(), criterion);
     }
 
-    /* Getter pour un critère. */
+    /**
+     * Accesseur pour un Criterion dans la map requirements.
+     * @param label Label du critère à retourner.
+     * @return Criterion correspondant au label.
+     */
     public Criterion getCriterion(CriterionName label) {
         return this.requirements.get(label);
     }
 
-    /* Getter pour la map requirements. */
+    /**
+     * Accesser pour la map requirements.
+     * @return Map requirements.
+     */
     public Map<CriterionName, Criterion> getRequirements() {
         return this.requirements;
     }
 
-    /* Retourne la valeur d'un critère dans la map requirements. */
+    /**
+     * Accesseur pour la valeur d'un Criterion dans la map requirements.
+     * @param label Label du critère dont on veut la valeur.
+     * @return Valeur du Criterion correspondant au label.
+     */
     public String getValue(CriterionName label) {
-        Criterion criterion = this.getCriterion(label);
-        if (criterion == null) {
+        try {
+            return this.getCriterion(label).getValue();
+        }
+        catch (NullPointerException e) {
             return "";
         }
-        return this.getCriterion(label).getValue();
     }
 
-    /* Vérifie si un critère est bien initialisé dans la map requirements. */
+    /**
+     * Vérifie si un Criterion est bien défini dans la map requirements.
+     * @param label Label du critère à vérifier.
+     * @return true si le Criterion est bien défini, false sinon.
+     */
     public boolean criterionIsProperlyDefine(CriterionName label) {
         return this.getCriterion(label) != null;
     }
 
     /**
-     * Si le Criterion n'est pas valable selon la méthodes isValid(), sa valuer dans la Map deviens null.
-     * Si il est déjà null, on l'ignore.
+     * Met à null tous les Criterion de la map requirements qui ne sont pas valide.
      */
     public void purgeCriterion() {
         for (Map.Entry<CriterionName, Criterion> criterion : this.requirements.entrySet()) {
@@ -196,27 +270,34 @@ public class Teenager implements Serializable {
         }
     }
 
-    /* Getter pour le prénom. */
-    public String getForename() {return this.forename;}
+    /*
+    public int diffAge(Teenager t2) {
+        return Math.abs(this.birth.getYear() - t2.birth.getYear());
+    }
 
-    /* Getter pour le nom. */
-    public String getName() {return this.name;}
+    /* Méthode qui renvoie vérifie si la préférence du genre est respectée. */
+    public int genderPref(Teenager t){
+        int res = 0;
+        if (this.getValue(CriterionName.PAIR_GENDER).isEmpty() || this.getValue(CriterionName.PAIR_GENDER).equals(t.getValue(CriterionName.GENDER))) {
+            res += 1;
+        }
+        if (t.getValue(CriterionName.PAIR_GENDER).isEmpty() ||t.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER))) {
+            res += 1;
+        }
+        return res;
+    }
 
-    /* Getter pour le pays. */
-    public Country getCountry() {return this.pays;}
+    public int numIncoherence() {
+        int incoherence = 0;
+        if (this.getCriterion(CriterionName.HOST_HAS_ANIMAL).getValue().equals("yes") 
+            && this.getCriterion(CriterionName.GUEST_ANIMAL_ALLERGY).getValue().equals("yes")) {
+            incoherence++;
+        }
+        return incoherence;
+    }
 
-    /* Getter pour l'id. */
-    public int getId() {return this.id;}
-
-    /* Getter pour la date de naissance. */
-    public LocalDate getBirth() {return this.birth;}
-
-    /* Setter pour le dernier invité. */
-    public void setLastguest(Teenager t) {this.lastGuest = t;}
-
-    /* Méthodes toString. */
-    public String toString() {
-        return String.format("(%d) %s %s", this.id, this.forename, this.name);
+    public void unregister() {
+        if (this.isRegistered) {this.isRegistered = false;}
     }
 
     /* Méthodes extractValues pour l'écriture dans un fichier (Récupère les valeurs des critères d'un host). */
@@ -233,6 +314,31 @@ public class Teenager implements Serializable {
         getValue(CriterionName.GUEST_FOOD) + ", " + getValue(CriterionName.GUEST_ANIMAL_ALLERGY) + ", [" + 
         getValue(CriterionName.HOBBIES) + "], " + getValue(CriterionName.HISTORY) + ", " + 
         getValue(CriterionName.PAIR_GENDER);
+    }
+
+    /* Getter pour l'id. */
+    public int getId() {return this.id;}
+
+    /* Getter pour le prénom. */
+    public String getForename() {return this.forename;}
+
+    /* Getter pour le nom. */
+    public String getName() {return this.name;}
+
+    /* Getter pour le pays. */
+    public Country getCountry() {return this.pays;}
+
+    /* Getter pour la date de naissance. */
+    public LocalDate getBirth() {return this.birth;}
+
+    public boolean getRegistered() {return this.isRegistered;}
+
+    /* Setter pour le dernier invité. */
+    public void setLastguest(Teenager t) {this.lastGuest = t;}
+
+    /* Méthodes toString. */
+    public String toString() {
+        return String.format("(%d) %s %s", this.id, this.forename, this.name);
     }
 
     @Override
@@ -273,45 +379,5 @@ public class Teenager implements Serializable {
         if (pays != other.pays)
             return false;
         return true;
-    }
-
-    /* Méthodes qui revoie la différence d'age entre deux Teenager. */
-    public int diffAge(Teenager t2) {
-        return Math.abs(this.birth.getYear() - t2.birth.getYear());
-    }
-
-    /* Méthode qui renvoie vérifie si la préférence du genre est respectée. */
-    public int genderPref(Teenager t2){
-        if (this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER)) &&  (t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER)))
-            || this.getValue(CriterionName.PAIR_GENDER).equals("") && t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER ))
-            || t2.getValue(CriterionName.PAIR_GENDER).equals("") && this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER ))
-            ) {
-            return 1;
-        }
-        if( this.getValue(CriterionName.PAIR_GENDER).equals(t2.getValue(CriterionName.GENDER)) || (t2.getValue(CriterionName.PAIR_GENDER).equals(this.getValue(CriterionName.GENDER)))
-            || this.getValue(CriterionName.PAIR_GENDER).equals("") || t2.getValue(CriterionName.PAIR_GENDER).equals("")) {
-
-        return 0;
-    }
-    return -1;
-    }
-
-    public int numIncoherence() {
-        int incoherence = 0;
-        if (this.getCriterion(CriterionName.HOST_HAS_ANIMAL).getValue().equals("yes") 
-            && this.getCriterion(CriterionName.GUEST_ANIMAL_ALLERGY).getValue().equals("yes")) {
-            incoherence++;
-        }
-        return incoherence;
-    }
-
-    public void unregister() {
-        if (this.isRegistered) {
-            this.isRegistered = false;
-        }
-    }
-
-    public boolean getRegistered() {
-        return this.isRegistered;
     }
 }

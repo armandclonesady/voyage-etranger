@@ -36,13 +36,13 @@ public class TestTeenager {
         t4.updateCriterion(new Criterion("HISTORY", "OTHER"));
     }
 
-    /*
     @Test
-    public void compatibleWithGuestTest() {
+    public void compatibleWithGuestTest() {
+        assertFalse(t1.compatibleWithGuest(t2));
         
     }
 
-
+/*
     @Test
     public void historyCompatibilityTest() {
 

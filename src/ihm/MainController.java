@@ -11,7 +11,6 @@ import devoo.Country;
 import devoo.Criterion;
 import devoo.CriterionName;
 import devoo.IdComparator;
-import devoo.Platform;
 import devoo.Teenager;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -97,7 +96,7 @@ public class MainController implements EventHandler<ActionEvent>{
         EcranIntro.platform.affectation(EcranIntroController.selectedHost, EcranIntroController.selectedGuest);
 
         list.setCellFactory(new AffectListFactory());
-        list.getItems().setAll(EcranIntro.platform.getAffectation().entrySet());
+        list.getItems().setAll(EcranIntro.platform.getCurrentAffectation().entrySet());
         list.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
                 try {
@@ -149,7 +148,7 @@ public class MainController implements EventHandler<ActionEvent>{
             teenagerList.getItems().setAll(EcranIntro.platform.getStudents());
         }
         for (Teenager student : EcranIntro.platform.getStudents()) {
-            if (student.getCountry() == countryComboBox.getSelectionModel().getSelectedItem()) {
+            if (student.getCountry() == countryComboBox.getSelectionModel().getSelectedItem() && student.getRegistered()) {
                 teenagerList.getItems().add(student);
             }
         }
@@ -213,7 +212,7 @@ public class MainController implements EventHandler<ActionEvent>{
         Iterator<Teenager> it = teenagerList.getItems().iterator();
         while (it.hasNext()) {
             Teenager student = it.next();
-            if (!student.toString().toLowerCase().contains(search.getText().toLowerCase())) {
+            if (!student.toString().toLowerCase().contains(search.getText().toLowerCase()) || !student.getRegistered()) {
                 it.remove();
             }
         }
@@ -241,7 +240,7 @@ public class MainController implements EventHandler<ActionEvent>{
         list.getItems().clear();
         EcranIntro.platform.affectation(hostComboBox.getSelectionModel().getSelectedItem(), guestComboBox.getSelectionModel().getSelectedItem());
         ObservableList<Map.Entry<Teenager, Teenager>> items = FXCollections.observableArrayList();
-        for (Map.Entry<Teenager, Teenager> entry : EcranIntro.platform.getAffectation().entrySet()) {
+        for (Map.Entry<Teenager, Teenager> entry : EcranIntro.platform.getCurrentAffectation().entrySet()) {
             items.add(entry);
         }
         list.setItems(items);

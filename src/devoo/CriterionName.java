@@ -1,17 +1,11 @@
 package devoo;
 
 /**
-    La classe contient une liste de constantes énumérées, chacune étant un critère, ils peuvent être de 2 types différents représentés par des lettres :
-
-    'B' pour un critère booleén, c'est-à-dire qui a deux valeurs possibles (vrai ou faux),
-    'T' pour un critère textuel, c'est-à-dire qui a une valeur textuelle,
-   
-    L'enum a deux méthodes publiques :
-
-    getType() qui renvoie le type du critère (B, T),
-    getName() qui renvoie le nom de la constante énumérée correspondante
-    
-    @autor : Raphael Kiecken, Armand Sady, Antoine Gaienier
+ * La classe contient une liste de constantes énumérées, chacune étant un critère, ils peuvent être de 2 types différents représentés par des lettres : <br>
+ * <br>
+ * B pour un critère booleén, c'est-à-dire qui a deux valeurs possibles (vrai ou faux).<br>
+ * T pour un critère textuel, c'est-à-dire qui a une valeur textuelle.
+ * @author : Raphael KIECKEN, Armand SADY, Antoine GAIENIER
 */
 public enum CriterionName {
     GUEST_ANIMAL_ALLERGY('B'),
@@ -23,31 +17,49 @@ public enum CriterionName {
     PAIR_GENDER('T'),
     HISTORY('T');
 
-    /* Attributs qui représentent le type du critère. */
+    /**
+     * Type du CriterionName.
+     */
     private final char TYPE;
 
-    /* Constructeur de CriterionName. */
+    /**
+     * Constructeur de CriterionName.
+     * @param type : char
+     */
     CriterionName(char type) {
         this.TYPE = type;
     }
 
-    /* Getter pour le type du critère. */
+    /**
+     * Accesseur pour le type du CriterionName.
+     * @return char : type du CriterionName.
+     */
     public char getType() {
         return this.TYPE;
     }
 
-    /* Getter pour le nom de la constante énumérée. */
+    /**
+     * Accesseur pour le nom du CriterionName.
+     * @return String : nom du CriterionName.
+     */
     public String getName() {
         return this.name();
     }
 
-    /* Méthode toShortString. */
+    /**
+     * Méthode toString.
+     * @return String : nom du CriterionName.
+     */
+    @Override
     public String toString() {
         return this.getName();
     }
 
-    /* Méthode toExtendString. */
+    /**
+     * Méthode qui retourne le CriterionName sous forme de String avec son type.
+     * @return String : CriterionName avec son type.
+     */
     public String toExtendString() {
-        return this.getName() + " (" + this.getType() + ")";
+        return this.toString() + " (" + this.getType() + ")";
     }
 }

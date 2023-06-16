@@ -1,8 +1,6 @@
 package devoo;
 
 import java.io.File;
-import java.net.InterfaceAddress;
-import java.util.ArrayList;
 import java.util.Map;
 
 import graphes.*;
@@ -13,20 +11,20 @@ public class TerminaInterface {
 
     static private Platform platform;
 
-
     /*
      * Permet de choisir le fichier CSV à utiliser dans le dissier rsc
      * @return le nom du fichier CSV
      */
-    public static String chooseCSV(){
+    public static File chooseCSV(){
         // récupérer la liste des fichiers dans le dossier rsc (dossier de ressources) et vérifier si c'est un .csv
-        File folder = new File("rsc");
+        File folder = new File(Platform.ressourcesPath.getAbsolutePath());
         File[] listOfFiles = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
             if (!isCSV(listOfFiles[i].getName())) {
                 listOfFiles[i] = null;
             }
         }
+        
         File[] csvFiles = new File[listOfFiles.length];
         // afficher la liste des fichiers .csv du dossier rsc
         int conteur =0;
@@ -42,7 +40,7 @@ public class TerminaInterface {
         // utiliser un scanner pour choisir le fichier
         Scanner sc = new Scanner(System.in);
         int choix = sc.nextInt()-1;
-        return csvFiles[choix].getName();
+        return csvFiles[choix];
     }
     /*
      * fonction qui vériifie si le fichier est bien un .csv
@@ -87,7 +85,7 @@ public class TerminaInterface {
         }else if(choix == 2){
             TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
             System.out.println("Voici les binomes : ");
-            for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getAffectation().entrySet()){
+            for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getCurrentAffectation().entrySet()){
                 System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
             }
             try{
@@ -120,7 +118,7 @@ public class TerminaInterface {
     }
 
     // menu des parametre
-    public static boolean  parametreMenu(){
+    public static boolean  parametreMenu() {
         System.out.print("1 : rétablir tout les poids\n2 : poids de l'historique : " + AffectationUtil.getWeightHistory()+
             "\n3 : poids des allergie : "+AffectationUtil.getWeightAllergy() +
             "\n4 : poids de l'alimentation : "+AffectationUtil.getWeightFood() +
