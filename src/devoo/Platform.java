@@ -31,7 +31,7 @@ public class Platform {
     public static final String SEPARATOR = System.getProperty("file.separator");
 
     /* Constantes pour le nom des fichiers. */
-    public static final String OUTPUT = "Output.txt";
+    public static final String OUTPUT = "Output.csv";
 
     /* Constante pour le chemin d'accès au fichier. */
     public static File ressourcesPath = new File(DIRECTORY + SEPARATOR + "rsc" + SEPARATOR);
