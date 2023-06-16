@@ -115,7 +115,6 @@ public class Platform {
         Teenager students;
         try (Scanner lineScanner = new Scanner(file)) {
             header = lineScanner.nextLine().split(";");
-            System.out.println(header);
             while (lineScanner.hasNextLine()) {
                 Scanner fieldScanner = new Scanner(lineScanner.nextLine());
                 fieldScanner.useDelimiter(";");

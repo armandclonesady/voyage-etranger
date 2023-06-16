@@ -1,6 +1,9 @@
 package devoo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import graphes.*;
@@ -10,205 +13,459 @@ import java.util.Scanner;
 public class TerminaInterface {
 
     static private Platform platform;
+    static private Scanner sc = new Scanner(System.in);
+    static private Country hostCountry;
+    static private Country guestCountry;
 
-    /*
-     * Permet de choisir le fichier CSV à utiliser dans le dissier rsc
-     * @return le nom du fichier CSV
+    /**
+     * Récupère la liste des fichiers CSV dans le dossier rsc et demande à l'utilisateur de choisir le fichier à utiliser
+     * @return le fichier choisi
      */
     public static File chooseCSV(){
-        // récupérer la liste des fichiers dans le dossier rsc (dossier de ressources) et vérifier si c'est un .csv
         File folder = new File(Platform.ressourcesPath.getAbsolutePath());
-        File[] listOfFiles = folder.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (!isCSV(listOfFiles[i].getName())) {
-                listOfFiles[i] = null;
+        List<File> csvFiles = new ArrayList<File>();
+        for (int i = 0; i < folder.listFiles().length; i++) {
+            if (isCSV(folder.listFiles()[i])) {
+                csvFiles.add(folder.listFiles()[i]);
             }
         }
-        
-        File[] csvFiles = new File[listOfFiles.length];
-        // afficher la liste des fichiers .csv du dossier rsc
-        int conteur =0;
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if(listOfFiles[i] != null){
-                csvFiles[conteur] = listOfFiles[i];
-                conteur++;
-                System.out.println((conteur) + " : " + listOfFiles[i].getName());
-            }
+        for (File file : csvFiles) {
+            System.out.println((csvFiles.indexOf(file)+1) + " : " + file.getName());
         }
-
-        System.out.println("Choisissez le fichier à utiliser : ");
-        // utiliser un scanner pour choisir le fichier
-        Scanner sc = new Scanner(System.in);
-        int choix = sc.nextInt()-1;
-        return csvFiles[choix];
+        System.out.print("\nChoisissez le fichier à utiliser : ");
+        try {
+            int choix = sc.nextInt()-1;
+            System.out.println("");
+            return csvFiles.get(choix);
+        } 
+        catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            return chooseCSV();
+        }
     }
-    /*
-     * fonction qui vériifie si le fichier est bien un .csv
+
+    /**
+     * Vérifie si le fichier est un fichier CSV
+     * @param file : le fichier à vérifier
+     * @return true si le fichier est un fichier CSV, false sinon
      */
-    public static boolean isCSV(String file){
-        return file.endsWith(".csv");
+    public static boolean isCSV(File file){
+        return file.getName().endsWith(".csv");
     }
 
-    /*
-     * Permet de choisir le pays hote et le guest en meme temps
+    /**
+     * Récupère la liste des pays et demande à l'utilisateur de choisir le pays hôte
+     * @return un tableau de deux pays, le pays hôte
      */
-    public static Country[] chooseCountry(){
-        Country[] countries = new Country[2];
-        for (int i = 0; i < Country.values().length; i++) {
-            System.out.println((i+1) + " : " + Country.values()[i]);
+    public static void chooseHostCountry(){
+        int choix = 0;
+        for (Country country : Country.values()) {
+            System.out.println((country.ordinal()+1) + " : " + country);
         }
-        System.out.println("Choisissez le pays Hôte : ");
-        Scanner sc = new Scanner(System.in);
-        int choix = sc.nextInt()-1;
-        countries[0] = Country.values()[choix];
-        // réafficher la liste des pays sans le pays choisit pour le pays hote
-        for (int i = 0; i < Country.values().length; i++) {
-            if(i != choix){
-                System.out.println((i+1) + " : " + Country.values()[i]);
-            }
+        System.out.print("Choisissez le pays hôte : ");
+        try {
+            choix = Integer.parseInt(sc.next())-1;
+            hostCountry = Country.values()[choix];
+        } 
+        catch (Exception e) {
+            System.out.println("\nVeuillez entrer un nombre valide\n");
+            chooseHostCountry();
         }
-        System.out.println("Choisissez le pays Visiteur : ");
-        int newChoix;
-        do{
-        newChoix = sc.nextInt()-1;}
-        while(newChoix == choix);
-        countries[1] = Country.values()[newChoix];
-        return countries;
     }
 
-    public static boolean menuInterface(Country[] hostAndGuest){
-        System.out.println("1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 : paraméère \n4 : Créer des binôme \n5 : Changer les pays hote et inviter  \n6 : Quitter");
-        Scanner sc = new Scanner(System.in);
-        int choix = sc.nextInt();
-        if(choix == 1){
-            TerminaInterface.platform.importCSV(chooseCSV());
-        }else if(choix == 2){
-            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
-            System.out.println("Voici les binomes : ");
-            for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getCurrentAffectation().entrySet()){
-                System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
+    /**
+     * Récupère la liste des pays et demande à l'utilisateur de choisir le pays invité
+     * @return un tableau de deux pays, le pays invité
+     */
+    public static void chooseGuestCountry(){
+        List<Country> countries = Arrays.asList(Country.values());
+        int choix = 0;
+        for (Country country : countries) {
+            if (country != TerminaInterface.hostCountry) {
+                System.out.println((country.ordinal()+1) + " : " + country);
             }
+        }
+        System.out.print("Choisissez le pays invité : ");
+        try {
+            choix = Integer.parseInt(sc.next())-1;
+            if (choix == hostCountry.ordinal()) {
+                System.out.println("\nVeuillez entrer un nombre valide\n");
+                chooseGuestCountry();
+            }
+            guestCountry = countries.get(choix);
+        } 
+        catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            chooseGuestCountry();
+        }
+    }
 
-        }else if(choix == 3){
-            while(parametreMenu()){}
-            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
-        }else if(choix == 4){
-            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
-            addBinome(hostAndGuest);
-        }else if(choix == 5){
-            hostAndGuest =chooseCountry();
-            TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
-        }else if(choix == 6){
-            return false;
+    public static boolean menuInterface(){
+        int choix = 0;
+        System.out.println("\n1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 : Paramètres \n4 : Fixer un binôme \n5 : Eviter un binôme \n6 : Changer les pays hote et inviter  \n7 : Quitter");
+        System.out.print("\nChoisissez une option : ");
+        try {
+            choix = Integer.parseInt(sc.next());
+            System.out.println("");
+            if (choix < 1 || choix > 6){
+                System.out.println("Veuillez entrer un nombre valide");
+                return menuInterface();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide");
+            return menuInterface();
+        }
+        switch (choix) {
+            case 1:
+                TerminaInterface.platform.importCSV(chooseCSV());
+                break;
+            case 2:
+                TerminaInterface.platform.affectation(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
+                System.out.println("\nVoici les binomes : \n");
+                for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getCurrentAffectation().entrySet()){
+                    System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
+                }
+                break;
+            case 3:
+                while(paramMenu()){}
+                TerminaInterface.platform.affectation(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
+                break;
+            case 4:
+                pairFixedMenu();
+                break;
+            case 5:
+                chooseHostCountry();
+                chooseGuestCountry();
+                break;
+            case 6:
+                return false;
         }
         return true;
     }
 
     // choix entre modifier et reset
-    public static int option(){
-        System.out.print("1 : modifier \n2 : reset\nChoix  : ");
-        Scanner sc = new Scanner(System.in);
-        int option = sc.nextInt();
+    public static int paramOption(){
+        System.out.print("1 : Modifier la valeur\n2 : Rétablir la valeur\nChoix  : ");
+        int option = 0;
+        try {
+            option = Integer.parseInt(sc.next());
+            if (option < 1 || option > 2){
+                System.out.println("Veuillez entrer un nombre valide");
+                return paramOption();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide");
+            return paramOption();
+        }
         return option;
     }
 
     // menu des parametre
-    public static boolean  parametreMenu() {
-        System.out.print("1 : rétablir tout les poids\n2 : poids de l'historique : " + AffectationUtil.getWeightHistory()+
-            "\n3 : poids des allergie : "+AffectationUtil.getWeightAllergy() +
-            "\n4 : poids de l'alimentation : "+AffectationUtil.getWeightFood() +
-            "\n5 : poids des hobbies :" +AffectationUtil.getWeightHobbies()+
-            "\n6 : poids de sur la préfèrence des genres :" +AffectationUtil.getWeightGender() + 
-            "\n7 : retour menu\nChoix : ");
-        Scanner sc = new Scanner(System.in);
-        int choix = sc.nextInt();
-        if(choix==1){AffectationUtil.allReset();}
-
-        if( choix == 2){
-            if(option() == 1){
-                System.out.print("nouveau poids : ");
-                Scanner scann = new Scanner(System.in);
-                int newPoids  = scann.nextInt();
-                AffectationUtil.setWeightHistory(newPoids);
-            }else{AffectationUtil.resetWeightHistory();}
+    public static boolean paramMenu() {
+        int choix = 0;
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n1 : Rétablir tout les poids par défaut");
+        sb.append("\n2 : Poids de l'historique : %d");
+        sb.append("\n3 : Poids des allergie : %d");
+        sb.append("\n4 : Poids de l'alimentation : %d");
+        sb.append("\n5 : Poids des hobbies : %d");
+        sb.append("\n6 : Poids de la préférences de genre : %d");
+        sb.append("\n7 : Retour menu\nChoix : ");
+        System.out.print(String.format(sb.toString(), 
+            AffectationUtil.getWeightHistory(), 
+            AffectationUtil.getWeightAllergy(), 
+            AffectationUtil.getWeightFood(), 
+            AffectationUtil.getWeightHobbies(), 
+            AffectationUtil.getWeightGender()));
+        try {
+            choix = Integer.parseInt(sc.next());
+            if (choix < 1 || choix > 7){
+                System.out.println("Veuillez entrer un nombre valide\n");
+                return menuInterface();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            return menuInterface();
         }
-        if(choix == 3){
-            if(option()==1){
-                System.out.print("nouveau poids : ");
-                Scanner scann = new Scanner(System.in);
-                int newPoids  = scann.nextInt();
-                AffectationUtil.setWeightAllergy(newPoids);
-            }else{AffectationUtil.resetWeightAllergy();}
+        if(choix == 1) {
+            AffectationUtil.allReset();
         }
-        if(choix == 4){
-            if(option()==1){
-                System.out.print("nouveau poids : ");
-                Scanner scann = new Scanner(System.in);
-                int newPoids  = scann.nextInt();
-                AffectationUtil.setWeightFood(newPoids);
-            }else{AffectationUtil.resetWeightFood();}
+        if(choix == 2) {
+            switch (paramOption()) {
+                case 1:
+                    System.out.print("Nouveau poids : ");
+                    try {
+                        int newPoids  = Integer.parseInt(sc.next());
+                        AffectationUtil.setWeightAllergy(newPoids);
+                    } catch (Exception e) {
+                        System.out.println("Veuillez entrer un nombre valide\n");
+                        break;
+                    }
+                case 2:
+                    AffectationUtil.resetWeightHistory();
+                    break;
+                case 3:
+                    break;
+            }
         }
-        if(choix == 5){
-            if(option()==1){
-                System.out.print("nouveau poids : ");
-                Scanner scann = new Scanner(System.in);
-                int newPoids  = scann.nextInt();
-                AffectationUtil.setWeightHobbies(newPoids);
-            }else{AffectationUtil.resetWeightHobbies();}
+        if(choix == 3) {
+            switch (paramOption()) {
+                case 1:
+                    System.out.print("Nouveau poids : ");
+                    try {
+                        int newPoids  = Integer.parseInt(sc.next());
+                        AffectationUtil.setWeightAllergy(newPoids);
+                    } catch (Exception e) {
+                        System.out.println("Veuillez entrer un nombre valide\n");
+                        break;
+                    }
+                    break;
+                case 2:
+                    AffectationUtil.resetWeightAllergy();
+                    break;
+                case 3:
+                    break;
+            }
         }
-        if(choix == 6){
-            if(option()==1){
-                System.out.print("nouveau poids : ");
-                Scanner scann = new Scanner(System.in);
-                int newPoids  = scann.nextInt();
-                AffectationUtil.setWeightGender(newPoids);
-            }else{AffectationUtil.resetWeightGender();}
+        if(choix == 4) {
+            switch (paramOption()) {
+                case 1:
+                    System.out.print("Nouveau poids : ");
+                    try {
+                        int newPoids  = Integer.parseInt(sc.next());
+                        AffectationUtil.setWeightFood(newPoids);
+                    } catch (Exception e) {
+                        System.out.println("Veuillez entrer un nombre valide\n");
+                        break;
+                    }
+                    break;
+                case 2:
+                    AffectationUtil.resetWeightFood();
+                    break;
+                case 3:
+                    break;
+            }
         }
-        if(choix == 7)return false;
+        if(choix == 5) {
+            switch (paramOption()) {
+                case 1:
+                    System.out.print("Nouveau poids : ");
+                    try {
+                        int newPoids  = Integer.parseInt(sc.next());
+                        AffectationUtil.setWeightHobbies(newPoids);
+                    } catch (Exception e) {
+                        System.out.println("Veuillez entrer un nombre valide\n");
+                        break;
+                    }
+                    break;
+                case 2:
+                    AffectationUtil.resetWeightHobbies();
+                    break;
+                case 3:
+                    break;
+            }
+        }
+        if(choix == 6) {
+            switch (paramOption()) {
+                case 1:
+                    System.out.print("Nouveau poids : ");
+                    try {
+                        int newPoids  = Integer.parseInt(sc.next());
+                        AffectationUtil.setWeightGender(newPoids);
+                    } catch (Exception e) {
+                        System.out.println("Veuillez entrer un nombre valide\n");
+                        break;
+                    }
+                    break;
+                case 2:
+                    AffectationUtil.resetWeightGender();
+                    break;
+                case 3:
+                    break;
+            }
+        }
+        if(choix == 7) return false;
         return true;
     }
 
-    public static void addBinome(Country[] hostAndGuest){
-        TerminaInterface.platform.clearHost();
-        TerminaInterface.platform.clearGuest();
-        TerminaInterface.platform.makeHostAndGuest(hostAndGuest[0], hostAndGuest[1]);
-
-        int choice[] = new int[2];
-
-        for (Teenager t : TerminaInterface.platform.getHost()) {
-            System.out.println((TerminaInterface.platform.getHost().lastIndexOf(t)+1) + " : " + t.toString());
+    public static void pairFixedMenu() {
+        int choix = 0;
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n1 : Ajouter un couple fixe");
+        sb.append("\n2 : Supprimer un couple fixe");
+        sb.append("\n3 : Afficher les couples fixes");
+        sb.append("\n4 : Retour menu\nChoix : ");
+        System.out.print(sb.toString());
+        try {
+            choix = Integer.parseInt(sc.next());
+            if (choix < 1 || choix > 4){
+                System.out.println("Veuillez entrer un nombre valide\n");
+                pairFixedMenu();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            pairFixedMenu();
         }
-        System.out.print("Etudiant host choisi : ");
-        Scanner sc = new Scanner(System.in);
-        choice[0] = sc.nextInt();
-
-        System.out.println("");
-
-        for (Teenager t : TerminaInterface.platform.getGuest()) {
-            System.out.println((TerminaInterface.platform.getGuest().lastIndexOf(t)+1) + " : " + t.toString());
+        switch (choix) {
+            case 1:
+                addPairFixed();
+                break;
+            case 2:
+                removePairFixed();
+                break;
+            case 3:
+                //howPairFixed();
+                break;
+            case 4:
+                return;
         }
-        System.out.print("Etudiant guest choisi : ");
-        choice[1] = sc.nextInt();
+        pairFixedMenu();
+    }
 
-        System.out.println("");
-
-        Teenager host = TerminaInterface.platform.getHost().get(choice[0]-1);
-        Teenager guest = TerminaInterface.platform.getGuest().get(choice[1]-1);
-
+    public static void addPairFixed() {
+        TerminaInterface.platform.makeHostAndGuest(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
+        Teenager host = chooseHostFixed();
+        Teenager guest = chooseGuestFixed();
         System.out.println(host.toString() + " -> " + guest.toString());
         TerminaInterface.platform.addPairFixed(host, guest);
-        TerminaInterface.platform.affectation(hostAndGuest[0], hostAndGuest[1]);
+        TerminaInterface.platform.affectation(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
+    }
+
+    public static Teenager chooseHostFixed() {
+        List<Teenager> hostList = TerminaInterface.platform.getHost();
+        for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairFixed().entrySet()) {
+            hostList.remove(entry.getKey());
+        }
+        hostList.sort(new IdComparator());
+        for (Teenager t : hostList) {
+            System.out.println(t.toString());
+        }
+        System.out.print("Etudiant hôtes choisi : ");
+        try {
+            int id = Integer.parseInt(sc.next());
+            for (Teenager t : hostList) {
+                if (t.getId() == id) {
+                    return t;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            chooseHostFixed();
+        }
+        return null;
+    }
+
+    public static Teenager chooseGuestFixed() {
+        List<Teenager> guestList = TerminaInterface.platform.getGuest();
+        for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairFixed().entrySet()) {
+            guestList.remove(entry.getValue());
+        }
+        guestList.sort(new IdComparator());
+        for (Teenager t : guestList) {
+            System.out.println(t.toString());
+        }
+        System.out.print("Etudiant visiteur choisi : ");
+        try {
+            int id = Integer.parseInt(sc.next());
+            for (Teenager t : guestList) {
+                if (t.getId() == id) {
+                    return t;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            chooseGuestFixed();
+        }
+        return null;
+    }
+
+    public static void removePairFixed() {
+        int i = 0;
+        int choix = 0;
+        for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairFixed().entrySet()) {
+            System.out.println((i+1) + " : " + entry.getKey().toString() + " -> " + entry.getValue().toString());
+            i++;
+        }
+        try {
+            choix = Integer.parseInt(sc.next());
+            if (choix < 1 || choix > TerminaInterface.platform.getPairFixed().size()) {
+                System.out.println("Veuillez entrer un nombre valide\n");
+                removePairFixed();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            removePairFixed();
+        }
+    }
+
+    public static void addAvoidedPair() {
+        TerminaInterface.platform.makeHostAndGuest(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
+        Teenager host = chooseHostAvoided();
+        Teenager guest = chooseGuestAvoided();
+        System.out.println(host.toString() + " -> " + guest.toString());
+        TerminaInterface.platform.addPairAvoided(host, guest);
+        TerminaInterface.platform.affectation(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
+    }
+
+    public static Teenager chooseHostAvoided() {
+        List<Teenager> hostList = TerminaInterface.platform.getHost();
+        for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairAvoided().entrySet()) {
+            hostList.remove(entry.getKey());
+        }
+        hostList.sort(new IdComparator());
+        for (Teenager t : hostList) {
+            System.out.println(t.toString());
+        }
+        System.out.print("Etudiant hôtes choisi : ");
+        try {
+            int id = Integer.parseInt(sc.next());
+            for (Teenager t : hostList) {
+                if (t.getId() == id) {
+                    return t;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            chooseHostAvoided();
+        }
+        return null;
+    }
+
+    public static Teenager chooseGuestAvoided() {
+        List<Teenager> guestList = TerminaInterface.platform.getGuest();
+        for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairAvoided().entrySet()) {
+            guestList.remove(entry.getValue());
+        }
+        guestList.sort(new IdComparator());
+        for (Teenager t : guestList) {
+            System.out.println(t.toString());
+        }
+        System.out.print("Etudiant visiteur choisi : ");
+        try {
+            int id = Integer.parseInt(sc.next());
+            for (Teenager t : guestList) {
+                if (t.getId() == id) {
+                    return t;
+                }
+            }
+            throw new Exception();
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            chooseGuestAvoided();
+        }
+        return null;
     }
 
     // Permet l'utilisation de l'applications pour créer les binome des échange l'inguistique.
     public static void main(String[] args) {
-        System.out.println("Bienvenue dans l'application de création de binome pour les échanges linguistiques");
+        System.out.println("Bienvenue dans l'application de création de binome pour les échanges linguistiques\n");
         TerminaInterface.platform = new Platform();
         TerminaInterface.platform.importCSV(chooseCSV());
-        System.out.println("choisiser le pays Hôte : ");
-        Country[] hostAndGuest = chooseCountry();
+        chooseHostCountry();
+        System.out.println("");
+        chooseGuestCountry();
     
-        while(menuInterface(hostAndGuest)){}
+        while(menuInterface()){}
         System.exit(0);
     }
 }

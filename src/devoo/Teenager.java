@@ -270,12 +270,20 @@ public class Teenager implements Serializable {
         }
     }
 
-    
+    /**
+     * Calcul la différence d'âge entre deux Teenager.
+     * @param t2 Teenager avec lequel on veut calculer la différence d'âge.
+     * @return Différence d'âge entre les deux Teenager.
+     */
     public int diffAge(Teenager t2) {
         return Math.abs(this.birth.getYear() - t2.birth.getYear());
     }
 
-    /* Méthode qui renvoie vérifie si la préférence du genre est respectée. */
+    /**
+     * Calcul le nombre de préférences de genre en commun entre deux Teenager.
+     * @param t Teenager avec lequel on veut calculer le nombre de préférences de genre en commun.
+     * @return Nombre de préférences de genre en commun entre les deux Teenager.
+     */
     public int genderPref(Teenager t){
         int res = 0;
         if (this.getValue(CriterionName.PAIR_GENDER).isEmpty() || this.getValue(CriterionName.PAIR_GENDER).equals(t.getValue(CriterionName.GENDER))) {
@@ -287,6 +295,10 @@ public class Teenager implements Serializable {
         return res;
     }
 
+    /**
+     * Calcul le nombre d'incohérences dans les critères d'un Teenager.
+     * @return Nombre d'incohérences dans les critères d'un Teenager.
+     */
     public int numIncoherence() {
         int incoherence = 0;
         if (this.getCriterion(CriterionName.HOST_HAS_ANIMAL).getValue().equals("yes") 
@@ -296,11 +308,17 @@ public class Teenager implements Serializable {
         return incoherence;
     }
 
+    /**
+     * Désinscrit un Teenager.
+     */
     public void unregister() {
         if (this.isRegistered) {this.isRegistered = false;}
     }
 
-    /* Méthodes extractValues pour l'écriture dans un fichier (Récupère les valeurs des critères d'un host). */
+    /**
+     * Extrait les Criterion d'un Teenager hôte.
+     * @return Criterion d'un Teenager hôte.
+     */
     public String extractValuesHost() {
         return toString() + ", " +
         getValue(CriterionName.HOST_FOOD) + ", " + getValue(CriterionName.HOST_HAS_ANIMAL) + ", [" + 
@@ -308,7 +326,10 @@ public class Teenager implements Serializable {
         getValue(CriterionName.PAIR_GENDER);
     }
 
-    /* Méthodes extractValues pour l'écriture dans un fichier (Récupère les valeurs des critères d'un guest). */
+    /**
+     * Extrait les Criterion d'un Teenager invité.
+     * @return
+     */
     public String extractValuesGuest() {
         return toString() + ", " +
         getValue(CriterionName.GUEST_FOOD) + ", " + getValue(CriterionName.GUEST_ANIMAL_ALLERGY) + ", [" + 
@@ -316,27 +337,52 @@ public class Teenager implements Serializable {
         getValue(CriterionName.PAIR_GENDER);
     }
 
-    /* Getter pour l'id. */
+    /**
+     * Accesseur pour l'identifiant.
+     * @return Identifiant.
+     */
     public int getId() {return this.id;}
 
-    /* Getter pour le prénom. */
+    /**
+     * Accesseur pour le prénom.
+     * @return Prénom.
+     */
     public String getForename() {return this.forename;}
 
-    /* Getter pour le nom. */
+    /**
+     * Accesseur pour le nom.
+     * @return Nom.
+     */
     public String getName() {return this.name;}
 
-    /* Getter pour le pays. */
+    /**
+     * Accesseur pour le pays.
+     * @return Pays.
+     */
     public Country getCountry() {return this.pays;}
 
-    /* Getter pour la date de naissance. */
+    /**
+     * Accesseur pour la date de naissance.
+     * @return Date de naissance.
+     */
     public LocalDate getBirth() {return this.birth;}
 
+    /**
+     * Accesseur pour savoir si le Teenager est inscrit.
+     * @return
+     */
     public boolean getRegistered() {return this.isRegistered;}
 
-    /* Setter pour le dernier invité. */
+    /**
+     * Mutateur pour le dernier Teenager invité.
+     * @param t Teenager invité.
+     */
     public void setLastguest(Teenager t) {this.lastGuest = t;}
 
-    /* Méthodes toString. */
+    /**
+     * Méthodes toString qui affiche les informations d'un Teenager.
+     * @return Informations d'un Teenager.
+     */
     public String toString() {
         return String.format("(%d) %s %s", this.id, this.forename, this.name);
     }
@@ -352,6 +398,11 @@ public class Teenager implements Serializable {
         return result;
     }
 
+    /**
+     * Méthode equals qui compare deux Teenager.
+     * @param obj Teenager avec lequel on veut comparer.
+     * @return True si les deux Teenager sont égaux, false sinon.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
