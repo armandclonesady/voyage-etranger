@@ -1,8 +1,6 @@
 package devoo;
 
 import java.io.File;
-import java.net.InterfaceAddress;
-import java.util.ArrayList;
 import java.util.Map;
 
 import graphes.*;
@@ -89,11 +87,6 @@ public class TerminaInterface {
             System.out.println("Voici les binomes : ");
             for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getAffectation().entrySet()){
                 System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
-            }
-            try{
-                Thread.sleep(10000);
-            } catch( InterruptedException e){
-                e.printStackTrace();
             }
 
         }else if(choix == 3){
