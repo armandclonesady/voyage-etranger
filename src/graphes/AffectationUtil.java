@@ -6,7 +6,7 @@ import java.util.Map;
 import devoo.*;
 import fr.ulille.but.sae2_02.graphes.*;
 
-/*
+/**
  *  Régle de calcul V1 :
  * 
  * - Si les deux ados ne sont pas compatibles sur le critère des animaux, le poids est de 100.
@@ -247,7 +247,5 @@ public class AffectationUtil {
         resetWeightFood();
         resetWeightGender();
         resetWeightHobbies();
-    }
-
-    
+    }  
 }

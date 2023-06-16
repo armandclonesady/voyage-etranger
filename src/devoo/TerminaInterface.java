@@ -16,6 +16,7 @@ public class TerminaInterface {
     static private Scanner sc = new Scanner(System.in);
     static private Country hostCountry;
     static private Country guestCountry;
+    static private File historyFile;
 
     /**
      * Récupère la liste des fichiers CSV dans le dossier rsc et demande à l'utilisateur de choisir le fichier à utiliser
@@ -32,7 +33,7 @@ public class TerminaInterface {
         for (File file : csvFiles) {
             System.out.println((csvFiles.indexOf(file)+1) + " : " + file.getName());
         }
-        System.out.print("\nChoisissez le fichier à utiliser : ");
+        System.out.print("Choisissez le fichier à utiliser : ");
         try {
             int choix = sc.nextInt()-1;
             System.out.println("");
@@ -55,7 +56,6 @@ public class TerminaInterface {
 
     /**
      * Récupère la liste des pays et demande à l'utilisateur de choisir le pays hôte
-     * @return un tableau de deux pays, le pays hôte
      */
     public static void chooseHostCountry(){
         int choix = 0;
@@ -75,7 +75,6 @@ public class TerminaInterface {
 
     /**
      * Récupère la liste des pays et demande à l'utilisateur de choisir le pays invité
-     * @return un tableau de deux pays, le pays invité
      */
     public static void chooseGuestCountry(){
         List<Country> countries = Arrays.asList(Country.values());
@@ -102,8 +101,8 @@ public class TerminaInterface {
 
     public static boolean menuInterface(){
         int choix = 0;
-        System.out.println("\n1 : Importer un fichier CSV \n2 : Afficher les binomes \n3 : Paramètres \n4 : Fixer un binôme \n5 : Eviter un binôme \n6 : Changer les pays hote et inviter  \n7 : Quitter");
-        System.out.print("\nChoisissez une option : ");
+        System.out.println("\n1 : Importer un fichier CSV\n2 : Afficher les binomes\n3 : Afficher les infos d'un participant\n4 : Paramètres\n5 : Historique\n6 : Fixer un binôme\n7 : Eviter un binôme\n8 : Changer les pays hote et invité\n9 : Quitter");
+        System.out.print("Choisissez une option : ");
         try {
             choix = Integer.parseInt(sc.next());
             System.out.println("");
@@ -118,26 +117,38 @@ public class TerminaInterface {
         switch (choix) {
             case 1:
                 TerminaInterface.platform.importCSV(chooseCSV());
+                TerminaInterface.historyFile = null;
                 break;
             case 2:
                 TerminaInterface.platform.affectation(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
-                System.out.println("\nVoici les binomes : \n");
-                for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getCurrentAffectation().entrySet()){
+                List<Map.Entry<Teenager,Teenager>> listCouple = new ArrayList<>(TerminaInterface.platform.getCurrentAffectation().entrySet());
+                listCouple.sort(new AffectListComparator());
+                System.out.println("\nVoici les binomes :\n");
+                for(Map.Entry<Teenager,Teenager> e : listCouple) {
                     System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
                 }
                 break;
             case 3:
+                showStudentInfo();
+                break;
+            case 4:
                 while(paramMenu()){}
                 TerminaInterface.platform.affectation(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
                 break;
-            case 4:
+            case 5:
+                historyMenu();
+            case 6:
                 pairFixedMenu();
                 break;
-            case 5:
+            case 7:
+                pairAvoidedMenu();
+                break;
+            case 8:
                 chooseHostCountry();
                 chooseGuestCountry();
+                TerminaInterface.historyFile = null;
                 break;
-            case 6:
+            case 9:
                 return false;
         }
         return true;
@@ -314,7 +325,13 @@ public class TerminaInterface {
                 removePairFixed();
                 break;
             case 3:
-                //howPairFixed();
+                if (TerminaInterface.platform.getPairFixed().isEmpty()) {
+                    System.out.println("Aucun couple fixe");
+                    break;
+                }
+                for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairFixed().entrySet()) {
+                    System.out.println(entry.getKey().toString() + " -> " + entry.getValue().toString());
+                }
                 break;
             case 4:
                 return;
@@ -333,57 +350,60 @@ public class TerminaInterface {
 
     public static Teenager chooseHostFixed() {
         List<Teenager> hostList = TerminaInterface.platform.getHost();
+        Teenager host = null;
+        int choix = 0;
         for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairFixed().entrySet()) {
             hostList.remove(entry.getKey());
         }
-        hostList.sort(new IdComparator());
+        int i = 1;
         for (Teenager t : hostList) {
-            System.out.println(t.toString());
+            System.out.println(i + " : " + t.toString());
+            i++;
         }
         System.out.print("Etudiant hôtes choisi : ");
         try {
-            int id = Integer.parseInt(sc.next());
-            for (Teenager t : hostList) {
-                if (t.getId() == id) {
-                    return t;
-                }
-            }
-        } catch (Exception e) {
+            choix = Integer.parseInt(sc.next());
+            host = hostList.get(choix - 1);
+        } 
+        catch (Exception e) {
             System.out.println("Veuillez entrer un nombre valide\n");
-            chooseHostFixed();
+            return chooseHostFixed();
         }
-        return null;
+        return host;
     }
 
     public static Teenager chooseGuestFixed() {
         List<Teenager> guestList = TerminaInterface.platform.getGuest();
+        Teenager guest = null;
+        int choix = 0;
         for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairFixed().entrySet()) {
             guestList.remove(entry.getValue());
         }
-        guestList.sort(new IdComparator());
+        int i = 1;
         for (Teenager t : guestList) {
-            System.out.println(t.toString());
+            System.out.println(i + " : " + t.toString());
+            i++;
         }
         System.out.print("Etudiant visiteur choisi : ");
         try {
-            int id = Integer.parseInt(sc.next());
-            for (Teenager t : guestList) {
-                if (t.getId() == id) {
-                    return t;
-                }
-            }
+            choix = Integer.parseInt(sc.next());
+            guest = guestList.get(choix - 1);
         } catch (Exception e) {
             System.out.println("Veuillez entrer un nombre valide\n");
-            chooseGuestFixed();
+            return chooseGuestFixed();
         }
-        return null;
+        return guest;
     }
 
     public static void removePairFixed() {
-        int i = 0;
+        int i = 1;
         int choix = 0;
+        if (TerminaInterface.platform.getPairFixed().isEmpty()) {
+            System.out.println("Il n'y a pas de couple fixe\n");
+            return;
+        }
         for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairFixed().entrySet()) {
-            System.out.println((i+1) + " : " + entry.getKey().toString() + " -> " + entry.getValue().toString());
+            System.out.println((i) + " : " + entry.getKey().toString() + " -> " + entry.getValue().toString());
             i++;
         }
         try {
@@ -398,6 +418,46 @@ public class TerminaInterface {
         }
     }
 
+    public static void pairAvoidedMenu() {
+        int choix = 0;
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n1 : Ajouter un couple évité");
+        sb.append("\n2 : Supprimer un couple évité");
+        sb.append("\n3 : Afficher les couples évités");
+        sb.append("\n4 : Retour menu\nChoix : ");
+        System.out.print(sb.toString());
+        try {
+            choix = Integer.parseInt(sc.next());
+            if (choix < 1 || choix > 4){
+                System.out.println("Veuillez entrer un nombre valide\n");
+                pairAvoidedMenu();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            pairAvoidedMenu();
+        }
+        switch (choix) {
+            case 1:
+                addAvoidedPair();
+                break;
+            case 2:
+                removeAvoidedPair();
+                break;
+            case 3:
+                if (TerminaInterface.platform.getPairAvoided().isEmpty()) {
+                    System.out.println("Aucun couple évité");
+                    break;
+                }
+                for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairAvoided().entrySet()) {
+                    System.out.println(entry.getKey().toString() + " -> " + entry.getValue().toString());
+                }
+                break;
+            case 4:
+                return;
+        }
+        pairAvoidedMenu();
+    }
+
     public static void addAvoidedPair() {
         TerminaInterface.platform.makeHostAndGuest(TerminaInterface.hostCountry, TerminaInterface.guestCountry);
         Teenager host = chooseHostAvoided();
@@ -409,55 +469,168 @@ public class TerminaInterface {
 
     public static Teenager chooseHostAvoided() {
         List<Teenager> hostList = TerminaInterface.platform.getHost();
+        Teenager host = null;
+        int choix = 0;
         for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairAvoided().entrySet()) {
             hostList.remove(entry.getKey());
         }
-        hostList.sort(new IdComparator());
+        int i = 1;
         for (Teenager t : hostList) {
-            System.out.println(t.toString());
+            System.out.println(i + " : " + t.toString());
+            i++;
         }
-        System.out.print("Etudiant hôtes choisi : ");
+        System.out.print("Etudiant visiteur choisi : ");
         try {
-            int id = Integer.parseInt(sc.next());
-            for (Teenager t : hostList) {
-                if (t.getId() == id) {
-                    return t;
-                }
-            }
+            choix = Integer.parseInt(sc.next());
+            host = hostList.get(choix - 1);
         } catch (Exception e) {
             System.out.println("Veuillez entrer un nombre valide\n");
-            chooseHostAvoided();
+            return chooseGuestFixed();
         }
-        return null;
+        return host;
     }
 
     public static Teenager chooseGuestAvoided() {
         List<Teenager> guestList = TerminaInterface.platform.getGuest();
+        Teenager guest = null;
+        int choix = 0;
         for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairAvoided().entrySet()) {
             guestList.remove(entry.getValue());
         }
-        guestList.sort(new IdComparator());
+        int i = 1;
         for (Teenager t : guestList) {
-            System.out.println(t.toString());
+            System.out.println(i + " : " + t.toString());
+            i++;
         }
         System.out.print("Etudiant visiteur choisi : ");
         try {
-            int id = Integer.parseInt(sc.next());
-            for (Teenager t : guestList) {
-                if (t.getId() == id) {
-                    return t;
-                }
-            }
-            throw new Exception();
+            choix = Integer.parseInt(sc.next());
+            guest = guestList.get(choix - 1);
         } catch (Exception e) {
             System.out.println("Veuillez entrer un nombre valide\n");
-            chooseGuestAvoided();
+            return chooseGuestFixed();
         }
-        return null;
+        return guest;
+    }
+
+    public static void removeAvoidedPair() {
+        int i = 1;
+        int choix = 0;
+        if (TerminaInterface.platform.getPairAvoided().isEmpty()) {
+            System.out.println("Il n'y a pas de couple évité\n");
+            return;
+        }
+        for (Map.Entry<Teenager, Teenager> entry : TerminaInterface.platform.getPairAvoided().entrySet()) {
+            System.out.println((i) + " : " + entry.getKey().toString() + " -> " + entry.getValue().toString());
+            i++;
+        }
+        try {
+            choix = Integer.parseInt(sc.next());
+            if (choix < 1 || choix > TerminaInterface.platform.getPairAvoided().size()) {
+                System.out.println("Veuillez entrer un nombre valide\n");
+                removeAvoidedPair();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            removeAvoidedPair();
+        }
+    }
+
+    public static void showStudentInfo() {
+        List<Teenager> listStudents = new ArrayList<>(TerminaInterface.platform.getStudents());
+        listStudents.sort(new IdComparator());
+        int i = 1;
+        for (Teenager student : listStudents) {
+            System.out.println(i + " : " + student);
+            i++;
+        }
+        try {
+            System.out.print("Choisissez un participant : ");
+            int choixStudent = Integer.parseInt(sc.next())-1;
+            System.out.println("");
+            Teenager student = listStudents.get(choixStudent);
+            System.out.println(student.toString() + " " + student.getBirth().toString() + "\n");
+            for (Map.Entry<CriterionName,Criterion> criterion : student.getRequirements().entrySet()) {
+                if (criterion.getValue() == null) {
+                    System.out.println(criterion.getKey() + " : Non renseigné");
+                }
+                else {
+                    System.out.println(criterion.getKey() + " : " + criterion.getValue().getValue());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide");
+            showStudentInfo();
+        }
+    }
+
+    public static boolean isHistory(File file) {
+        return file.getName().endsWith(".bin") && file.getName().startsWith(hostCountry.name() + "-" + guestCountry.name());
+    }
+
+    public static void chooseHistory() {
+        File folder = new File(Platform.historyPath.getAbsolutePath());
+        List<File> historyFiles = new ArrayList<File>();
+        for (int i = 0; i < folder.listFiles().length; i++) {
+            if (isHistory(folder.listFiles()[i])) {
+                historyFiles.add(folder.listFiles()[i]);
+            }
+        }
+        for (File file : historyFiles) {
+            System.out.println((historyFiles.indexOf(file)+1) + " : " + file.getName());
+        }
+        System.out.print("Choisissez le fichier à utiliser : ");
+        try {
+            int choix = sc.nextInt()-1;
+            System.out.println("");
+            TerminaInterface.platform.loadHistory(historyFiles.get(choix));
+            TerminaInterface.historyFile = historyFiles.get(choix);
+        } 
+        catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            chooseHistory();
+        }
+    }
+
+    public static void historyMenu() {
+        System.out.println("Historique : ");
+        if (TerminaInterface.historyFile == null) {
+            System.out.println("Non chargé\n");
+        }
+        else {
+            System.out.println(historyFile.getName() + "\n");
+        }
+         
+        System.out.println("1 : Charger un historique");
+        System.out.println("2 : Sauvegarder les affectations");
+        System.out.println("3 : Retour");
+        int choix = 0;
+        try {
+            choix = Integer.parseInt(sc.next());
+            if (choix < 1 || choix > 3) {
+                System.out.println("Veuillez entrer un nombre valide\n");
+                historyMenu();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez entrer un nombre valide\n");
+            historyMenu();
+        }
+        switch (choix) {
+            case 1:
+                chooseHistory();
+                break;
+            case 2:
+                TerminaInterface.platform.exportBin();
+                break;
+            case 3:
+                return;
+        }
+        historyMenu();
     }
 
     // Permet l'utilisation de l'applications pour créer les binome des échange l'inguistique.
     public static void main(String[] args) {
+        TerminaInterface.sc = new Scanner(System.in);
         System.out.println("Bienvenue dans l'application de création de binome pour les échanges linguistiques\n");
         TerminaInterface.platform = new Platform();
         TerminaInterface.platform.importCSV(chooseCSV());
@@ -466,6 +639,7 @@ public class TerminaInterface {
         chooseGuestCountry();
     
         while(menuInterface()){}
+        TerminaInterface.sc.close();
         System.exit(0);
     }
 }

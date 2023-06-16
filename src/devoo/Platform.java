@@ -264,63 +264,51 @@ public class Platform {
                 this.guest.remove(t);
             }
         }
+        this.host.sort(new IdComparator());
+        this.guest.sort(new IdComparator());
     } 
 
     /**
      * Accesseur de l'ensemble des étudiants.
      * @return Set de Teenager : ensemble des étudiants
      */
-    public Set<Teenager> getStudents() {
-        return this.students;
-    }
+    public Set<Teenager> getStudents() {return this.students;}
 
     /**
      * Accesseur des couples d'étudiants courants.
      * @return Map de Teenager : couples d'étudiants courants
      */
-    public Map<Teenager, Teenager> getCurrentAffectation() {
-        return this.currentAffectation;
-    }
+    public Map<Teenager, Teenager> getCurrentAffectation() {return this.currentAffectation;}
 
     /**
      * Accesseur des couples d'étudiants précédents.
      * @return Map de Teenager : couples d'étudiants précédents
      */
-    public Map<Teenager, Teenager> getPreviousAffectation() {
-        return this.previousAffectation;
-    }
+    public Map<Teenager, Teenager> getPreviousAffectation() {return this.previousAffectation;}
 
     /**
      * Accesseur des couples d'étudiants fixes.
      * @return Map de Teenager : couples d'étudiants fixes
      */
-    public Map<Teenager, Teenager> getPairFixed() {
-        return this.pairFixed;
-    }
+    public Map<Teenager, Teenager> getPairFixed() {return this.pairFixed;}
 
     /**
      * Accesseur des couples d'étudiants évités.
      * @return Map de Teenager : couples d'étudiants évités
      */
-    public Map<Teenager, Teenager> getPairAvoided() {
-        return this.pairAvoided;
-    }
+    public Map<Teenager, Teenager> getPairAvoided() {return this.pairAvoided;}
 
     /**
      * Accesseur des étudiants hôtes.
      * @return List de Teenager : étudiants hôtes
      */
-    public List<Teenager> getHost() {
-        return this.host;
-    } 
+    public List<Teenager> getHost() {return this.host;} 
 
     /**
      * Accesseur des étudiants invités.
      * @return List de Teenager : étudiants invités
      */
-    public List<Teenager> getGuest() {
-        return this.guest;
-    }
+    public List<Teenager> getGuest() {return this.guest;}
 
     /**
      * Nettoie la liste des étudiants hôtes.

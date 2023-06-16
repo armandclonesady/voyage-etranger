@@ -47,12 +47,12 @@ public class Teenager implements Serializable {
     /**
      * Booléen indiquant si le Teenager est inscrit ou non.
      */
-    private boolean isRegistered = true; 
+    public boolean isRegistered = true; 
 
     /**
      * Map contenant les Criterion du Teenager.
      */
-    private Map<CriterionName, Criterion> requirements;
+    public Map<CriterionName, Criterion> requirements;
 
     /**
      * Constructeur de Teenager avec un dernier invité.
