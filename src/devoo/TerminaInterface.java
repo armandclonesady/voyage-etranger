@@ -549,7 +549,7 @@ public class TerminaInterface {
             int choixStudent = Integer.parseInt(sc.next())-1;
             System.out.println("");
             Teenager student = listStudents.get(choixStudent);
-            System.out.println(student.toString() + " " + student.getBirth().toString() + "\n");
+            System.out.println(student.toString() + " " + student.getBirth().toString() + "\n\n" + "COUNTRY : " + student.getCountry());
             for (Map.Entry<CriterionName,Criterion> criterion : student.getRequirements().entrySet()) {
                 if (criterion.getValue() == null) {
                     System.out.println(criterion.getKey() + " : Non renseigné");
