@@ -28,10 +28,10 @@ public class FixedPairModalController extends MainController {
         guestLabel.setText(EcranIntroController.selectedGuest.name());
         for (Teenager t : EcranIntro.platform.getStudents()) {
             if (!EcranIntro.platform.getPairFixed().containsKey(t) && !EcranIntro.platform.getPairFixed().containsValue(t)) {
-                if (t.getCountry().equals(EcranIntroController.selectedHost)) {
+                if (t.getCountry().equals(EcranIntroController.selectedHost) && t.getRegistered()) {
                 hostList.getItems().add(t);
                 }
-                if (t.getCountry().equals(EcranIntroController.selectedGuest)) {
+                if (t.getCountry().equals(EcranIntroController.selectedGuest) && t.getRegistered()) {
                 guestList.getItems().add(t);
                 }
             }
@@ -73,10 +73,8 @@ public class FixedPairModalController extends MainController {
     public void onSearchHost() {
         hostList.getItems().clear();
         for (Teenager t : EcranIntro.platform.getStudents()) {
-            if (!EcranIntro.platform.getPairFixed().containsKey(t) && !EcranIntro.platform.getPairFixed().containsValue(t)) {
-                if (t.getCountry().equals(EcranIntroController.selectedHost)) {
-                    hostList.getItems().add(t);
-                }
+            if (!EcranIntro.platform.getPairFixed().containsKey(t) && t.getCountry().equals(EcranIntroController.selectedHost) && t.getRegistered()) {
+                hostList.getItems().add(t);
             }
         }
         Iterator<Teenager> it = hostList.getItems().iterator();
@@ -93,10 +91,8 @@ public class FixedPairModalController extends MainController {
     public void onSearchGuest() {
         guestList.getItems().clear();
         for (Teenager t : EcranIntro.platform.getStudents()) {
-            if (!EcranIntro.platform.getPairFixed().containsKey(t) && !EcranIntro.platform.getPairFixed().containsValue(t)) {
-                if (t.getCountry().equals(EcranIntroController.selectedGuest)) {
-                    guestList.getItems().add(t);
-                }
+            if (!EcranIntro.platform.getPairFixed().containsValue(t) && t.getCountry().equals(EcranIntroController.selectedGuest) && t.getRegistered()) {
+                guestList.getItems().add(t);
             }
         }
         Iterator<Teenager> it = guestList.getItems().iterator();
