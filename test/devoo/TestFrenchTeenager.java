@@ -59,16 +59,22 @@ public class TestFrenchTeenager {
         t2.updateCriterion(new Criterion("HISTORY", "same"));
 
         t4.updateCriterion(new Criterion("HISTORY", "OTHER"));
+
+        ft1.updateCriterion(new Criterion("HOBBIES", "being a teenager"));
+        t1.updateCriterion(new Criterion("HOBBIES", "being a teenager"));
+        ft2.updateCriterion(new Criterion("HOBBIES", "being annoying"));
+        t2.updateCriterion(new Criterion("HOBBIES", "being annoying"));
+        ft3.updateCriterion(new Criterion("HOBBIES", "being a teenager,being annoying"));
+        t3.updateCriterion(new Criterion("HOBBIES", "being a teenager,being annoying"));
+        ft4.updateCriterion(new Criterion("HOBBIES", "being a teenager,being annoying"));
+        t4.updateCriterion(new Criterion("HOBBIES", "being a teenager,being annoying"));
     }
 
     @Test
     public void countryCompatibilityTest() {
-        assertTrue(ft1.countryCompatibility(ft2));
-        assertTrue(ft1.countryCompatibility(ft3));
-        assertTrue(ft1.countryCompatibility(ft4));
-
+        assertTrue(ft1.countryCompatibility(t1));
         assertFalse(ft1.countryCompatibility(t2));
-        assertFalse(ft1.countryCompatibility(t3));
-        assertFalse(ft1.countryCompatibility(t3));
+        assertTrue(ft3.countryCompatibility(t1));
+        assertTrue(ft4.countryCompatibility(t1));
     }
 }

@@ -22,11 +22,11 @@ public class TestPlatform {
                 Country guest = Country.values()[j];
                 if (host != guest) {
                     p.affectation(host, guest);
-                    for (Teenager t : p.getAffectation().keySet()) {
+                    for (Teenager t : p.getCurrentAffectation().keySet()) {
                         assertEquals(host, t.getCountry());
                     }
-                    for (Teenager t : p.getAffectation().keySet()) {
-                        assertEquals(guest, p.getAffectation().get(t).getCountry());
+                    for (Teenager t : p.getCurrentAffectation().keySet()) {
+                        assertEquals(guest, p.getCurrentAffectation().get(t).getCountry());
                     }
                 }
             }
