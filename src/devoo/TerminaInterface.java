@@ -88,11 +88,6 @@ public class TerminaInterface {
             for( Map.Entry< Teenager, Teenager> e : TerminaInterface.platform.getCurrentAffectation().entrySet()){
                 System.out.println(e.getKey().toString() + " -> " + e.getValue().toString());
             }
-            try{
-                Thread.sleep(10000);
-            } catch( InterruptedException e){
-                e.printStackTrace();
-            }
 
         }else if(choix == 3){
             while(parametreMenu()){}

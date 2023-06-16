@@ -37,17 +37,35 @@ public class TestTeenager {
     }
 
     @Test
-    public void compatibleWithGuestTest() {
-        assertFalse(t1.compatibleWithGuest(t2));
-        
-    }
-
-/*
-    @Test
     public void historyCompatibilityTest() {
+        t1.updateCriterion(new Criterion("HISTORY", "same"));
 
+        t2.updateCriterion(new Criterion("HISTORY", "same"));
+        assertEquals(1, t1.historyCompatibility(t2));
+        t2.updateCriterion(new Criterion("HISTORY", "other"));
+        assertEquals(0, t1.historyCompatibility(t2));
+        t2.updateCriterion(new Criterion("HISTORY", ""));
+        assertEquals(-1, t1.historyCompatibility(t2));
+
+        t1.updateCriterion(new Criterion("HISTORY", "other"));
+
+        t2.updateCriterion(new Criterion("HISTORY", "same"));
+        assertEquals(0, t1.historyCompatibility(t2));
+        t2.updateCriterion(new Criterion("HISTORY", "other"));
+        assertEquals(0, t1.historyCompatibility(t2));
+        t2.updateCriterion(new Criterion("HISTORY", ""));
+        assertEquals(0, t1.historyCompatibility(t2));
+
+        t1.updateCriterion(new Criterion("HISTORY", ""));
+
+        t2.updateCriterion(new Criterion("HISTORY", "same"));
+        assertEquals(-1, t1.historyCompatibility(t2));
+        t2.updateCriterion(new Criterion("HISTORY", "other"));
+        assertEquals(0, t1.historyCompatibility(t2));
+        t2.updateCriterion(new Criterion("HISTORY", ""));
+        assertEquals(-1, t1.historyCompatibility(t2));
     }
-    */
+    
 
     @Test
     public void animalCompatibilityTest() {
@@ -117,8 +135,27 @@ public class TestTeenager {
     }
 
     @Test
-    public void countryCompatibilityTest() {
+    public void diffAgeTest() {
+            assertEquals(2, t1.diffAge(t2));
+            assertEquals(4, t1.diffAge(t3));
+            assertEquals(0, t1.diffAge(t4));
+            assertEquals(2, t2.diffAge(t1));
+            assertEquals(2, t2.diffAge(t3));
+            assertEquals(2, t2.diffAge(t4));
 
+            t1 = new Teenager("t", "one", Country.FRANCE, LocalDate.of(2000, 9, 15));
+            t2 = new Teenager("t", "one", Country.FRANCE, LocalDate.of(2004, 9, 16));
+            assertEquals(4, t1.diffAge(t2));
+            assertEquals(4, t2.diffAge(t1));
+            t2 = new Teenager("t", "one", Country.FRANCE, LocalDate.of(2004, 9, 14));
+            assertEquals(4, t1.diffAge(t2));
+            assertEquals(4, t2.diffAge(t1));
+
+    }
+
+    @Test
+    public void genderPref() {
+        
     }
 
     @Test
@@ -142,5 +179,14 @@ public class TestTeenager {
         t4.updateCriterion(new Criterion("HISTORY", "same"));
         t4.purgeCriterion();
         assertFalse(t4.getCriterion(CriterionName.HISTORY)== null);
+    }
+
+    @Test
+    public void extractValuesHost() {
+        assertEquals((t1.toString()+", vegetarian, vegetarian, [], same, "),t1.extractValuesHost());
+        assertEquals((t1.toString()+", vegetarian, yes, [], same, "),t1.extractValuesGuest());
+
+        assertEquals((t2.toString()+", , , [], same, "),t2.extractValuesHost());
+        assertEquals((t2.toString()+", nonuts, yes, [], same, "),t2.extractValuesGuest());
     }
 }

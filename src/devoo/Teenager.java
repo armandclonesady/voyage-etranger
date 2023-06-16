@@ -270,7 +270,7 @@ public class Teenager implements Serializable {
         }
     }
 
-    /*
+    
     public int diffAge(Teenager t2) {
         return Math.abs(this.birth.getYear() - t2.birth.getYear());
     }
