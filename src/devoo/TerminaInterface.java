@@ -106,7 +106,7 @@ public class TerminaInterface {
         try {
             choix = Integer.parseInt(sc.next());
             System.out.println("");
-            if (choix < 1 || choix > 6){
+            if (choix < 1 || choix > 9){
                 System.out.println("Veuillez entrer un nombre valide");
                 return menuInterface();
             }
